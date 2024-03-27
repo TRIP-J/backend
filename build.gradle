@@ -1,0 +1,129 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.2'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'study'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// init
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// Security
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//Thymeleaf
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// Validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'javax.annotation:javax.annotation-api:1.3.2'
+
+	//ModelMapper
+	implementation 'org.modelmapper:modelmapper:3.1.1'
+
+	//spring-doc
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.3.0'
+	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+
+	testAnnotationProcessor 'org.projectlombok:lombok'
+ 	testImplementation 'org.projectlombok:lombok'
+
+	//JWT
+	implementation 'io.jsonwebtoken:jjwt:0.12.3'
+	// xml문서와 java객체 간 매핑 자동화
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+	//폼로그인 JWT
+	implementation 'com.auth0:java-jwt:4.4.0'
+
+	//aws
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// === Querydsl 추가 ===
+	//3.0.xx
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+	// === QueryDsl 끝 ===
+
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//feign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.0'
+
+}
+
+//springboot 버전에 맞춰서 설정
+ext {
+	set('springCloudVersion', "2022.0.3")
+}
+
+dependencyManagement {
+  imports {
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+  }
+}
+
+
+//***************** querydsl 추가 시작 *********************//
+def generated = "src/main/generated"
+
+// querydsl QClass 파일 생성 위치를 지정
+tasks.withType(JavaCompile) {
+	options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+
+// java source set 에 querydsl QClass 위치 추가
+sourceSets {
+	main.java.srcDirs += [ generated ]
+}
+
+// gradle clean 시에 QClass 디렉토리 삭제
+clean {
+	delete file(generated)
+}
+//******************** querydsl 추가 끝 *********************//
+
+tasks.named('bootBuildImage') {
+	builder = 'paketobuildpacks/builder-jammy-base:latest'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.named("bootJar") {
+  mainClass = 'com.tripj.TripjApplication'
+}
