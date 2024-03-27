@@ -14,7 +14,7 @@ public class HealthCheckController {
 
     @GetMapping("/test")
     public String healthCheck() {
-        log.info("admin test success");
+        log.info("admin test success!");
         return "admin test success";
     }
 
