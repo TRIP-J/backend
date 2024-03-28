@@ -1,6 +1,7 @@
 package com.tripj.domain.user.model.entity;
 
 import com.tripj.domain.common.entity.BaseTimeEntity;
+import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.user.constant.Role;
 import com.tripj.domain.user.constant.UserType;
 import com.tripj.global.util.DateTimeUtils;
@@ -12,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +26,12 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Trip trip;
+
+    @OneToMany(mappedBy = "user")
+    private List<Item> items = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
