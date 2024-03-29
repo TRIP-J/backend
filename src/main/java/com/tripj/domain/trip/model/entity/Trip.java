@@ -22,11 +22,10 @@ public class Trip extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Embedded
+    private Period TripPeriod;
+
     private String tripName;
-
-    private Date startDate;
-
-    private Date endDate;
 
     private String purpose;
 
