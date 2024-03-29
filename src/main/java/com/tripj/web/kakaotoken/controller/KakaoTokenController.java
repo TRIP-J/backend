@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -65,7 +66,7 @@ public class KakaoTokenController {
 
     //Step 2 : 토큰받기
     @GetMapping("/oauth/kakao/callback")
-    public @ResponseBody String loginCallback(String code) {
+    public ResponseEntity<KakaoTokenDto.Response> loginCallback(String code) {
         String contentType = "application/x-www-form-urlencoded;charset=utf-8";
         KakaoTokenDto.Request kakaoTokenRequestDto = KakaoTokenDto.Request.builder()
                 .client_id(clientId)
@@ -79,8 +80,8 @@ public class KakaoTokenController {
 
         KakaoTokenDto.Response kakaoToken = kakaoTokenClient.requestKakaoToken(contentType, kakaoTokenRequestDto);
         log.info("[-] kakaoToken : {}", kakaoToken);
-        return "kakao token : " + kakaoToken;
-    }
 
+        return ResponseEntity.ok(kakaoToken);
+    }
 
 }
