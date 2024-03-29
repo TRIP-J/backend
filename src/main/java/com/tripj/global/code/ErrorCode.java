@@ -10,6 +10,16 @@ public enum ErrorCode {
     TEST(INTERNAL_SERVER_ERROR, false, "T001", "business exception test"),
 
     /**
+     * 400 Bad Request (잘못된 요청)
+     */
+    E401_BINDING_RESULT(BAD_REQUEST, false, "BR001", "잘못된 Binding 입니다"),
+
+    /**
+     * 404 Not Found
+     */
+    E404_NOT_EXISTS_MEMBER(NOT_FOUND, false, "NF001", "존재하지 않는 회원입니다."),
+
+    /**
      * 회원
      */
     INVALID_USER_TYPE(BAD_REQUEST, false, "M001", "잘못된 회원 타입 입니다."),
