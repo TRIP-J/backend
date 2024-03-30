@@ -17,15 +17,20 @@ public class Item extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id")
     private Country country;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_cate_id")
     private ItemCate itemCate;
 
     private String itemName;
 
     private String previous;
+
+    private String fix;
 }
