@@ -1,6 +1,7 @@
 package com.tripj.domain.trip.model.entity;
 
 import com.tripj.domain.common.entity.BaseTimeEntity;
+import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.user.model.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,8 +24,9 @@ public class Trip extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @Embedded
-//    private Period TripPeriod;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id")
+    private Country country;
 
     private LocalDate startDate;
 
@@ -37,13 +39,16 @@ public class Trip extends BaseTimeEntity {
     private String previous;
 
     public static Trip newTrip(String tripName, String purpose, String previous,
-                               LocalDate startDate, LocalDate endDate) {
+                               LocalDate startDate, LocalDate endDate,
+                               User user, Country country) {
         return Trip.builder()
                 .tripName(tripName)
                 .purpose(purpose)
                 .previous("NOW")
                 .startDate(startDate)
                 .endDate(endDate)
+                .user(user)
+                .country(country)
                 .build();
     }
 }
