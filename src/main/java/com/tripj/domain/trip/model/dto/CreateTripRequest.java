@@ -1,5 +1,6 @@
 package com.tripj.domain.trip.model.dto;
 
+import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.user.model.entity.User;
 import jakarta.validation.constraints.NotNull;
@@ -21,9 +22,11 @@ public class CreateTripRequest {
 
     private LocalDate endDate;
 
-    public Trip toEntity(User user) {
+    private Long countryId;
+
+    public Trip toEntity(User user, Country country) {
         return Trip.newTrip(tripName, purpose, previous,
-                            startDate, endDate);
+                            startDate, endDate, user, country);
 
 
     }

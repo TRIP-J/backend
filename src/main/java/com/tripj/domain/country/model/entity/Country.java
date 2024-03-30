@@ -19,8 +19,10 @@ public class Country {
     @OneToMany(mappedBy = "country")
     private List<Item> items = new ArrayList<>();
 
-    private String countryName;
+    @Column(name = "country_name", nullable = false)
+    private String name;
 
-    private String countryCode;
+    @Column(name = "country_code", nullable = false)
+    private String code;
 
 }
