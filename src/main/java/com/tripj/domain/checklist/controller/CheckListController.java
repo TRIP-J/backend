@@ -2,6 +2,7 @@ package com.tripj.domain.checklist.controller;
 
 import com.tripj.domain.checklist.model.dto.CreateCheckListRequest;
 import com.tripj.domain.checklist.model.dto.CreateCheckListResponse;
+import com.tripj.domain.checklist.model.dto.DeleteCheckListResponse;
 import com.tripj.domain.checklist.model.dto.GetCheckListResponse;
 import com.tripj.domain.checklist.service.CheckListService;
 import com.tripj.global.model.RestApiResponse;
@@ -43,5 +44,15 @@ public class CheckListController {
                 checkListService.createCheckList(request, userId));
     }
 
+    @Operation(
+            summary = "체크리스트 삭제 API",
+            description = "체크리스트에 아이템을 삭제합니다."
+    )
+    @DeleteMapping("/{checkListId}")
+    public RestApiResponse<DeleteCheckListResponse> deleteChecList(@PathVariable("checkListId") Long checkListId,
+                                                                   Long userId) {
+        return RestApiResponse.success(
+                checkListService.deleteCheckList(checkListId, userId));
+    }
 
 }

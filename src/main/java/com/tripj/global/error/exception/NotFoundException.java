@@ -11,4 +11,8 @@ public class NotFoundException extends CustomRunTimeException {
         super(message, errorCode);
     }
 
+    public NotFoundException(ErrorCode errorCode) {
+        super(errorCode.getMessage(), errorCode);
+    }
+
 }

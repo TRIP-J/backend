@@ -15,12 +15,18 @@ public enum ErrorCode {
     E401_BINDING_RESULT(BAD_REQUEST, false, "BR001", "잘못된 Binding 입니다"),
 
     /**
+     * 403 Forbidden (권한 등의 이유로 허용하지 않는 요청)
+     */
+    E403_FORBIDDEN(FORBIDDEN, false, "FB000", "허용하지 않는 요청입니다"),
+
+    /**
      * 404 Not Found
      */
     E404_NOT_EXISTS_USER(NOT_FOUND, false, "NF001", "존재하지 않는 회원입니다."),
     E404_NOT_EXISTS_COUNTRY(NOT_FOUND, false, "NF002", "존재하지 않는 나라입니다."),
     E404_NOT_EXISTS_ITEM_CATE(NOT_FOUND, false, "NF003", "존재하지 않는 아이템 카테고리입니다."),
     E404_NOT_EXISTS_ITEM(NOT_FOUND, false, "NF004", "존재하지 않는 아이템입니다."),
+    E404_NOT_EXISTS_CHECKLIST(NOT_FOUND, false, "NF005", "존재하지 않는 체크리스트입니다."),
 
     /**
      * 회원
