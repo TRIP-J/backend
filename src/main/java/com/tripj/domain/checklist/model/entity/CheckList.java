@@ -3,10 +3,13 @@ package com.tripj.domain.checklist.model.entity;
 import com.tripj.domain.common.entity.BaseTimeEntity;
 import com.tripj.domain.item.model.entity.Item;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CheckList extends BaseTimeEntity {
 
     @Id
@@ -18,9 +21,12 @@ public class CheckList extends BaseTimeEntity {
     @JoinColumn(name = "item_id")
     private Item item;
 
-    private String checkCate;
-
     private String pack;
 
-    private String previous;
+    public static CheckList newCheckList(Item item, String pack) {
+        return CheckList.builder()
+                .item(item)
+                .pack("NO")
+                .build();
+    }
 }

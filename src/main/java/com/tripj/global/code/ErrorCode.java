@@ -20,6 +20,7 @@ public enum ErrorCode {
     E404_NOT_EXISTS_USER(NOT_FOUND, false, "NF001", "존재하지 않는 회원입니다."),
     E404_NOT_EXISTS_COUNTRY(NOT_FOUND, false, "NF002", "존재하지 않는 나라입니다."),
     E404_NOT_EXISTS_ITEM_CATE(NOT_FOUND, false, "NF003", "존재하지 않는 아이템 카테고리입니다."),
+    E404_NOT_EXISTS_ITEM(NOT_FOUND, false, "NF004", "존재하지 않는 아이템입니다."),
 
     /**
      * 회원
