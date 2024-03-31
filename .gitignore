@@ -39,3 +39,7 @@ out/
 ### yml ###
 # application-local.yml 을 ignore 함
 application-local.yml
+
+### Q파일 ignore ###
+/src/main/generated/
+
