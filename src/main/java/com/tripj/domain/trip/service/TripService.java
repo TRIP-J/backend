@@ -30,7 +30,7 @@ public class TripService {
                                          Long userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다.", ErrorCode.E404_NOT_EXISTS_MEMBER));
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다.", ErrorCode.E404_NOT_EXISTS_USER));
 
         Country country = countryRepository.findById(request.getCountryId())
                         .orElseThrow(() -> new NotFoundException("존재하지 않는 나라입니다.", ErrorCode.E404_NOT_EXISTS_COUNTRY));
@@ -48,7 +48,7 @@ public class TripService {
     public List<GetTripResponse> getTrip(Long userId) {
 
         userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다.", ErrorCode.E404_NOT_EXISTS_MEMBER));
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다.", ErrorCode.E404_NOT_EXISTS_USER));
 
         return tripRepository.getTrip(userId);
     }

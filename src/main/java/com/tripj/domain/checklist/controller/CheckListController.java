@@ -22,8 +22,8 @@ public class CheckListController {
 
     @Tag(name = "checkList")
     @Operation(
-            summary = "체크리스트 조회 API",
-            description = "체크리스트 카테고리별 아이템 조회"
+            summary = "카테고리별 아이템 조회 API",
+            description = "체크리스트 > 카테고리별 아이템 조회"
     )
     @GetMapping("")
     public RestApiResponse <List<GetCheckListResponse>> getCheckList(Long itemCateId,
