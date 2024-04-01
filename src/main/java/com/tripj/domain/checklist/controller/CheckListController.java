@@ -55,4 +55,14 @@ public class CheckListController {
                 checkListService.deleteCheckList(checkListId, userId));
     }
 
+    @Operation(
+            summary = "체크리스트 챙김 API",
+            description = "체크리스트에 추가한 아이템 체크박스 클릭시 챙김여부 변경"
+    )
+    @PostMapping("/pack")
+
+
+
+
+
 }

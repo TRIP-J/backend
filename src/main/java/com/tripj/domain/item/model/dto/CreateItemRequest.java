@@ -16,7 +16,7 @@ public class CreateItemRequest {
     private String itemName;
 
     @Schema(description = "이전 여행 기록 분기 컬럼", example = "NOW")
-    private String previous; //필요한가 ? NOW로 박을건데 ?
+    private String previous;
 
     @Schema(description = "나라 Id", example = "1")
     private Long countryId;

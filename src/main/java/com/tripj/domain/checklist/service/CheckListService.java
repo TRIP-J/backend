@@ -1,9 +1,6 @@
 package com.tripj.domain.checklist.service;
 
-import com.tripj.domain.checklist.model.dto.CreateCheckListRequest;
-import com.tripj.domain.checklist.model.dto.CreateCheckListResponse;
-import com.tripj.domain.checklist.model.dto.DeleteCheckListResponse;
-import com.tripj.domain.checklist.model.dto.GetCheckListResponse;
+import com.tripj.domain.checklist.model.dto.*;
 import com.tripj.domain.checklist.model.entity.CheckList;
 import com.tripj.domain.checklist.repository.CheckListRepository;
 import com.tripj.domain.item.model.entity.Item;
@@ -69,12 +66,40 @@ public class CheckListService {
         } else {
             throw new ForbiddenException("아이템 삭제 권한이 없습니다.", ErrorCode.E403_FORBIDDEN);
         }
+    }
+
+    /**
+     * 체크리스트에 추가한 아이템 체크박스 클릭
+     */
+    public PackCheckListResponse packCheckList(PackCheckListRequest request, Long userId) {
+
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+
+        CheckList checkList = checkListRepository.findById(request.getCheckListId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_CHECKLIST));
+
+        //체크박스 누르기
+        boolean addPack = addPack(request, userId);
+
+
+
+
 
     }
 
 
+    private boolean addPack(PackCheckListRequest request) {
+        //이미 챙긴 아이템인지 확인
+        if (validatePacked(request)) {
 
+        }
 
+    }
+
+    private boolean validatePacked(PackCheckListRequest request) {
+        return checkListRepository.findByItemIdAndChecklistIdAndPack(request.getItemId(), request.getCheckListId(), "NO").isEmpty();
+    }
 
 
 }

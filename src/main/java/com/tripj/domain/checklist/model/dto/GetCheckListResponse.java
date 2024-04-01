@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GetCheckListResponse {
 
+    //TODO id추가.
+
     @Schema(description = "아이템명", example = "동전지갑")
     private String itemName;
 
