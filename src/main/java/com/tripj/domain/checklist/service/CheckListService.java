@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -76,32 +77,44 @@ public class CheckListService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
-        CheckList checkList = checkListRepository.findById(request.getCheckListId())
+        CheckList checkList = checkListRepository.findById(request.getChecklistId())
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_CHECKLIST));
 
         //체크박스 누르기
-        boolean addPack = addPack(request, userId);
+        boolean addPack = addPack(request);
 
-
-
-
-
+        if (addPack == true) {
+            //true이면 YES 로 변경
+            checkList.updatePack(request.getChecklistId(),"YES");
+        } else {
+            //false이면 다시 NO로 변경
+            checkList.updatePack(request.getChecklistId(),"NO");
+        }
+        return PackCheckListResponse.of(checkList.getId(), checkList.getPack());
     }
-
-    
-
 
     private boolean addPack(PackCheckListRequest request) {
         //이미 챙긴 아이템인지 확인
         if (validatePacked(request)) {
-
+            return true;
+        } else {
+            //이미 챙겼으면 체크박스 취소
+            return false;
         }
-
     }
 
     private boolean validatePacked(PackCheckListRequest request) {
-        return checkListRepository.findByItemIdAndChecklistIdAndPack(request.getItemId(), request.getCheckListId(), "NO").isEmpty();
+//        return checkListRepository.findByItemIdAndChecklistIdAndPack(request.getItemId(), request.getCheckListId(), "NO").isEmpty();
+        Optional<PackCheckListResponse> packedCheckList = checkListRepository.findByItemIdAndId(request.getItemId(), request.getChecklistId());
+        if (packedCheckList.isPresent()) {
+            if (packedCheckList.get().getPack().equals("NO")) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
-
 
 }
