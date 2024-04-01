@@ -8,10 +8,11 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PackCheckListResponse {
 
-    private Long checkListId;
+    private Long id;
+    private String pack;
 
-    public static PackCheckListResponse of(Long checkListId) {
-        return new PackCheckListResponse(checkListId);
+    public static PackCheckListResponse of(Long checklistId, String pack) {
+        return new PackCheckListResponse(checklistId, pack);
     }
 
 }

@@ -29,4 +29,10 @@ public class CheckList extends BaseTimeEntity {
                 .pack("NO")
                 .build();
     }
+
+    // 체크리스트에 담은 아이템 챙겼을시 update
+    public void updatePack(Long checkListId, String yes) {
+        this.id = checkListId;
+        this.pack = yes;
+    }
 }

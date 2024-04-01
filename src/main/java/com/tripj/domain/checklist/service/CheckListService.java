@@ -88,6 +88,8 @@ public class CheckListService {
 
     }
 
+    
+
 
     private boolean addPack(PackCheckListRequest request) {
         //이미 챙긴 아이템인지 확인

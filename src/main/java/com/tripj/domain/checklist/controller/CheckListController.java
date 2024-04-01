@@ -1,9 +1,6 @@
 package com.tripj.domain.checklist.controller;
 
-import com.tripj.domain.checklist.model.dto.CreateCheckListRequest;
-import com.tripj.domain.checklist.model.dto.CreateCheckListResponse;
-import com.tripj.domain.checklist.model.dto.DeleteCheckListResponse;
-import com.tripj.domain.checklist.model.dto.GetCheckListResponse;
+import com.tripj.domain.checklist.model.dto.*;
 import com.tripj.domain.checklist.service.CheckListService;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +29,6 @@ public class CheckListController {
         return RestApiResponse.success(checkListService.getCheckList(itemCateId, userId));
     }
 
-
     @Operation(
             summary = "체크리스트 추가 API",
             description = "체크리스트에 아이템을 추가합니다."
@@ -60,6 +56,17 @@ public class CheckListController {
             description = "체크리스트에 추가한 아이템 체크박스 클릭시 챙김여부 변경"
     )
     @PostMapping("/pack")
+    public RestApiResponse<PackCheckListResponse> packCheckList(@RequestBody PackCheckListRequest request,
+                                                                Long userId) {
+        return RestApiResponse.success(
+                checkListService.packCheckList(request, userId));
+    }
+
+
+
+
+
+
 
 
 
