@@ -1,14 +1,10 @@
 package com.tripj.domain.checklist.service;
 
-import com.tripj.domain.checklist.model.dto.CreateCheckListRequest;
-import com.tripj.domain.checklist.model.dto.CreateCheckListResponse;
-import com.tripj.domain.checklist.model.dto.DeleteCheckListResponse;
-import com.tripj.domain.checklist.model.dto.GetCheckListResponse;
+import com.tripj.domain.checklist.model.dto.*;
 import com.tripj.domain.checklist.model.entity.CheckList;
 import com.tripj.domain.checklist.repository.CheckListRepository;
 import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.item.repository.ItemRepository;
-import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.ForbiddenException;
@@ -18,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,18 +60,34 @@ public class CheckListService {
         CheckList checkList = checkListRepository.findById(checkListId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_CHECKLIST));
 
-        if (checkList.getItem().getUser().getId().equals(userId)) {
+        if (checkList.getItem().getFix().equals("F")) {
+            // fix가 "F"인 경우 바로 삭제
             checkListRepository.deleteById(checkListId);
-            return DeleteCheckListResponse.of(checkListId);
         } else {
-            throw new ForbiddenException("아이템 삭제 권한이 없습니다.", ErrorCode.E403_FORBIDDEN);
+            // fix가 "F"가 아닌 경우, 사용자 ID 확인
+            if (checkList.getItem().getUser().getId().equals(userId)) {
+                checkListRepository.deleteById(checkListId);
+            } else {
+                throw new ForbiddenException("아이템 삭제 권한이 없습니다.", ErrorCode.E403_FORBIDDEN);
+            }
         }
-
+        
+        return DeleteCheckListResponse.of(checkListId);
     }
 
 
 
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
