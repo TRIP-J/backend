@@ -124,6 +124,14 @@ public class CheckListService {
         }
     }
 
+    /**
+     * 내 체크리스트 조회
+     */
+    @Transactional(readOnly = true)
+    public List<GetMyCheckListResponse> getMyCheckList(Long itemCateId, Long userId) {
+        return checkListRepository.getMyCheckList(itemCateId, userId);
+    }
+
 }
 
 

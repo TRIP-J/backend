@@ -11,13 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GetCheckListResponse {
 
-    //TODO id추가.
+    @Schema(description = "아이템 Id", example = "1")
+    private Long itemId;
 
     @Schema(description = "아이템명", example = "동전지갑")
     private String itemName;
 
     @QueryProjection
-    public GetCheckListResponse(String itemName) {
+    public GetCheckListResponse(Long itemId, String itemName) {
+        this.itemId = itemId;
         this.itemName = itemName;
     }
 
