@@ -17,10 +17,14 @@ public class GetCheckListResponse {
     @Schema(description = "아이템명", example = "동전지갑")
     private String itemName;
 
+    @Schema(description = "아이템 카테고리 명", example = "추천템")
+    private String itemCateName;
+
     @QueryProjection
-    public GetCheckListResponse(Long itemId, String itemName) {
+    public GetCheckListResponse(Long itemId, String itemName, String itemCateName) {
         this.itemId = itemId;
         this.itemName = itemName;
+        this.itemCateName = itemCateName;
     }
 
 }
