@@ -8,7 +8,8 @@ import java.util.Optional;
 
 public interface CheckListRepository extends JpaRepository<CheckList, Long>, CheckListRepositoryCustom {
 
-    Optional<PackCheckListResponse> findByItemIdAndChecklistIdAndPack(Long itemId, Long checkListId, String pack);
+//    Optional<PackCheckListResponse> findByItemIdAndChecklistIdAndPack(Long itemId, Long checkListId, String pack);
+    Optional<PackCheckListResponse> findByItemIdAndId(Long itemId, Long id);
 
 
 }

@@ -5,6 +5,6 @@ import lombok.Getter;
 @Getter
 public class PackCheckListRequest {
     private Long itemId;
-    private Long checkListId;
+    private Long checklistId;
     private String pack;
 }
