@@ -112,9 +112,9 @@ public class CheckListService {
 
     private boolean validatePacked(PackCheckListRequest request) {
 //        return checkListRepository.findByItemIdAndChecklistIdAndPack(request.getItemId(), request.getCheckListId(), "NO").isEmpty();
-        Optional<PackCheckListResponse> packedCheckList = checkListRepository.findByItemIdAndId(request.getItemId(), request.getChecklistId());
-        if (packedCheckList.isPresent()) {
-            if (packedCheckList.get().getPack().equals("NO")) {
+        Optional<CheckList> checkList = checkListRepository.findById(request.getChecklistId());
+        if (checkList.isPresent()) {
+            if (checkList.get().getPack().equals("NO")) {
                 return true;
             } else {
                 return false;
