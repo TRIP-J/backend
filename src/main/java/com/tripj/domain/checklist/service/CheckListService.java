@@ -39,13 +39,13 @@ public class CheckListService {
      */
     public CreateCheckListResponse createCheckList(CreateCheckListRequest request,
                                                    Long userId) {
-        userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다.", ErrorCode.E404_NOT_EXISTS_USER));
 
         Item item = itemRepository.findById(request.getItemId())
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 아이템입니다.", ErrorCode.E404_NOT_EXISTS_ITEM));
 
-        CheckList savedCheckList = checkListRepository.save(request.toEntity(item));
+        CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user));
 
         return CreateCheckListResponse.of(savedCheckList.getId());
     }
