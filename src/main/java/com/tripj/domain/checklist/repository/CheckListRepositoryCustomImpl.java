@@ -23,7 +23,8 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
         List<GetCheckListResponse> results = queryFactory
                 .select(new QGetCheckListResponse(
                         item.id,
-                        item.itemName
+                        item.itemName,
+                        itemCate.itemCateName
                 ))
                 .from(item)
                 .join(item.itemCate, itemCate)
