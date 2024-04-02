@@ -18,7 +18,6 @@ public class CheckListController {
 
     private final CheckListService checkListService;
 
-    @Tag(name = "checkList")
     @Operation(
             summary = "카테고리별 아이템 조회 API",
             description = "체크리스트 > 카테고리별 아이템 조회"
@@ -61,10 +60,16 @@ public class CheckListController {
         return RestApiResponse.success(
                 checkListService.packCheckList(request, userId));
     }
-
-
-
-
+    
+    @Operation(
+            summary = "체크리스트에 담은 아이템 조회 API",
+            description = "체크리스트 > 체크리스트에 내가 담은 아이템 카테고리별 조회"
+    )
+    @GetMapping("/checklist")
+    public RestApiResponse <List<GetMyCheckListResponse>> getMyCheckList(Long itemCateId,
+                                                                         Long userId) {
+        return RestApiResponse.success(checkListService.getMyCheckList(itemCateId, userId));
+    }
 
 
 
