@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  tripjmysql:
+    image: mysql:8.0.32
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=tripjmysql
+    expose:
+      - 3306
+    ports:
+      - "3307:3306"
+
+  tripj:
+    build: .
+    expose:
+      - 8080
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - DB_URL=jdbc:mysql://tripjmysql:3306/tripjmysql?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+      - MYSQL_ROOT_PASSWORD=root
+    depends_on:
+      - tripjmysql
+    command:
+      - bash
+      - -c
+      - |
+        ./wait-for-it.sh tripjmysql:3306 -s -t 50
+        java -jar /app.jar
