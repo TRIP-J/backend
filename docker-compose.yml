@@ -3,7 +3,7 @@ services:
   tripjmysql:
     image: mysql:8.0.32
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=tripjmysql
     expose:
       - 3306
@@ -19,7 +19,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=local
       - DB_URL=jdbc:mysql://tripjmysql:3306/tripjmysql?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     depends_on:
       - tripjmysql
     command:

@@ -15,6 +15,7 @@ CREATE TABLE item (
     item_name VARCHAR(255) NOT NULL,
     item_cate_id INT,
     fix CHAR(1),
+    country_id INT,
     FOREIGN KEY (item_cate_id) REFERENCES item_cate(item_cate_id)
 );
 
