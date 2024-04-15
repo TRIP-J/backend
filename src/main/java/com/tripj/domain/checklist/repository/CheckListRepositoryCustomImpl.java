@@ -19,7 +19,9 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
     }
 
     @Override
-    public List<GetCheckListResponse> getCheckList(Long itemCateId, Long userId) {
+    public List<GetCheckListResponse> getCheckList(Long itemCateId,
+                                                   Long userId,
+                                                   Long countryId) {
         List<GetCheckListResponse> results = queryFactory
                 .select(new QGetCheckListResponse(
                         item.id,
@@ -30,6 +32,7 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
                 .join(item.itemCate, itemCate)
                 .where(
                         item.itemCate.Id.eq(itemCateId)
+                        .and(item.country.id.eq(countryId))
                         .and(item.fix.eq("F")
                             .or(item.previous.eq("NOW")
                             .and(item.user.id.eq(userId)))

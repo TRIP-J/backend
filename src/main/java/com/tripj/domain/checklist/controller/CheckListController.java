@@ -24,8 +24,9 @@ public class CheckListController {
     )
     @GetMapping("")
     public RestApiResponse <List<GetCheckListResponse>> getCheckList(Long itemCateId,
-                                                                     Long userId) {
-        return RestApiResponse.success(checkListService.getCheckList(itemCateId, userId));
+                                                                     Long userId,
+                                                                     Long countryId) {
+        return RestApiResponse.success(checkListService.getCheckList(itemCateId, userId, countryId));
     }
 
     @Operation(
