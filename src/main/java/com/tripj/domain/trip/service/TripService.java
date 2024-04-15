@@ -5,6 +5,7 @@ import com.tripj.domain.country.repository.CountryRepository;
 import com.tripj.domain.trip.model.dto.CreateTripRequest;
 import com.tripj.domain.trip.model.dto.CreateTripResponse;
 import com.tripj.domain.trip.model.dto.GetTripResponse;
+import com.tripj.domain.trip.model.dto.UpdateTripRequest;
 import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.trip.repository.TripRepository;
 import com.tripj.domain.user.model.entity.User;
@@ -26,6 +27,9 @@ public class TripService {
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
 
+    /**
+     * 여행 생성
+     */
     public CreateTripResponse createTrip(CreateTripRequest request,
                                          Long userId) {
 
@@ -40,6 +44,29 @@ public class TripService {
         return CreateTripResponse.of(savedTrip.getId());
     }
 
+    /**
+     * 여행 수정
+     */
+    public CreateTripResponse updateTrip(UpdateTripRequest request,
+                                         Long tripId,
+                                         Long userId) {
+
+        Trip trip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
+
+        Country country = countryRepository.findById(request.getCountryId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
+
+        if (trip.getUser().getId().equals(userId)) {
+            trip.updateTrip(request.getTripName(), request.getPurpose(),
+                            request.getStartDate(), request.getEndDate(),
+                            country);
+        }
+
+        return CreateTripResponse.of(tripId);
+    }
+
+
 
     /**
      * 여행 조회
@@ -52,8 +79,6 @@ public class TripService {
 
         return tripRepository.getTrip(userId);
     }
-
-
 
 
 }
