@@ -9,9 +9,8 @@ import lombok.Getter;
 public class CreateCheckListRequest {
 
     private Long itemId;
-    private String pack;
 
     public CheckList toEntity(Item item, User user) {
-        return CheckList.newCheckList(item, user, pack);
+        return CheckList.newCheckList(item, user);
     }
 }
