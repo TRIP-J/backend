@@ -28,8 +28,8 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Trip trip;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Trip> trip = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Item> items = new ArrayList<>();

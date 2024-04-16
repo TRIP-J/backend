@@ -73,6 +73,12 @@ public class TripController {
                 tripService.getTrip(userId));
     }
 
+    @Operation(
+   				summary = "지난 여행 기록 조회 API",
+   				description = "자신의 지난 여행 기록 모두 조회"
+   	)
+   	@GetMapping("/past")
+
 
 
 }
