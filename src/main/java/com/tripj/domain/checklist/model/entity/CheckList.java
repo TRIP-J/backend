@@ -28,11 +28,14 @@ public class CheckList extends BaseTimeEntity {
 
     private String pack;
 
-    public static CheckList newCheckList(Item item, User user, String pack) {
+    private String previous;
+
+    public static CheckList newCheckList(Item item, User user) {
         return CheckList.builder()
                 .item(item)
                 .user(user)
                 .pack("NO")
+                .previous("NOW")
                 .build();
     }
 

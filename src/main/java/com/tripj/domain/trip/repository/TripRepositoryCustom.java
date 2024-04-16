@@ -8,6 +8,5 @@ import java.util.List;
 public interface TripRepositoryCustom {
 
     List<GetTripResponse> getTrip(Long userId);
-
-
+    List<GetTripResponse> getPastTrip(Long userId);
 }

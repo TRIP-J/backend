@@ -41,4 +41,6 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
 
         return results;
     }
+
+
 }

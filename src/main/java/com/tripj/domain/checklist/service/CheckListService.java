@@ -8,6 +8,7 @@ import com.tripj.domain.item.repository.ItemRepository;
 import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.code.ErrorCode;
+import com.tripj.global.error.exception.BusinessException;
 import com.tripj.global.error.exception.ForbiddenException;
 import com.tripj.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -42,10 +43,16 @@ public class CheckListService {
     public CreateCheckListResponse createCheckList(CreateCheckListRequest request,
                                                    Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다.", ErrorCode.E404_NOT_EXISTS_USER));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
         Item item = itemRepository.findById(request.getItemId())
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 아이템입니다.", ErrorCode.E404_NOT_EXISTS_ITEM));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM));
+
+        Optional<CheckList> existingCheckList =
+                checkListRepository.findByUserIdAndItemIdAndPreviousNow(userId, request.getItemId());
+        if (existingCheckList.isPresent()) {
+            throw new BusinessException(ErrorCode.ALREADY_EXISTS_CHECKLIST);
+        }
 
         CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user));
 

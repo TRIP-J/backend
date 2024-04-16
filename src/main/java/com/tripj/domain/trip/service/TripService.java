@@ -34,10 +34,10 @@ public class TripService {
                                          Long userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다.", ErrorCode.E404_NOT_EXISTS_USER));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
         Country country = countryRepository.findById(request.getCountryId())
-                        .orElseThrow(() -> new NotFoundException("존재하지 않는 나라입니다.", ErrorCode.E404_NOT_EXISTS_COUNTRY));
+                        .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
 
         Trip savedTrip = tripRepository.save(request.toEntity(user, country));
 
@@ -66,8 +66,6 @@ public class TripService {
         return CreateTripResponse.of(tripId);
     }
 
-
-
     /**
      * 여행 조회
      */
@@ -75,10 +73,23 @@ public class TripService {
     public List<GetTripResponse> getTrip(Long userId) {
 
         userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("존재하지 않는 회원입니다.", ErrorCode.E404_NOT_EXISTS_USER));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
         return tripRepository.getTrip(userId);
     }
+
+    /**
+     * 지난 여행 조회
+     */
+    @Transactional(readOnly = true)
+    public List<GetTripResponse> getPastTrip(Long userId) {
+
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+
+        return tripRepository.getPastTrip(userId);
+    }
+
 
 
 }

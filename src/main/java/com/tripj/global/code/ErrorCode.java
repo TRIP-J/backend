@@ -36,6 +36,11 @@ public enum ErrorCode {
     ALREADY_REGISTERED_USER(BAD_REQUEST, false, "M002", "이미 가입된 회원입니다."),
 
     /**
+     * 체크리스트
+     */
+    ALREADY_EXISTS_CHECKLIST(BAD_REQUEST, false, "C001", "이미 체크리스트에 추가된 아이템입니다."),
+
+    /**
      * 인증 && 인가
      */
     TOKEN_EXPIRED(UNAUTHORIZED, false, "A001", "토큰이 만료되었습니다."),
