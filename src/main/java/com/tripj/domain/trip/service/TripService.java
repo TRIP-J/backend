@@ -84,11 +84,18 @@ public class TripService {
     @Transactional(readOnly = true)
     public List<GetTripResponse> getPastTrip(Long userId) {
 
-        userRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+
+        tripRepository.findById(user.getTrip().get(0).getId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
 
         return tripRepository.getPastTrip(userId);
     }
+
+
+
+
 
 
 
