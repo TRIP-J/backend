@@ -46,4 +46,7 @@ public class GetTripResponse {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
+
+
 }

@@ -5,6 +5,7 @@ import com.tripj.domain.country.model.entity.QCountry;
 import com.tripj.domain.trip.model.dto.GetTripResponse;
 import com.tripj.domain.trip.model.dto.QGetTripResponse;
 import com.tripj.domain.trip.model.entity.QTrip;
+import com.tripj.domain.trip.model.entity.Trip;
 
 import java.util.List;
 
@@ -42,5 +43,27 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
         return results;
     }
 
+    @Override
+    public List<GetTripResponse> getPastTrip(Long userId) {
+        List<GetTripResponse> result = queryFactory
+                .select(new QGetTripResponse(
+                        trip.id,
+                        trip.user.id,
+                        trip.country.name,
+                        trip.tripName,
+                        trip.purpose,
+                        trip.startDate,
+                        trip.endDate
+                ))
+                .from(trip)
+                .join(trip.country, country)
+                .where(
+                        trip.previous.ne("NOW"),
+                        trip.user.id.eq(userId)
+                )
+                .orderBy(trip.startDate.desc())
+                .fetch();
 
+        return result;
+    }
 }
