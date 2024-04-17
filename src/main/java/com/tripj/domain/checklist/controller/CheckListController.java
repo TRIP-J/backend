@@ -66,10 +66,11 @@ public class CheckListController {
             summary = "체크리스트에 담은 아이템 조회 API",
             description = "체크리스트 > 체크리스트에 내가 담은 아이템 카테고리별 조회"
     )
-    @GetMapping("/checklist")
+    @GetMapping("/added")
     public RestApiResponse <List<GetMyCheckListResponse>> getMyCheckList(Long itemCateId,
-                                                                         Long userId) {
-        return RestApiResponse.success(checkListService.getMyCheckList(itemCateId, userId));
+                                                                         Long userId,
+                                                                         Long tripId) {
+        return RestApiResponse.success(checkListService.getMyCheckList(itemCateId, userId, tripId));
     }
 
 

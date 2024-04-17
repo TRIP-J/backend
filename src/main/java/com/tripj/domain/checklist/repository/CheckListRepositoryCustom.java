@@ -9,6 +9,6 @@ import java.util.List;
 public interface CheckListRepositoryCustom {
 
     List<GetCheckListResponse> getCheckList(Long itemCateId, Long userId, Long countryId);
-    List<GetMyCheckListResponse> getMyCheckList(Long itemCateId, Long userId);
+    List<GetMyCheckListResponse> getMyCheckList(Long itemCateId, Long userId, Long tripId);
 
 }

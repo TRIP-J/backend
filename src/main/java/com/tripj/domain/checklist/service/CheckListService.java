@@ -5,6 +5,8 @@ import com.tripj.domain.checklist.model.entity.CheckList;
 import com.tripj.domain.checklist.repository.CheckListRepository;
 import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.item.repository.ItemRepository;
+import com.tripj.domain.trip.model.entity.Trip;
+import com.tripj.domain.trip.repository.TripRepository;
 import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.code.ErrorCode;
@@ -26,6 +28,7 @@ public class CheckListService {
     private final CheckListRepository checkListRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final TripRepository tripRepository;
 
     /**
      * 체크리스트 조회
@@ -42,8 +45,12 @@ public class CheckListService {
      */
     public CreateCheckListResponse createCheckList(CreateCheckListRequest request,
                                                    Long userId) {
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+
+        Trip trip = tripRepository.findById(request.getTripId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
 
         Item item = itemRepository.findById(request.getItemId())
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM));
@@ -54,7 +61,7 @@ public class CheckListService {
             throw new BusinessException(ErrorCode.ALREADY_EXISTS_CHECKLIST);
         }
 
-        CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user));
+        CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user, trip));
 
         return CreateCheckListResponse.of(savedCheckList.getId());
     }
@@ -137,8 +144,11 @@ public class CheckListService {
      * 내 체크리스트 조회
      */
     @Transactional(readOnly = true)
-    public List<GetMyCheckListResponse> getMyCheckList(Long itemCateId, Long userId) {
-        return checkListRepository.getMyCheckList(itemCateId, userId);
+    public List<GetMyCheckListResponse> getMyCheckList(Long itemCateId,
+                                                       Long userId,
+                                                       Long tripId) {
+
+        return checkListRepository.getMyCheckList(itemCateId, userId, tripId);
     }
 
 }
