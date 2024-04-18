@@ -52,7 +52,8 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
                                 checkList.id,
                                 checkList.item.itemName,
                                 itemCate.itemCateName,
-                                trip.tripName
+                                trip.tripName,
+                                checkList.pack
                         ))
                         .from(checkList)
                         .join(checkList.item, item)
@@ -67,4 +68,5 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
 
         return results;
     }
+
 }
