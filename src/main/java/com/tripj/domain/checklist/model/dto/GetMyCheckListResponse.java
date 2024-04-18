@@ -23,15 +23,20 @@ public class GetMyCheckListResponse {
     @Schema(description = "여행 이름", example = "즐거운 오사카 여행")
     private String tripName;
 
+    @Schema(description = "챙김 여부", example = "YES")
+    private String pack;
+
     @QueryProjection
     public GetMyCheckListResponse(Long checkListId,
                                   String itemName,
                                   String itemCateName,
-                                  String tripName) {
+                                  String tripName,
+                                  String pack) {
         this.checkListId = checkListId;
         this.itemName = itemName;
         this.itemCateName = itemCateName;
         this.tripName = tripName;
+        this.pack = pack;
     }
 
 }

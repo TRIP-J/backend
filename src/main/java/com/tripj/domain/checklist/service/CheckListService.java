@@ -151,6 +151,9 @@ public class CheckListService {
         return checkListRepository.getMyCheckList(itemCateId, userId, tripId);
     }
 
+
+
+
 }
 
 
