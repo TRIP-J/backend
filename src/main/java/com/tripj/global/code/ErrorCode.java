@@ -28,6 +28,7 @@ public enum ErrorCode {
     E404_NOT_EXISTS_ITEM(NOT_FOUND, false, "NF004", "존재하지 않는 아이템입니다."),
     E404_NOT_EXISTS_CHECKLIST(NOT_FOUND, false, "NF005", "존재하지 않는 체크리스트입니다."),
     E404_NOT_EXISTS_TRIP(NOT_FOUND, false, "NF006", "존재하지 않는 여행계획 입니다."),
+    E404_NOT_EXISTS_PRECAUTION(NOT_FOUND, false, "NF007", "존재하지 않는 주의사항 입니다."),
 
     /**
      * 회원

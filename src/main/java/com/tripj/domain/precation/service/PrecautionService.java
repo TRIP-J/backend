@@ -2,6 +2,7 @@ package com.tripj.domain.precation.service;
 
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
+import com.tripj.domain.precation.model.dto.GetPrecautionDetailResponse;
 import com.tripj.domain.precation.model.dto.GetPrecautionListResponse;
 import com.tripj.domain.precation.model.entity.Precaution;
 import com.tripj.domain.precation.repository.PrecautionRepository;
@@ -23,7 +24,7 @@ public class PrecautionService {
     private final CountryRepository countryRepository;
 
     /**
-     * 주의사항 전체 조회
+     * 나라별 주의사항 전체 조회
      */
     public List<GetPrecautionListResponse> getPrecautionList(Long countryId) {
 
@@ -33,5 +34,14 @@ public class PrecautionService {
         return precautionRepository.findByCountryId(countryId);
     }
 
+    /**
+     * 주의사항 상세 조회
+     */
+    public GetPrecautionDetailResponse getPrecautionDetail(Long precautionId) {
 
+        precautionRepository.findById(precautionId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_PRECAUTION));
+
+        return precautionRepository.getPrecautionDetail(precautionId);
+    }
 }
