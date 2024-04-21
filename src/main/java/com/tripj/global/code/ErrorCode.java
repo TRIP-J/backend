@@ -27,13 +27,15 @@ public enum ErrorCode {
     E404_NOT_EXISTS_ITEM_CATE(NOT_FOUND, false, "NF003", "존재하지 않는 아이템 카테고리입니다."),
     E404_NOT_EXISTS_ITEM(NOT_FOUND, false, "NF004", "존재하지 않는 아이템입니다."),
     E404_NOT_EXISTS_CHECKLIST(NOT_FOUND, false, "NF005", "존재하지 않는 체크리스트입니다."),
-    E404_NOT_EXISTS_TRIP(NOT_FOUND, false, "NF006", "존재하지 않는 여행계획 입니다."),
-    E404_NOT_EXISTS_PRECAUTION(NOT_FOUND, false, "NF007", "존재하지 않는 주의사항 입니다."),
+    E404_NOT_EXISTS_TRIP(NOT_FOUND, false, "NF006", "존재하지 않는 여행계획입니다."),
+    E404_NOT_EXISTS_PRECAUTION(NOT_FOUND, false, "NF007", "존재하지 않는 주의사항입니다."),
+    E404_NOT_EXISTS_BOARD(NOT_FOUND, false, "NF008", "존재하지 않는 게시글입니다."),
+    E404_NOT_EXISTS_BOARD_CATE(NOT_FOUND, false, "NF009", "존재하지 않는 게시글 카테고리입니다."),
 
     /**
      * 회원
      */
-    INVALID_USER_TYPE(BAD_REQUEST, false, "M001", "잘못된 회원 타입 입니다."),
+    INVALID_USER_TYPE(BAD_REQUEST, false, "M001", "잘못된 회원 타입입니다."),
     ALREADY_REGISTERED_USER(BAD_REQUEST, false, "M002", "이미 가입된 회원입니다."),
 
     /**

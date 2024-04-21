@@ -37,7 +37,7 @@ public class TripService {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
         Country country = countryRepository.findById(request.getCountryId())
-                        .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
 
         Trip savedTrip = tripRepository.save(request.toEntity(user, country));
 
