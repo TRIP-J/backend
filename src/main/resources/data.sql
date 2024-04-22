@@ -1,16 +1,16 @@
-CREATE TABLE item_cate (
+CREATE TABLE IF NOT EXISTS item_cate (
     item_cate_id INT AUTO_INCREMENT PRIMARY KEY,
     item_cate_code CHAR(3) NOT NULL,
     item_cate_name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE country (
+CREATE TABLE IF NOT EXISTS country (
     country_id INT AUTO_INCREMENT PRIMARY KEY,
     country_code CHAR(2) NOT NULL,
     country_name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE item (
+CREATE TABLE IF NOT EXISTS item (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
     item_name VARCHAR(255) NOT NULL,
     item_cate_id INT,
@@ -59,3 +59,8 @@ VALUES (1, '여권', 2, 'F', null),
          (17, '필터 샤워기', 1, 'F', 6),
          (18, '선글라스', 1, 'F', 7),
          (19, '선크림', 1, 'F', 7);
+
+INSERT INTO board_cate (board_cate_id, board_cate_code, board_cate_name)
+VALUES (1, 'REV', '후기'),
+       (2, 'QUE', '질문'),
+       (3, 'TIP', '꿀팁');
