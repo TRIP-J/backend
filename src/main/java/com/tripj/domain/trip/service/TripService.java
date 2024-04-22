@@ -29,6 +29,7 @@ public class TripService {
 
     /**
      * 여행 생성
+
      */
     public CreateTripResponse createTrip(CreateTripRequest request,
                                          Long userId) {

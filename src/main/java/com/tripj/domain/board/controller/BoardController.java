@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -30,8 +27,9 @@ public class BoardController {
             description = "게시글을 등록합니다."
     )
     @PostMapping("")
+    //TODO : S3에 첨부파일 올리기
     public RestApiResponse<CreateBoardResponse> createBoard(
-            @ModelAttribute @Validated CreateBoardRequest request,
+            @Validated @RequestPart CreateBoardRequest request,
             Long userId,
             BindingResult bindingResult) throws IOException {
 
