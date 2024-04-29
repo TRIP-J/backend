@@ -12,4 +12,5 @@ public interface LikedBoardRepository extends JpaRepository<LikedBoard, Long> {
 
     void deleteByUserIdAndBoardId(Long userId, Long boardId);
 
+    void deleteByBoardId(Long boardId);
 }
