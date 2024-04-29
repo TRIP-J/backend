@@ -42,5 +42,37 @@ public class BoardController {
                 boardService.createBoard(request, userId));
     }
 
+    @Operation(
+            summary = "게시글 수정 API",
+            description = "게시글을 수정합니다."
+    )
+    @PostMapping("/{boardId}")
+    public RestApiResponse<CreateBoardResponse> updateBoard(
+            @Validated @RequestPart CreateBoardRequest request,
+            @PathVariable Long boardId, Long userId,
+            BindingResult bindingResult) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            return RestApiResponse.error(ErrorCode.E401_BINDING_RESULT, errorMessage);
+        }
+
+        return RestApiResponse.success(
+                boardService.updateBoard(request, boardId, userId));
+    }
+
+    @Operation(
+            summary = "게시글 삭제 API",
+            description = "게시글을 삭제합니다."
+    )
+    @DeleteMapping("/{boardId}")
+    public RestApiResponse<CreateBoardResponse> deleteBoard(
+            Long userId, @PathVariable Long boardId) {
+
+        return RestApiResponse.success(
+                boardService.deleteBoard(userId, boardId));
+    }
+
+
 
 }

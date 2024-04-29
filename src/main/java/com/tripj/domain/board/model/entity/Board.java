@@ -33,7 +33,6 @@ public class Board extends BaseTimeEntity {
 
     private String content;
 
-
     public static Board newBoard(String title, String content,
                                 User user, BoardCate boardCate) {
         return Board.builder()
@@ -42,5 +41,13 @@ public class Board extends BaseTimeEntity {
                 .user(user)
                 .boardCate(boardCate)
                 .build();
+    }
+
+    /**
+     * 게시글 수정
+     */
+    public void updateBoard(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 }
