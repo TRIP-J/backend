@@ -2,6 +2,7 @@ package com.tripj.domain.board.service;
 
 import com.tripj.domain.board.model.dto.CreateBoardRequest;
 import com.tripj.domain.board.model.dto.CreateBoardResponse;
+import com.tripj.domain.board.model.dto.GetBoardResponse;
 import com.tripj.domain.board.model.entity.Board;
 import com.tripj.domain.board.repository.BoardRepository;
 import com.tripj.domain.boardcate.model.entity.BoardCate;
@@ -88,4 +89,39 @@ public class BoardService {
 
         return CreateBoardResponse.of(board.getId());
     }
+
+    /**
+     * 게시글 상세조회
+     */
+    public GetBoardResponse getBoard(Long boardId) {
+
+        Board board = boardRepository.findById(boardId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
+
+        return GetBoardResponse.of(boardId, board.getTitle(), board.getContent());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -2,6 +2,7 @@ package com.tripj.domain.board.controller;
 
 import com.tripj.domain.board.model.dto.CreateBoardRequest;
 import com.tripj.domain.board.model.dto.CreateBoardResponse;
+import com.tripj.domain.board.model.dto.GetBoardResponse;
 import com.tripj.domain.board.service.BoardService;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;
@@ -73,6 +74,16 @@ public class BoardController {
                 boardService.deleteBoard(userId, boardId));
     }
 
+    @Operation(
+            summary = "게시글 상세 조회 API",
+            description = "게시글을 상세조회 합니다."
+    )
+    @GetMapping("/{boardId}")
+    public RestApiResponse<GetBoardResponse> getBoard(
+            @PathVariable Long boardId) {
+
+        return RestApiResponse.success(boardService.getBoard(boardId));
+    }
 
 
 }
