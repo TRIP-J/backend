@@ -7,6 +7,9 @@ import org.springframework.data.domain.Slice;
 public interface BoardRepositoryCustom {
     Slice<GetBoardResponse> findAllPaging(Long lastBoardId, Pageable pageable);
 
+    GetBoardResponse getBoardDetail(Long boardId);
+
+
 
 
 }

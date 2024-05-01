@@ -102,13 +102,16 @@ public class BoardService {
     @Transactional(readOnly = true)
     public GetBoardResponse getBoard(Long boardId) {
 
-        Board board = boardRepository.findById(boardId)
+        boardRepository.findById(boardId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
 
-        return GetBoardResponse.of(board.getUser().getId(),
-                board.getUser().getUserName(),
-                board.getUser().getProfile(),
-                boardId, board.getTitle(), board.getContent());
+        return boardRepository.getBoardDetail(boardId);
+
+        /*return GetBoardResponse.of(
+                boardDetail.getUserId(), boardDetail.getUserName(),
+                boardDetail.getProfile(), boardDetail.getBoardId(),
+                boardDetail.getTitle(), boardDetail.getContent(),
+                boardDetail.getCommentCnt(), boardDetail.getLikeCnt());*/
     }
 
 
@@ -120,7 +123,8 @@ public class BoardService {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
 
-        commentRepository.findByBoardId(boardId)
+        commentRepository.findByBoardId(boardId);
+        return null;
     }
 
     /**
@@ -135,8 +139,11 @@ public class BoardService {
                         board.getUserName(),
                         board.getProfile(),
                         board.getBoardId(),
+                        board.getBoardCateName(),
                         board.getTitle(),
-                        board.getContent()));
+                        board.getContent(),
+                        board.getCommentCnt(),
+                        board.getLikeCnt()));
     }
 
 
