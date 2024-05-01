@@ -1,14 +1,19 @@
 package com.tripj.domain.board.controller;
 
-import com.tripj.domain.board.model.dto.CreateBoardRequest;
-import com.tripj.domain.board.model.dto.CreateBoardResponse;
-import com.tripj.domain.board.model.dto.GetBoardResponse;
+import com.tripj.domain.board.model.dto.request.CreateBoardRequest;
+import com.tripj.domain.board.model.dto.request.GetBoardRequest;
+import com.tripj.domain.board.model.dto.response.CreateBoardResponse;
+import com.tripj.domain.board.model.dto.response.GetBoardCommentResponse;
+import com.tripj.domain.board.model.dto.response.GetBoardResponse;
 import com.tripj.domain.board.service.BoardService;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -82,8 +87,62 @@ public class BoardController {
     public RestApiResponse<GetBoardResponse> getBoard(
             @PathVariable Long boardId) {
 
-        return RestApiResponse.success(boardService.getBoard(boardId));
+        return RestApiResponse.success(
+                boardService.getBoard(boardId));
     }
+
+    @Operation(
+            summary = "게시글 상세 댓글 조회 API",
+            description = "게시글 상세조회시 댓글을 조회 합니다."
+    )
+    @GetMapping("/{boardId}/comments")
+    public RestApiResponse<GetBoardCommentResponse> getBoardComment(
+            @PathVariable Long boardId) {
+
+        return RestApiResponse.success(
+                boardService.getBoardComment(boardId));
+    }
+
+
+    @Operation(
+            summary = "게시글 리스트 조회 API",
+            description = "게시글(후기,질문,꿀팁) 리스트 조회 합니다."
+    )
+    @GetMapping("")
+    public RestApiResponse<Slice<GetBoardResponse>> getBoardList(
+            @RequestParam(required = false) Long lastBoardId,
+            @PageableDefault(size = 5) Pageable pageable) {
+
+        GetBoardRequest request = GetBoardRequest.of(lastBoardId);
+        Slice<GetBoardResponse> getBoardList =
+                boardService.getBoardList(request, pageable);
+
+        return RestApiResponse.success(getBoardList);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

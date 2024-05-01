@@ -1,8 +1,10 @@
 package com.tripj.domain.board.service;
 
-import com.tripj.domain.board.model.dto.CreateBoardRequest;
-import com.tripj.domain.board.model.dto.CreateBoardResponse;
-import com.tripj.domain.board.model.dto.GetBoardResponse;
+import com.tripj.domain.board.model.dto.request.CreateBoardRequest;
+import com.tripj.domain.board.model.dto.request.GetBoardRequest;
+import com.tripj.domain.board.model.dto.response.CreateBoardResponse;
+import com.tripj.domain.board.model.dto.response.GetBoardCommentResponse;
+import com.tripj.domain.board.model.dto.response.GetBoardResponse;
 import com.tripj.domain.board.model.entity.Board;
 import com.tripj.domain.board.repository.BoardRepository;
 import com.tripj.domain.boardcate.model.entity.BoardCate;
@@ -15,8 +17,12 @@ import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.ForbiddenException;
 import com.tripj.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -93,34 +99,45 @@ public class BoardService {
     /**
      * 게시글 상세조회
      */
+    @Transactional(readOnly = true)
     public GetBoardResponse getBoard(Long boardId) {
 
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
 
-        return GetBoardResponse.of(boardId, board.getTitle(), board.getContent());
+        return GetBoardResponse.of(board.getUser().getId(),
+                board.getUser().getUserName(),
+                board.getUser().getProfile(),
+                boardId, board.getTitle(), board.getContent());
     }
 
 
+    /**
+     * 게시글 댓글 조회
+     */
+    public GetBoardCommentResponse getBoardComment(Long boardId) {
 
+        Board board = boardRepository.findById(boardId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
 
+        commentRepository.findByBoardId(boardId)
+    }
 
+    /**
+     * 게시글 리스트 조회 (무한스크롤)
+     */
+    @Transactional(readOnly = true)
+    public Slice<GetBoardResponse> getBoardList(GetBoardRequest request, Pageable pageable) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return boardRepository.findAllPaging(request.getLastBoardId(), pageable)
+                .map(board -> GetBoardResponse.of(
+                        board.getUserId(),
+                        board.getUserName(),
+                        board.getProfile(),
+                        board.getBoardId(),
+                        board.getTitle(),
+                        board.getContent()));
+    }
 
 
 

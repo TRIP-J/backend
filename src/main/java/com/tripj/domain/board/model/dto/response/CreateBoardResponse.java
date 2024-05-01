@@ -1,4 +1,4 @@
-package com.tripj.domain.board.model.dto;
+package com.tripj.domain.board.model.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
