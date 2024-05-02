@@ -1,4 +1,4 @@
-package com.tripj.domain.board.model.dto;
+package com.tripj.domain.board.model.dto.request;
 
 import com.tripj.domain.board.model.entity.Board;
 import com.tripj.domain.boardcate.model.entity.BoardCate;
