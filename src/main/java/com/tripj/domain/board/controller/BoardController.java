@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -103,28 +104,52 @@ public class BoardController {
                 boardService.getBoardComment(boardId));
     }
 
+    @Operation(
+            summary = "게시글 리스트 조회 API",
+            description = "게시글(후기,질문,꿀팁) 리스트 조회 무한스크롤 합니다."
+    )
+    @GetMapping("/scroll")
+    public RestApiResponse<Slice<GetBoardResponse>> getBoardListScroll(
+            @RequestParam(required = false) Long lastBoardId,
+            @PageableDefault(size = 5) Pageable pageable) {
+
+        GetBoardRequest request = GetBoardRequest.of(lastBoardId);
+        Slice<GetBoardResponse> getBoardList =
+                boardService.getBoardListScroll(request, pageable);
+
+        return RestApiResponse.success(getBoardList);
+    }
 
     @Operation(
             summary = "게시글 리스트 조회 API",
             description = "게시글(후기,질문,꿀팁) 리스트 조회 합니다."
     )
     @GetMapping("")
-    public RestApiResponse<Slice<GetBoardResponse>> getBoardList(
-            @RequestParam(required = false) Long lastBoardId,
-            @PageableDefault(size = 5) Pageable pageable) {
+    public RestApiResponse<List<GetBoardResponse>> getBoardList(
+            @RequestParam Long boardCateId) {
 
-        GetBoardRequest request = GetBoardRequest.of(lastBoardId);
-        Slice<GetBoardResponse> getBoardList =
-                boardService.getBoardList(request, pageable);
-
-        return RestApiResponse.success(getBoardList);
+        return RestApiResponse.success(boardService.getBoardList(boardCateId));
     }
 
+    @Operation(
+            summary = "최신글 리스트 조회 API",
+            description = "최신글 리스트 조회 합니다."
+    )
+    @GetMapping("/latest")
+    public RestApiResponse<List<GetBoardResponse>> getBoardLatestList() {
 
+        return RestApiResponse.success(boardService.getBoardLatestList());
+    }
 
+    @Operation(
+            summary = "인기글 리스트 조회 API",
+            description = "인기글 리스트 조회 합니다."
+    )
+    @GetMapping("/popular")
+    public RestApiResponse<List<GetBoardResponse>> getBoardPopularList() {
 
-
-
+        return RestApiResponse.success(boardService.getBoardPopularList());
+    }
 
 
 

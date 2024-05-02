@@ -131,7 +131,7 @@ public class BoardService {
      * 게시글 리스트 조회 (무한스크롤)
      */
     @Transactional(readOnly = true)
-    public Slice<GetBoardResponse> getBoardList(GetBoardRequest request, Pageable pageable) {
+    public Slice<GetBoardResponse> getBoardListScroll(GetBoardRequest request, Pageable pageable) {
 
         return boardRepository.findAllPaging(request.getLastBoardId(), pageable)
                 .map(board -> GetBoardResponse.of(
@@ -139,13 +139,32 @@ public class BoardService {
                         board.getUserName(),
                         board.getProfile(),
                         board.getBoardId(),
-                        board.getBoardCateName(),
                         board.getTitle(),
                         board.getContent(),
+                        board.getBoardCateName(),
+                        board.getRegTime(),
                         board.getCommentCnt(),
                         board.getLikeCnt()));
     }
 
+    /**
+     * 게시글 전체 리스트 조회
+     */
+    public List<GetBoardResponse> getBoardList(Long boardCateId) {
+        return boardRepository.getBoardList(boardCateId);
+    }
 
+    /**
+     * 최신글 전체 리스트 조회
+     */
+    public List<GetBoardResponse> getBoardLatestList() {
+        return boardRepository.getBoardLatestList();
+    }
 
+    /**
+     * 인기글 전체 리스트 조회
+     */
+    public List<GetBoardResponse> getBoardPopularList() {
+        return boardRepository.getBoardPopularList();
+    }
 }

@@ -1,11 +1,16 @@
 package com.tripj.domain.board.model.entity;
 
 import com.tripj.domain.boardcate.model.entity.BoardCate;
+import com.tripj.domain.comment.model.entity.Comment;
 import com.tripj.domain.common.entity.BaseEntity;
 import com.tripj.domain.common.entity.BaseTimeEntity;
+import com.tripj.domain.like.model.entity.LikedBoard;
 import com.tripj.domain.user.model.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
 
@@ -28,6 +33,12 @@ public class Board extends BaseTimeEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "board_cate_id")
     private BoardCate boardCate;
+
+    @OneToMany(mappedBy = "board")
+    private List<Comment> comment = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<LikedBoard> likedBoard = new ArrayList<>();
 
     private String title;
 
