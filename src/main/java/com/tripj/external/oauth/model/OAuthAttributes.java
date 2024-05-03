@@ -20,12 +20,14 @@ public class OAuthAttributes {
     private String email;
     private String profile;
     private UserType userType;
+    private String nickname;
 
     //OAuthAttributes에 있는 정보를 User에 담아 객체를 만들고 이 객체를 통해 회원가입
-    public User toUserEntity(UserType userType, Role role) {
+    public User toUserEntity(UserType userType, Role role, String nickname) {
         return User.builder()
                 .userName(name)
                 .email(email)
+                .nickname(nickname)
                 .userType(userType)
                 .profile(profile)
                 .role(role)

@@ -1,6 +1,7 @@
 package com.tripj.domain.user.service;
 
 import com.tripj.domain.user.model.entity.User;
+import com.tripj.domain.user.repository.nickname.GenerateRandomNicknameRepository;
 import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.BusinessException;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final GenerateRandomNicknameRepository nicknameRepository;
 
     /**
      * 회원가입
@@ -44,6 +46,18 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    /**
+     * 랜덤 닉네임 생성
+     */
+    public String generateRandomNickname() {
+        while (true) {
+            String nickname = nicknameRepository.generate();
+            if (!userRepository.existsByNickname(nickname)) {
+                return nickname;
+            }
+        }
     }
 
 

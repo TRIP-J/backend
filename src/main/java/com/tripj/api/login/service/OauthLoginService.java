@@ -37,7 +37,8 @@ public class OauthLoginService {
         Optional<User> optionalUser = userService.findUserByEmail(userInfo.getEmail());
         //신규 회원가입
         if (optionalUser.isEmpty()) {
-            User oauthUser = userInfo.toUserEntity(userType, Role.ROLE_USER);
+            String nickname = userService.generateRandomNickname();
+            User oauthUser = userInfo.toUserEntity(userType, Role.ROLE_USER, nickname);
             oauthUser = userService.registerUser(oauthUser);
 
             //토큰 생성
