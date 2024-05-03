@@ -11,13 +11,17 @@ import com.tripj.domain.trip.repository.TripRepository;
 import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.code.ErrorCode;
+import com.tripj.global.error.exception.BusinessException;
 import com.tripj.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -29,16 +33,21 @@ public class TripService {
 
     /**
      * 여행 생성
-
      */
     public CreateTripResponse createTrip(CreateTripRequest request,
                                          Long userId) {
 
+        // 여행 계획은 endDate가 지나기 전까지 한 개밖에 못 만든다.
+        Trip trip = tripRepository.findByUserId(userId);
+        if (trip != null && trip.getPrevious().equals("NOW")) {
+            throw new BusinessException(ErrorCode.ALREADY_EXISTS_TRIP);
+        }
+
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
         Country country = countryRepository.findById(request.getCountryId())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
 
         Trip savedTrip = tripRepository.save(request.toEntity(user, country));
 
@@ -53,10 +62,10 @@ public class TripService {
                                          Long userId) {
 
         Trip trip = tripRepository.findById(tripId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
 
         Country country = countryRepository.findById(request.getCountryId())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
 
         if (trip.getUser().getId().equals(userId)) {
             trip.updateTrip(request.getTripName(), request.getPurpose(),
