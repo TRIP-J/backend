@@ -103,6 +103,12 @@ public class TripService {
         return tripRepository.getPastTrip(userId);
     }
 
+    /**
+     * Previous 변경
+     */
+    public void changeTripPrevious() {
+    }
+
 
 
 
