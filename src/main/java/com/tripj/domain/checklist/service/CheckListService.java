@@ -47,23 +47,26 @@ public class CheckListService {
                                                    Long userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
         Trip trip = tripRepository.findById(request.getTripId())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
 
         Item item = itemRepository.findById(request.getItemId())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM));
 
         Optional<CheckList> existingCheckList =
-                checkListRepository.findByUserIdAndItemIdAndPreviousNow(userId, request.getItemId());
+                checkListRepository.findByUserIdAndItemIdAndTripIdAndPreviousNow(userId, request.getItemId(), trip.getId());
         if (existingCheckList.isPresent()) {
             throw new BusinessException(ErrorCode.ALREADY_EXISTS_CHECKLIST);
         }
 
-        CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user, trip));
-
-        return CreateCheckListResponse.of(savedCheckList.getId());
+        if (trip.getUser().getId().equals(userId)) {
+            CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user, trip));
+            return CreateCheckListResponse.of(savedCheckList.getId());
+        } else {
+            throw new ForbiddenException(ErrorCode.NOT_MY_CHECKLIST);
+        }
     }
 
     /**

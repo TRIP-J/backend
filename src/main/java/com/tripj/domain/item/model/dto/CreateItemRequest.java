@@ -3,6 +3,7 @@ package com.tripj.domain.item.model.dto;
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.itemcate.model.entity.ItemCate;
+import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -24,12 +25,17 @@ public class CreateItemRequest {
     @Schema(description = "아이템 카테고리 Id", example = "1")
     private Long itemCateId;
 
-    public Item toEntity(User user, ItemCate itemCate, Country country) {
+    @Schema(description = "여행 Id", example = "1")
+    private Long tripId;
+
+    public Item toEntity(User user, ItemCate itemCate, Country country, Trip trip) {
         return Item.newItem(
                 itemName,
                 previous,
                 user,
                 itemCate,
-                country);
+                country,
+                trip);
     }
+
 }

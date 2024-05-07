@@ -43,11 +43,13 @@ public enum ErrorCode {
      * 여행
      */
     ALREADY_EXISTS_TRIP(BAD_REQUEST, false, "C001", "이미 생성한 여행이 있습니다."),
+    NOT_MY_TRIP(BAD_REQUEST, false, "C002", "자신이 생성한 여행이 아닙니다."),
 
     /**
      * 체크리스트
      */
     ALREADY_EXISTS_CHECKLIST(BAD_REQUEST, false, "C001", "이미 체크리스트에 추가된 아이템입니다."),
+    NOT_MY_CHECKLIST(BAD_REQUEST, false, "C002", "자신이 생성한 체크리스트가 아닙니다."),
 
     /**
      * 인증 && 인가
