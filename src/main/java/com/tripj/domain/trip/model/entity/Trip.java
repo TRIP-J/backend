@@ -65,8 +65,11 @@ public class Trip extends BaseTimeEntity {
         this.country = country;
     }
 
-
-
-
+    /**
+     * 스케줄러로 Previous 변경
+     */
+    public void updatePrevious(String previous) {
+        this.previous = previous;
+    }
 
 }
