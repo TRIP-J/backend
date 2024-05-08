@@ -107,12 +107,25 @@ public class TripService {
      * Previous 변경
      */
     public void changeTripPrevious() {
+
+        List<Trip> previousIsNow = tripRepository.findAllPreviousIsNow();
+
+        previousIsNow
+                .forEach(trip -> {
+                    Long userId = trip.getUser().getId();
+                    // previous 가장 큰 값 찾기
+                    String maxPrevious = tripRepository.findMaxPrevious(userId);
+                    if (maxPrevious != null) {
+                        int nextNum = Integer.parseInt(maxPrevious.substring(1)) + 1;
+                        String nextPrevious = "B" + String.format("%02d", nextNum);
+                        trip.updatePrevious(nextPrevious);
+                    }
+                    // previous가 NOW만 있으면 B01로 변경
+                    if (trip.getPrevious().equals("NOW")) {
+                        trip.updatePrevious("B01");
+                    }
+                });
     }
-
-
-
-
-
 
 
 }

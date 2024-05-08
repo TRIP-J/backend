@@ -71,4 +71,5 @@ public class Trip extends BaseTimeEntity {
     public void updatePrevious(String previous) {
         this.previous = previous;
     }
+
 }
