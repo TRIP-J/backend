@@ -50,4 +50,9 @@ public class CheckList extends BaseTimeEntity {
         this.id = checkListId;
         this.pack = yes;
     }
+
+    // checkList previous update
+    public void updatePrevious(String nextPrevious) {
+        this.previous = nextPrevious;
+    }
 }

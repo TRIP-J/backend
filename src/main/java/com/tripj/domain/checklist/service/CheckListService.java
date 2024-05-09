@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class CheckListService {
 
     private final CheckListRepository checkListRepository;
@@ -154,9 +154,29 @@ public class CheckListService {
         return checkListRepository.getMyCheckList(itemCateId, userId, tripId);
     }
 
+    /**
+     * Previous 변경
+     */
+    public void changeCheckListPrevious() {
+        List<CheckList> allPreviousIsNow = checkListRepository.findAllPreviousIsNow();
+
+        allPreviousIsNow
+                .forEach(checkList -> {
+                    Long tripId = checkList.getTrip().getId();
+                    String maxPrevious = checkListRepository.findMaxPrevious(tripId);
+                    if (maxPrevious != null) {
+                        int nextNum = Integer.parseInt(maxPrevious.substring(1)) + 1;
+                        String nextPrevious = "B" + String.format("%02d", nextNum);
+                        checkList.updatePrevious(nextPrevious);
+                    }
+                    if (checkList.getPrevious().equals("NOW")) {
+                        checkList.updatePrevious("B01");
+                    }
+                }
+        );
 
 
-
+    }
 }
 
 

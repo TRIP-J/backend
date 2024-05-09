@@ -1,5 +1,6 @@
-package com.tripj.batch.trip;
+package com.tripj.batch.item;
 
+import com.tripj.batch.trip.TripDailyJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -10,18 +11,17 @@ import org.springframework.stereotype.Component;
 @Component
 //@Profile("batch")
 @RequiredArgsConstructor
-public class TripBatchScheduler {
+public class ItemBatchScheduler {
 
-    private final TripDailyJob tripDailyJob;
+    private final ItemDailyJob itemDailyJob;
 
     /**
      * 매일 자정 여행계획의 EndDate 가 지나면 Previous 상태 변경
      */
     @Scheduled(cron = "0 0 12 * * ?")
-//    @Scheduled(fixedDelay = 60000)
     public void runDailyJobPrevious() {
-        log.info("tripDailyJob Update batch execute");
-        tripDailyJob.run();
+        log.info("itemDailyJob Update batch execute");
+        itemDailyJob.run();
     }
 
 
