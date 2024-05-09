@@ -54,4 +54,8 @@ public class Item extends BaseTimeEntity {
                 .trip(trip)
                 .build();
     }
+
+    public void updatePrevious(String previous) {
+        this.previous = previous;
+    }
 }
