@@ -58,7 +58,7 @@ public class TripController {
         }
 
         return RestApiResponse.success(
-                tripService.updateTrip(request, userId, tripId));
+                tripService.updateTrip(request, tripId, userId));
     }
 
 

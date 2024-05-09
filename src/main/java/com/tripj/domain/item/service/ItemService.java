@@ -4,7 +4,6 @@ import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
 import com.tripj.domain.item.model.dto.CreateItemRequest;
 import com.tripj.domain.item.model.dto.CreateItemResponse;
-import com.tripj.domain.item.model.dto.ItemPreviousResponse;
 import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.item.repository.ItemRepository;
 import com.tripj.domain.itemcate.model.entity.ItemCate;
