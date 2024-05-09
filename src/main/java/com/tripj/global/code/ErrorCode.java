@@ -32,6 +32,9 @@ public enum ErrorCode {
     E404_NOT_EXISTS_BOARD(NOT_FOUND, false, "NF008", "존재하지 않는 게시글입니다."),
     E404_NOT_EXISTS_BOARD_CATE(NOT_FOUND, false, "NF009", "존재하지 않는 게시글 카테고리입니다."),
     E404_NOT_EXISTS_COMMENT(NOT_FOUND, false, "NF010", "존재하지 않는 게시글 댓글입니다."),
+    E404_NOT_EXISTS_NOW_TRIP(NOT_FOUND, false, "NF011", "존재하지 않는 현재 여행계획입니다."),
+    E404_NOT_EXISTS_NOW_ITEM(NOT_FOUND, false, "NF012", "존재하지 않는 현재 아이템입니다."),
+
 
     /**
      * 회원

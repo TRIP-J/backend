@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
@@ -14,4 +15,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select max(i.previous) from Item i where i.trip.id = :tripId and i.previous = '%B'")
     String findMaxPrevious(@Param("tripId") Long tripId);
+
+    @Query("select i from Item i where i.previous = 'NOW' and i.id = :itemId")
+    Optional<Item> findByPreviousIsNow(@Param("itemId") Long itemId);
 }

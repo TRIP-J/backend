@@ -38,8 +38,9 @@ public class ItemService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
-        Trip trip = tripRepository.findById(request.getTripId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
+        //지난 여행에 아이템 등록 불가
+        Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_NOW_TRIP));
 
         ItemCate itemCate = itemCateRepository.findById(request.getItemCateId())
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM_CATE));
