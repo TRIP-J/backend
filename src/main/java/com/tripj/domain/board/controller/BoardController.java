@@ -97,7 +97,7 @@ public class BoardController {
             description = "게시글 상세조회시 댓글을 조회 합니다."
     )
     @GetMapping("/{boardId}/comments")
-    public RestApiResponse<GetBoardCommentResponse> getBoardComment(
+    public RestApiResponse<List<GetBoardCommentResponse>> getBoardComment(
             @PathVariable Long boardId) {
 
         return RestApiResponse.success(
