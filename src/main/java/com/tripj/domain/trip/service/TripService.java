@@ -2,10 +2,10 @@ package com.tripj.domain.trip.service;
 
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
-import com.tripj.domain.trip.model.dto.CreateTripRequest;
-import com.tripj.domain.trip.model.dto.CreateTripResponse;
-import com.tripj.domain.trip.model.dto.GetTripResponse;
-import com.tripj.domain.trip.model.dto.UpdateTripRequest;
+import com.tripj.domain.trip.model.dto.request.CreateTripRequest;
+import com.tripj.domain.trip.model.dto.response.CreateTripResponse;
+import com.tripj.domain.trip.model.dto.response.GetTripResponse;
+import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
 import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.trip.repository.TripRepository;
 import com.tripj.domain.user.model.entity.User;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service

@@ -1,9 +1,9 @@
 package com.tripj.domain.trip.controller;
 
-import com.tripj.domain.trip.model.dto.CreateTripRequest;
-import com.tripj.domain.trip.model.dto.CreateTripResponse;
-import com.tripj.domain.trip.model.dto.GetTripResponse;
-import com.tripj.domain.trip.model.dto.UpdateTripRequest;
+import com.tripj.domain.trip.model.dto.request.CreateTripRequest;
+import com.tripj.domain.trip.model.dto.response.CreateTripResponse;
+import com.tripj.domain.trip.model.dto.response.GetTripResponse;
+import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
 import com.tripj.domain.trip.service.TripService;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;

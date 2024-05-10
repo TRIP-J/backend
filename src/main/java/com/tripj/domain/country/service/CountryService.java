@@ -1,6 +1,6 @@
 package com.tripj.domain.country.service;
 
-import com.tripj.domain.country.model.dto.GetCountryResponse;
+import com.tripj.domain.country.model.dto.response.GetCountryResponse;
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;

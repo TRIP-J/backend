@@ -1,11 +1,8 @@
 package com.tripj.domain.precation.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tripj.domain.precation.model.dto.GetPrecautionDetailResponse;
-import com.tripj.domain.precation.model.dto.QGetPrecautionDetailResponse;
-import com.tripj.domain.precation.model.entity.QPrecaution;
-
-import java.util.List;
+import com.tripj.domain.precation.model.dto.response.GetPrecautionDetailResponse;
+import com.tripj.domain.precation.model.dto.response.QGetPrecautionDetailResponse;
 
 import static com.tripj.domain.precation.model.entity.QPrecaution.*;
 

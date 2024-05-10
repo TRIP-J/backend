@@ -1,4 +1,4 @@
-package com.tripj.domain.checklist.model.dto;
+package com.tripj.domain.checklist.model.dto.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

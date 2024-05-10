@@ -1,7 +1,7 @@
 package com.tripj.domain.like.controller;
 
-import com.tripj.domain.like.model.dto.CreateLikedBoardRequest;
-import com.tripj.domain.like.model.dto.CreateLikedBoardResponse;
+import com.tripj.domain.like.model.dto.request.CreateLikedBoardRequest;
+import com.tripj.domain.like.model.dto.response.CreateLikedBoardResponse;
 import com.tripj.domain.like.service.LikedBoardService;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

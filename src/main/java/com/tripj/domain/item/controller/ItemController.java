@@ -1,7 +1,7 @@
 package com.tripj.domain.item.controller;
 
-import com.tripj.domain.item.model.dto.CreateItemRequest;
-import com.tripj.domain.item.model.dto.CreateItemResponse;
+import com.tripj.domain.item.model.dto.request.CreateItemRequest;
+import com.tripj.domain.item.model.dto.response.CreateItemResponse;
 import com.tripj.domain.item.service.ItemService;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,14 +1,11 @@
 package com.tripj.domain.precation.service;
 
-import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
-import com.tripj.domain.precation.model.dto.GetPrecautionDetailResponse;
-import com.tripj.domain.precation.model.dto.GetPrecautionListResponse;
-import com.tripj.domain.precation.model.entity.Precaution;
+import com.tripj.domain.precation.model.dto.response.GetPrecautionDetailResponse;
+import com.tripj.domain.precation.model.dto.response.GetPrecautionListResponse;
 import com.tripj.domain.precation.repository.PrecautionRepository;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.NotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,6 +1,5 @@
 package com.tripj.domain.like.repository;
 
-import com.tripj.domain.like.model.dto.CreateLikedBoardResponse;
 import com.tripj.domain.like.model.entity.LikedBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
 

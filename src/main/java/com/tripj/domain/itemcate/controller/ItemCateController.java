@@ -1,6 +1,6 @@
 package com.tripj.domain.itemcate.controller;
 
-import com.tripj.domain.itemcate.model.dto.GetItemCateResponse;
+import com.tripj.domain.itemcate.model.dto.response.GetItemCateResponse;
 import com.tripj.domain.itemcate.service.ItemCateService;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

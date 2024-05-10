@@ -1,6 +1,6 @@
 package com.tripj.domain.itemcate.service;
 
-import com.tripj.domain.itemcate.model.dto.GetItemCateResponse;
+import com.tripj.domain.itemcate.model.dto.response.GetItemCateResponse;
 import com.tripj.domain.itemcate.model.entity.ItemCate;
 import com.tripj.domain.itemcate.repository.ItemCateRepository;
 import lombok.RequiredArgsConstructor;

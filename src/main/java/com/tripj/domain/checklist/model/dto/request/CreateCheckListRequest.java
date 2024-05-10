@@ -1,4 +1,4 @@
-package com.tripj.domain.checklist.model.dto;
+package com.tripj.domain.checklist.model.dto.request;
 
 import com.tripj.domain.checklist.model.entity.CheckList;
 import com.tripj.domain.item.model.entity.Item;

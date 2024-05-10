@@ -1,6 +1,6 @@
 package com.tripj.domain.precation.repository;
 
-import com.tripj.domain.precation.model.dto.GetPrecautionDetailResponse;
+import com.tripj.domain.precation.model.dto.response.GetPrecautionDetailResponse;
 
 public interface PrecautionRepositoryCustom {
 
