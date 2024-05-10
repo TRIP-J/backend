@@ -118,13 +118,12 @@ public class BoardService {
     /**
      * 게시글 댓글 조회
      */
-    public GetBoardCommentResponse getBoardComment(Long boardId) {
+    public List<GetBoardCommentResponse> getBoardComment(Long boardId) {
 
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
 
-        commentRepository.findByBoardId(boardId);
-        return null;
+        return commentRepository.findByBoardId(boardId);
     }
 
     /**
