@@ -1,7 +1,7 @@
 package com.tripj.domain.precation.controller;
 
-import com.tripj.domain.precation.model.dto.GetPrecautionDetailResponse;
-import com.tripj.domain.precation.model.dto.GetPrecautionListResponse;
+import com.tripj.domain.precation.model.dto.response.GetPrecautionDetailResponse;
+import com.tripj.domain.precation.model.dto.response.GetPrecautionListResponse;
 import com.tripj.domain.precation.service.PrecautionService;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

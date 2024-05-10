@@ -1,6 +1,8 @@
 package com.tripj.domain.checklist.controller;
 
-import com.tripj.domain.checklist.model.dto.*;
+import com.tripj.domain.checklist.model.dto.request.CreateCheckListRequest;
+import com.tripj.domain.checklist.model.dto.request.PackCheckListRequest;
+import com.tripj.domain.checklist.model.dto.response.*;
 import com.tripj.domain.checklist.service.CheckListService;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

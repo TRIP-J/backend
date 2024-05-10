@@ -1,4 +1,4 @@
-package com.tripj.domain.item.model.dto;
+package com.tripj.domain.item.model.dto.request;
 
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.item.model.entity.Item;

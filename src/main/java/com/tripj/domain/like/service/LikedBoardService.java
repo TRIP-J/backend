@@ -2,8 +2,8 @@ package com.tripj.domain.like.service;
 
 import com.tripj.domain.board.model.entity.Board;
 import com.tripj.domain.board.repository.BoardRepository;
-import com.tripj.domain.like.model.dto.CreateLikedBoardRequest;
-import com.tripj.domain.like.model.dto.CreateLikedBoardResponse;
+import com.tripj.domain.like.model.dto.request.CreateLikedBoardRequest;
+import com.tripj.domain.like.model.dto.response.CreateLikedBoardResponse;
 import com.tripj.domain.like.model.entity.LikedBoard;
 import com.tripj.domain.like.repository.LikedBoardRepository;
 import com.tripj.domain.user.model.entity.User;

@@ -1,6 +1,6 @@
 package com.tripj.domain.country.controller;
 
-import com.tripj.domain.country.model.dto.GetCountryResponse;
+import com.tripj.domain.country.model.dto.response.GetCountryResponse;
 import com.tripj.domain.country.service.CountryService;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

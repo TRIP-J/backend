@@ -1,4 +1,4 @@
-package com.tripj.domain.checklist.model.dto;
+package com.tripj.domain.checklist.model.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;

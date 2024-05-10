@@ -1,11 +1,8 @@
 package com.tripj.domain.trip.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tripj.domain.country.model.entity.QCountry;
-import com.tripj.domain.trip.model.dto.GetTripResponse;
-import com.tripj.domain.trip.model.dto.QGetTripResponse;
-import com.tripj.domain.trip.model.entity.QTrip;
-import com.tripj.domain.trip.model.entity.Trip;
+import com.tripj.domain.trip.model.dto.response.GetTripResponse;
+import com.tripj.domain.trip.model.dto.response.QGetTripResponse;
 
 import java.util.List;
 

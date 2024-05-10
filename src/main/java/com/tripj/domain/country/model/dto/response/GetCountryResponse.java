@@ -1,4 +1,4 @@
-package com.tripj.domain.country.model.dto;
+package com.tripj.domain.country.model.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

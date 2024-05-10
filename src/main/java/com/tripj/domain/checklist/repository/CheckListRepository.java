@@ -1,6 +1,6 @@
 package com.tripj.domain.checklist.repository;
 
-import com.tripj.domain.checklist.model.dto.PackCheckListResponse;
+import com.tripj.domain.checklist.model.dto.response.PackCheckListResponse;
 import com.tripj.domain.checklist.model.entity.CheckList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

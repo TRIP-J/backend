@@ -1,14 +1,19 @@
-package com.tripj.domain.precation.model.dto;
+package com.tripj.domain.precation.model.dto.response;
 
-import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
-@Schema(description = "주의사항 상세조회 DTO")
-public class GetPrecautionDetailResponse {
+@Schema(description = "주의사항 조회 DTO")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class GetPrecautionListResponse {
+
+    @Schema(description = "주의사항 Id", example = "1")
+    private Long id;
 
     @Schema(description = "주의사항 제목",
             example = "일본은 현금을 많이 사용해요")
@@ -18,9 +23,7 @@ public class GetPrecautionDetailResponse {
             example = "일본은 카드보다 현금을 많이 사용하는 편이에요....")
     private String content;
 
-    @QueryProjection
-    public GetPrecautionDetailResponse(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
+    @Schema(description = "나라명", example = "일본")
+    private String countryName;
+
 }
