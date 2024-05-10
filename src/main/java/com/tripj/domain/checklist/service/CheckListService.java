@@ -53,7 +53,7 @@ public class CheckListService {
         Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_NOW_TRIP));
 
-        Item item = itemRepository.findByPreviousIsNow(request.getItemId())
+        Item item = itemRepository.findByPreviousIsNowOrFixIsF(request.getItemId())
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_NOW_ITEM));
 
         // 중복 체크
@@ -82,18 +82,19 @@ public class CheckListService {
         CheckList checkList = checkListRepository.findById(checkListId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_CHECKLIST));
 
-        if (checkList.getItem().getFix().equals("F")) {
-            // fix가 "F"인 경우 바로 삭제
-            checkListRepository.deleteById(checkListId);
-        } else {
+        String fix = checkList.getItem().getFix();
+
+        if (fix == null) {
             // fix가 "F"가 아닌 경우, 사용자 ID 확인
             if (checkList.getItem().getUser().getId().equals(userId)) {
                 checkListRepository.deleteById(checkListId);
             } else {
                 throw new ForbiddenException("아이템 삭제 권한이 없습니다.", ErrorCode.E403_FORBIDDEN);
             }
+        } else {
+            checkListRepository.deleteById(checkListId);
         }
-        
+
         return DeleteCheckListResponse.of(checkListId);
     }
 

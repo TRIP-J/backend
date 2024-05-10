@@ -26,7 +26,8 @@ public class CheckListController {
     public RestApiResponse <List<GetCheckListResponse>> getCheckList(Long itemCateId,
                                                                      Long userId,
                                                                      Long countryId) {
-        return RestApiResponse.success(checkListService.getCheckList(itemCateId, userId, countryId));
+        return RestApiResponse.success(
+                checkListService.getCheckList(itemCateId, userId, countryId));
     }
 
     @Operation(
@@ -45,8 +46,8 @@ public class CheckListController {
             description = "체크리스트에 아이템을 삭제합니다."
     )
     @DeleteMapping("/{checkListId}")
-    public RestApiResponse<DeleteCheckListResponse> deleteChecList(@PathVariable("checkListId") Long checkListId,
-                                                                   Long userId) {
+    public RestApiResponse<DeleteCheckListResponse> deleteCheckList(@PathVariable("checkListId") Long checkListId,
+                                                                    Long userId) {
         return RestApiResponse.success(
                 checkListService.deleteCheckList(checkListId, userId));
     }
@@ -70,7 +71,8 @@ public class CheckListController {
     public RestApiResponse <List<GetMyCheckListResponse>> getMyCheckList(Long itemCateId,
                                                                          Long userId,
                                                                          Long tripId) {
-        return RestApiResponse.success(checkListService.getMyCheckList(itemCateId, userId, tripId));
+        return RestApiResponse.success(
+                checkListService.getMyCheckList(itemCateId, userId, tripId));
     }
 
 
