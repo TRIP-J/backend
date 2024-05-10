@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TripRepositoryCustom {
 
-    List<GetTripResponse> getTrip(Long userId);
+    GetTripResponse getTrip(Long userId);
 
     List<GetTripResponse> getPastTrip(Long userId);
 

@@ -67,7 +67,7 @@ public class TripController {
    				description = "여행 선택완료 후 메인페이지에 조회되는 여행 정보 조회"
    	)
    	@GetMapping("")
-    public RestApiResponse <List<GetTripResponse>> getTrip(Long userId) {
+    public RestApiResponse<GetTripResponse> getTrip(Long userId) {
 
         return RestApiResponse.success(
                 tripService.getTrip(userId));

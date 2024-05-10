@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface TripRepository extends JpaRepository<Trip, Long>, TripRepositoryCustom {
 
-    Trip findByUserId(Long userId);
+    List<Trip> findByUserId(Long userId);
 
     @Query("select t from Trip t where t.endDate = CURRENT_DATE and t.previous = 'NOW'")
     List<Trip> findAllPreviousIsNow();

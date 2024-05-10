@@ -21,8 +21,8 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
     }
 
     @Override
-    public List<GetTripResponse> getTrip(Long userId) {
-        List<GetTripResponse> results = queryFactory
+    public GetTripResponse getTrip(Long userId) {
+        GetTripResponse results = queryFactory
                 .select(new QGetTripResponse(
                         trip.id,
                         trip.user.id,
@@ -38,7 +38,7 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
                         trip.previous.eq("NOW"),
                         trip.user.id.eq(userId)
                 )
-                .fetch();
+                .fetchOne();
 
         return results;
     }
