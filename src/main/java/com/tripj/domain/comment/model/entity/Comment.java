@@ -1,7 +1,6 @@
 package com.tripj.domain.comment.model.entity;
 
 import com.tripj.domain.board.model.entity.Board;
-import com.tripj.domain.comment.model.dto.CreateCommentRequest;
 import com.tripj.domain.user.model.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
