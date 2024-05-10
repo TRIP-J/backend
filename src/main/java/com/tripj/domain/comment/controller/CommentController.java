@@ -1,7 +1,8 @@
 package com.tripj.domain.comment.controller;
 
-import com.tripj.domain.comment.model.dto.CreateCommentRequest;
-import com.tripj.domain.comment.model.dto.CreateCommentResponse;
+import com.tripj.domain.comment.model.dto.request.CreateCommentRequest;
+import com.tripj.domain.comment.model.dto.response.CreateCommentResponse;
+import com.tripj.domain.comment.model.dto.response.DeleteCommentResponse;
 import com.tripj.domain.comment.service.CommentService;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,10 +23,12 @@ public class CommentController {
             description = "게시글에 댓글을 등록합니다."
     )
     @PostMapping("")
-    public RestApiResponse<CreateCommentResponse> createComment(@RequestBody CreateCommentRequest request,
-                                                                Long userId) {
+    public RestApiResponse<CreateCommentResponse> createComment(
+            @RequestBody CreateCommentRequest request,
+            Long userId) {
 
-        return RestApiResponse.success(commentService.createComment(request, userId));
+        return RestApiResponse.success(
+                commentService.createComment(request, userId));
     }
 
     @Operation(
@@ -33,12 +36,25 @@ public class CommentController {
             description = "게시글에 댓글을 수정합니다."
     )
     @PostMapping("/{commentId}")
-    public RestApiResponse<CreateCommentResponse> updateComment(@RequestBody CreateCommentRequest request,
-                                                                @PathVariable Long commentId,
-                                                                Long userId) {
+    public RestApiResponse<CreateCommentResponse> updateComment(
+            @RequestBody CreateCommentRequest request,
+            @PathVariable Long commentId,
+            Long userId) {
 
-        return RestApiResponse.success(commentService.updateComment(request, commentId, userId));
+        return RestApiResponse.success(
+                commentService.updateComment(request, commentId, userId));
     }
 
+    @Operation(
+            summary = "게시글에 댓글 삭제 API",
+            description = "게시글에 댓글을 삭제합니다."
+    )
+    @DeleteMapping("/{commentId}")
+    public RestApiResponse<DeleteCommentResponse> deleteComment(
+            @PathVariable Long commentId, Long userId) {
+
+        return RestApiResponse.success(
+                commentService.deleteComment(commentId, userId));
+    }
 
 }
