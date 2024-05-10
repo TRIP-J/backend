@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TripRepository extends JpaRepository<Trip, Long>, TripRepositoryCustom {
 
@@ -16,4 +17,7 @@ public interface TripRepository extends JpaRepository<Trip, Long>, TripRepositor
 
     @Query("select max(t.previous) from Trip t where t.user.id = :userId and t.previous like 'B%'")
     String findMaxPrevious(@Param("userId") Long userId);
+
+    @Query("select t from Trip t where t.previous = 'NOW' and t.id = :tripId")
+    Optional<Trip> findByPreviousIsNow(@Param("tripId") Long tripId);
 }
