@@ -18,6 +18,4 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select i from Item i where i.id = :itemId and ((i.previous = 'NOW' and i.fix is null) or (i.previous is null and i.fix is not null))")
     Optional<Item> findByPreviousIsNowOrFixIsF(@Param("itemId") Long itemId);
-
-
 }

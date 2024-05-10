@@ -8,7 +8,4 @@ public class PackCheckListRequest {
 
     @Schema(description = "체크리스트 Id", example = "1")
     private Long checklistId;
-
-    @Schema(description = "챙김 여부", example = "NO")
-    private String pack;
 }

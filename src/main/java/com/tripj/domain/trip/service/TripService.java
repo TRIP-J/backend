@@ -38,10 +38,13 @@ public class TripService {
                                          Long userId) {
 
         // 여행 계획은 endDate가 지나기 전까지 한 개밖에 못 만든다.
-        Trip trip = tripRepository.findByUserId(userId);
-        if (trip != null && trip.getPrevious().equals("NOW")) {
-            throw new BusinessException(ErrorCode.ALREADY_EXISTS_TRIP);
-        }
+        List<Trip> trip = tripRepository.findByUserId(userId);
+        trip
+            .forEach(trips -> {
+                if (trips.getPrevious().equals("NOW")) {
+                    throw new BusinessException(ErrorCode.ALREADY_EXISTS_TRIP);
+                }
+            });
 
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
@@ -80,7 +83,7 @@ public class TripService {
      * 여행 조회
      */
     @Transactional(readOnly = true)
-    public List<GetTripResponse> getTrip(Long userId) {
+    public GetTripResponse getTrip(Long userId) {
 
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
