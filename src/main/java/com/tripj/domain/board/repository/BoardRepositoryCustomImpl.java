@@ -2,9 +2,12 @@ package com.tripj.domain.board.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tripj.domain.board.model.dto.response.GetBoardResponse;
 import com.tripj.domain.board.model.dto.response.QGetBoardResponse;
+import com.tripj.domain.board.model.entity.Board;
+import com.tripj.domain.board.model.entity.QBoard;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -186,4 +189,34 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
 
         return results;
     }
+
+    @Override
+    public List<GetBoardResponse> getMyBoardList(Long userId) {
+        List<GetBoardResponse> results = queryFactory
+                .select((new QGetBoardResponse(
+                        user.id,
+                        user.userName,
+                        user.profile,
+                        board.id,
+                        board.boardCate.boardCateName,
+                        board.title,
+                        board.content,
+                        board.regTime,
+                        comment.id.countDistinct(),
+                        likedBoard.id.countDistinct()
+                )))
+                .from(board)
+                .join(board.user, user)
+                .leftJoin(board.comment, comment)
+                .leftJoin(board.likedBoard, likedBoard)
+                .where(board.user.id.eq(userId))
+                .groupBy(user.id, user.userName, user.profile, board.id,
+                        board.boardCate.boardCateName, board.title,
+                        board.content, board.regTime)
+                .orderBy(board.regTime.desc())
+                .fetch();
+
+        return results;
+    }
+
 }
