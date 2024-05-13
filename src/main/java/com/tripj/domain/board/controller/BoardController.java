@@ -151,23 +151,15 @@ public class BoardController {
         return RestApiResponse.success(boardService.getBoardPopularList());
     }
 
+    @Operation(
+            summary = "내가 쓴 게시글 조회 API",
+            description = "마이페이지에서 내 게시글을 조회 합니다."
+    )
+    @GetMapping("/my/{userId}")
+    public RestApiResponse<List<GetBoardResponse>> getMyBoardList(
+            @RequestParam Long userId) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return RestApiResponse.success(boardService.getMyBoardList(userId));
+    }
 
 }

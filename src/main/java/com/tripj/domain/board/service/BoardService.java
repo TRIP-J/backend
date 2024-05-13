@@ -16,6 +16,7 @@ import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.ForbiddenException;
 import com.tripj.global.error.exception.NotFoundException;
+import com.tripj.global.model.RestApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -165,5 +166,12 @@ public class BoardService {
      */
     public List<GetBoardResponse> getBoardPopularList() {
         return boardRepository.getBoardPopularList();
+    }
+
+    /**
+     * 내 게시글 조회
+     */
+    public List<GetBoardResponse> getMyBoardList(Long userId) {
+        return boardRepository.getMyBoardList(userId);
     }
 }
