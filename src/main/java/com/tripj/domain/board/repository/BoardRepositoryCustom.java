@@ -18,4 +18,6 @@ public interface BoardRepositoryCustom {
     List<GetBoardResponse> getBoardPopularList();
 
     List<GetBoardResponse> getMyBoardList(Long userId);
+
+    List<GetBoardResponse> getMyLikedBoard(Long userId);
 }

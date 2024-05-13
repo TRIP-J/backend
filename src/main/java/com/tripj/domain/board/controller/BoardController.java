@@ -162,4 +162,14 @@ public class BoardController {
         return RestApiResponse.success(boardService.getMyBoardList(userId));
     }
 
+    @Operation(
+            summary = "내가 좋아요 누른 게시글 조회 API",
+            description = "마이페이지에서 내 좋아요 조회 합니다."
+    )
+    @GetMapping("/my/liked/{userId}")
+    public RestApiResponse<List<GetBoardResponse>> getMyLikedBoard(
+            @RequestParam Long userId) {
+        return RestApiResponse.success(boardService.getMyLikedBoard(userId));
+    }
+
 }

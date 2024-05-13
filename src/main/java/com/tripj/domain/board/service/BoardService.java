@@ -174,4 +174,14 @@ public class BoardService {
     public List<GetBoardResponse> getMyBoardList(Long userId) {
         return boardRepository.getMyBoardList(userId);
     }
+
+    /**
+     * 내 좋아요
+     */
+    public List<GetBoardResponse> getMyLikedBoard(Long userId) {
+        return boardRepository.getMyLikedBoard(userId);
+    }
+
+
+
 }
