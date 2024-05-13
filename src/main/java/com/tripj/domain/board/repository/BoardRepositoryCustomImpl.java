@@ -219,4 +219,33 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
         return results;
     }
 
+    @Override
+    public List<GetBoardResponse> getMyLikedBoard(Long userId) {
+        List<GetBoardResponse> results = queryFactory
+                .select((new QGetBoardResponse(
+                        user.id,
+                        user.userName,
+                        user.profile,
+                        board.id,
+                        board.boardCate.boardCateName,
+                        board.title,
+                        board.content,
+                        board.regTime,
+                        comment.id.countDistinct(),
+                        likedBoard.id.countDistinct()
+                )))
+                .from(board)
+                .join(board.user, user)
+                .leftJoin(board.comment, comment)
+                .join(board.likedBoard, likedBoard)
+                .where(likedBoard.user.id.eq(userId))
+                .groupBy(user.id, user.userName, user.profile, board.id,
+                        board.boardCate.boardCateName, board.title,
+                        board.content, board.regTime)
+                .orderBy(board.regTime.desc())
+                .fetch();
+
+        return results;
+
+    }
 }
