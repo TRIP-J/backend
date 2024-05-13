@@ -3,7 +3,9 @@ package com.tripj.domain.item.service;
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
+import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
+import com.tripj.domain.item.model.dto.response.UpdateItemResponse;
 import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.item.repository.ItemRepository;
 import com.tripj.domain.itemcate.model.entity.ItemCate;
@@ -32,7 +34,9 @@ public class ItemService {
     private final CountryRepository countryRepository;
     private final TripRepository tripRepository;
 
-    //아이템 등록
+    /**
+     * 아이템 등록
+     */
     public CreateItemResponse createItem(CreateItemRequest request, Long userId) {
 
         User user = userRepository.findById(userId)
@@ -57,6 +61,23 @@ public class ItemService {
     }
 
     /**
+     * 아이템 수정
+     */
+    public UpdateItemResponse updateItem(UpdateItemRequest request, Long itemId, Long userId) {
+
+        Item item = itemRepository.findById(itemId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM));
+
+        if (item.getUser().getId().equals(userId)) {
+            item.updateItem(request.getItemName());
+        } else {
+            throw new ForbiddenException("자신의 아이템만 수정 가능합니다.", ErrorCode.E403_FORBIDDEN);
+        }
+
+        return UpdateItemResponse.of(item.getId());
+    }
+
+    /**
      * Previous 변경
      */
     public void changeItemPrevious() {
@@ -76,7 +97,6 @@ public class ItemService {
                         item.updatePrevious("B01");
                     }
                 });
-
-
     }
+    
 }

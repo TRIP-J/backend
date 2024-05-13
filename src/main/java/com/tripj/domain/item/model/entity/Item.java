@@ -58,4 +58,11 @@ public class Item extends BaseTimeEntity {
     public void updatePrevious(String previous) {
         this.previous = previous;
     }
+
+    /**
+     * 아이템 수정
+     */
+    public void updateItem(String itemName) {
+        this.itemName = itemName;
+    }
 }
