@@ -2,6 +2,7 @@ package com.tripj.domain.board.service;
 
 import com.tripj.domain.board.model.dto.request.CreateBoardRequest;
 import com.tripj.domain.board.model.dto.request.GetBoardRequest;
+import com.tripj.domain.board.model.dto.request.GetBoardSearchRequest;
 import com.tripj.domain.board.model.dto.response.CreateBoardResponse;
 import com.tripj.domain.board.model.dto.response.GetBoardCommentResponse;
 import com.tripj.domain.board.model.dto.response.GetBoardResponse;
@@ -169,6 +170,13 @@ public class BoardService {
     }
 
     /**
+     * 게시글 전체 검색 조회
+     */
+    public List<GetBoardResponse> getAllBoardList(GetBoardSearchRequest request) {
+        return boardRepository.getAllBoardList(request);
+    }
+
+    /**
      * 내 게시글 조회
      */
     public List<GetBoardResponse> getMyBoardList(Long userId) {
@@ -181,7 +189,5 @@ public class BoardService {
     public List<GetBoardResponse> getMyLikedBoard(Long userId) {
         return boardRepository.getMyLikedBoard(userId);
     }
-
-
 
 }

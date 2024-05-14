@@ -2,6 +2,7 @@ package com.tripj.domain.board.controller;
 
 import com.tripj.domain.board.model.dto.request.CreateBoardRequest;
 import com.tripj.domain.board.model.dto.request.GetBoardRequest;
+import com.tripj.domain.board.model.dto.request.GetBoardSearchRequest;
 import com.tripj.domain.board.model.dto.response.CreateBoardResponse;
 import com.tripj.domain.board.model.dto.response.GetBoardCommentResponse;
 import com.tripj.domain.board.model.dto.response.GetBoardResponse;
@@ -9,6 +10,7 @@ import com.tripj.domain.board.service.BoardService;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -151,6 +153,18 @@ public class BoardController {
         return RestApiResponse.success(boardService.getBoardPopularList());
     }
 
+
+    @Operation(
+            summary = "게시글 전체 검색 조회 API",
+            description = "게시글에서 전체 검색을 합니다."
+    )
+    @GetMapping("/all")
+    public RestApiResponse<List<GetBoardResponse>> getAllBoardList(
+            @Parameter GetBoardSearchRequest request) {
+
+        return RestApiResponse.success(boardService.getAllBoardList(request));
+    }
+
     @Operation(
             summary = "내가 쓴 게시글 조회 API",
             description = "마이페이지에서 내 게시글을 조회 합니다."
@@ -171,5 +185,6 @@ public class BoardController {
             @RequestParam Long userId) {
         return RestApiResponse.success(boardService.getMyLikedBoard(userId));
     }
+
 
 }
