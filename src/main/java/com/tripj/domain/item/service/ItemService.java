@@ -5,6 +5,7 @@ import com.tripj.domain.country.repository.CountryRepository;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
+import com.tripj.domain.item.model.dto.response.DeleteItemResponse;
 import com.tripj.domain.item.model.dto.response.UpdateItemResponse;
 import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.item.repository.ItemRepository;
@@ -68,11 +69,17 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM));
 
-        if (item.getUser().getId().equals(userId)) {
-            item.updateItem(request.getItemName());
-        } else {
+        // 나라별 고정 아이템 수정 불가
+        if (item.getUser() == null || "F".equals(item.getFix())) {
+            throw new ForbiddenException("이 아이템은 수정이 불가능합니다.", ErrorCode.E403_FORBIDDEN);
+        }
+
+        // 자신의 아이템만 수정 가능
+        if (!item.getUser().getId().equals(userId)) {
             throw new ForbiddenException("자신의 아이템만 수정 가능합니다.", ErrorCode.E403_FORBIDDEN);
         }
+
+        item.updateItem(request.getItemName());
 
         return UpdateItemResponse.of(item.getId());
     }
@@ -98,5 +105,29 @@ public class ItemService {
                     }
                 });
     }
-    
+
+    /**
+     * 아이템 삭제
+     */
+    public DeleteItemResponse deleteItem(Long itemId, Long userId) {
+
+        Item item = itemRepository.findById(itemId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM));
+
+        if (item.getUser() == null || "F".equals(item.getFix())) {
+            throw new ForbiddenException("삭제 할 수 없는 아이템 입니다.", ErrorCode.E403_FORBIDDEN);
+        }
+
+        if (!"NOW".equals(item.getPrevious())) {
+            throw new ForbiddenException("지난 아이템은 삭제할 수 없습니다.", ErrorCode.E403_FORBIDDEN);
+        }
+
+        if (item.getUser().getId().equals(userId)) {
+            itemRepository.deleteById(item.getId());
+        } else {
+            throw new ForbiddenException("자신의 아이템만 삭제 가능합니다.", ErrorCode.E403_FORBIDDEN);
+        }
+
+        return DeleteItemResponse.of(item.getId());
+    }
 }

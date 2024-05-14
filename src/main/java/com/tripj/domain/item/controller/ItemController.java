@@ -3,6 +3,7 @@ package com.tripj.domain.item.controller;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
+import com.tripj.domain.item.model.dto.response.DeleteItemResponse;
 import com.tripj.domain.item.model.dto.response.UpdateItemResponse;
 import com.tripj.domain.item.service.ItemService;
 import com.tripj.global.code.ErrorCode;
@@ -49,9 +50,20 @@ public class ItemController {
             return RestApiResponse.error(ErrorCode.E401_BINDING_RESULT, errorMessage);
         }
 
-        return RestApiResponse.success(itemService.updateItem(request, itemId, userId));
+        return RestApiResponse.success(
+                itemService.updateItem(request, itemId, userId));
     }
 
+    @Operation(
+            summary = "아이템 삭제 API",
+            description = "체크리스트에서 아이템을 삭제합니다."
+    )
+    @DeleteMapping("/{itemId}")
+    public RestApiResponse<DeleteItemResponse> deleteItem(
+            @PathVariable Long itemId, Long userId) {
 
+        return RestApiResponse.success(
+                itemService.deleteItem(itemId, userId));
+    }
 
 }
