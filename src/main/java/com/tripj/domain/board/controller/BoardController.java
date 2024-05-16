@@ -153,7 +153,6 @@ public class BoardController {
         return RestApiResponse.success(boardService.getBoardPopularList());
     }
 
-
     @Operation(
             summary = "게시글 전체 검색 조회 API",
             description = "게시글에서 전체 검색을 합니다."

@@ -9,6 +9,5 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class GetBoardSearchRequest {
 
-    private String title;
-    private String content;
+    private String keyword; //검색어
 }

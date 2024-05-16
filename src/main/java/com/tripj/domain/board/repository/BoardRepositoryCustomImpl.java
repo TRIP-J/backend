@@ -21,7 +21,7 @@ import static com.tripj.domain.like.model.entity.QLikedBoard.likedBoard;
 import static com.tripj.domain.user.model.entity.QUser.user;
 import static org.springframework.util.StringUtils.*;
 
-public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
+public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
@@ -211,8 +211,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
                 .join(board.user, user)
                 .leftJoin(board.comment, comment)
                 .leftJoin(board.likedBoard, likedBoard)
-                .where(titleLike(request.getTitle()),
-                        contentLike(request.getContent()))
+                .where(titleOrContentLike(request.getKeyword()))
                 .groupBy(user.id, user.userName, user.profile, board.id,
                         board.boardCate.boardCateName, board.title,
                         board.content, board.regTime)
@@ -287,5 +286,27 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
     private BooleanExpression contentLike(String content) {
         return hasText(content) ? board.content.contains(content) : null;
     }
+
+    private BooleanExpression titleOrContentLike(String keyword) {
+        String[] keywords = keyword.split(" ");
+
+        BooleanExpression condition = null;
+
+        for (String word : keywords) {
+            BooleanExpression titleCondition = hasText(word) ? board.title.contains(word) : null;
+            BooleanExpression contentCondition = hasText(word) ? board.content.contains(word) : null;
+
+            if (condition == null) {
+                condition = titleCondition != null ? titleCondition.or(contentCondition) : null;
+            } else {
+                if (titleCondition != null) {
+                    condition = condition.or(titleCondition).or(contentCondition);
+                }
+            }
+        }
+        return condition;
+    }
+
+
 
 }
