@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.tripj.domain.board.model.dto.request.GetBoardSearchRequest;
 import com.tripj.domain.board.model.dto.response.GetBoardResponse;
 import com.tripj.domain.board.model.dto.response.QGetBoardResponse;
 import com.tripj.domain.board.model.entity.Board;
@@ -18,8 +19,9 @@ import static com.tripj.domain.board.model.entity.QBoard.board;
 import static com.tripj.domain.comment.model.entity.QComment.comment;
 import static com.tripj.domain.like.model.entity.QLikedBoard.likedBoard;
 import static com.tripj.domain.user.model.entity.QUser.user;
+import static org.springframework.util.StringUtils.*;
 
-public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
+public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
@@ -191,6 +193,35 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
     }
 
     @Override
+    public List<GetBoardResponse> getAllBoardList(GetBoardSearchRequest request) {
+        List<GetBoardResponse> results = queryFactory
+                .select(new QGetBoardResponse(
+                        user.id,
+                        user.userName,
+                        user.profile,
+                        board.id,
+                        board.boardCate.boardCateName,
+                        board.title,
+                        board.content,
+                        board.regTime,
+                        comment.id.countDistinct(),
+                        likedBoard.id.countDistinct()
+                ))
+                .from(board)
+                .join(board.user, user)
+                .leftJoin(board.comment, comment)
+                .leftJoin(board.likedBoard, likedBoard)
+                .where(titleOrContentLike(request.getKeyword()))
+                .groupBy(user.id, user.userName, user.profile, board.id,
+                        board.boardCate.boardCateName, board.title,
+                        board.content, board.regTime)
+                .orderBy(board.regTime.desc())
+                .fetch();
+
+        return results;
+    }
+
+    @Override
     public List<GetBoardResponse> getMyBoardList(Long userId) {
         List<GetBoardResponse> results = queryFactory
                 .select((new QGetBoardResponse(
@@ -246,6 +277,36 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom{
                 .fetch();
 
         return results;
-
     }
+
+    private BooleanExpression titleLike(String title) {
+        return hasText(title) ? board.title.contains(title) : null;
+    }
+
+    private BooleanExpression contentLike(String content) {
+        return hasText(content) ? board.content.contains(content) : null;
+    }
+
+    private BooleanExpression titleOrContentLike(String keyword) {
+        String[] keywords = keyword.split(" ");
+
+        BooleanExpression condition = null;
+
+        for (String word : keywords) {
+            BooleanExpression titleCondition = hasText(word) ? board.title.contains(word) : null;
+            BooleanExpression contentCondition = hasText(word) ? board.content.contains(word) : null;
+
+            if (condition == null) {
+                condition = titleCondition != null ? titleCondition.or(contentCondition) : null;
+            } else {
+                if (titleCondition != null) {
+                    condition = condition.or(titleCondition).or(contentCondition);
+                }
+            }
+        }
+        return condition;
+    }
+
+
+
 }
