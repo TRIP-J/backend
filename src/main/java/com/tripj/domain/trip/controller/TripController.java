@@ -2,6 +2,7 @@ package com.tripj.domain.trip.controller;
 
 import com.tripj.domain.trip.model.dto.request.CreateTripRequest;
 import com.tripj.domain.trip.model.dto.response.CreateTripResponse;
+import com.tripj.domain.trip.model.dto.response.GetTripCountResponse;
 import com.tripj.domain.trip.model.dto.response.GetTripResponse;
 import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
 import com.tripj.domain.trip.service.TripService;
@@ -81,6 +82,15 @@ public class TripController {
     public RestApiResponse<List<GetTripResponse>> getPastTrip(Long userId) {
         return RestApiResponse.success(
                 tripService.getPastTrip(userId));
+    }
+
+    @Operation(
+            summary = "여행 횟수 조회 API",
+            description = "몇 번째 여행 준비중 조회"
+    )
+    @GetMapping("/count")
+    public RestApiResponse<GetTripCountResponse> getTripCount(Long userId) {
+        return RestApiResponse.success(tripService.getTripCount(userId));
     }
 
 
