@@ -4,6 +4,7 @@ import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
 import com.tripj.domain.trip.model.dto.request.CreateTripRequest;
 import com.tripj.domain.trip.model.dto.response.CreateTripResponse;
+import com.tripj.domain.trip.model.dto.response.GetTripCountResponse;
 import com.tripj.domain.trip.model.dto.response.GetTripResponse;
 import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
 import com.tripj.domain.trip.model.entity.Trip;
@@ -129,7 +130,17 @@ public class TripService {
                 });
     }
 
+    /**
+     * 여행 횟수 조회
+     */
+    public GetTripCountResponse getTripCount(Long userId) {
 
+        userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+
+        Long tripCount = tripRepository.countByUserId(userId);
+        return GetTripCountResponse.of(userId, tripCount);
+    }
 }
 
 
