@@ -26,14 +26,11 @@ public class ConversationService {
      */
     public List<GetConversationListResponse> getConversationList(Long countryId, ConversationCate cate) {
 
-        conversationRepository.findByCountryId(countryId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_CONVERSATION));
-
         List<Conversation> results = conversationRepository.findByCountryIdAndCate(countryId, cate);
 
         List<GetConversationListResponse> responseList = results.stream()
                 .map(conversation -> GetConversationListResponse.of(
-                        conversation.getId(), conversation.getCountry(), conversation.getCate(),
+                        conversation.getId(), conversation.getCountry().getId(), conversation.getCate().getValue(),
                         conversation.getMean(), conversation.getOriginal(), conversation.getAlphabet()))
                 .collect(Collectors.toList());
 

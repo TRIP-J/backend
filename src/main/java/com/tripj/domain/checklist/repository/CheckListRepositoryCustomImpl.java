@@ -1,7 +1,6 @@
 package com.tripj.domain.checklist.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tripj.domain.checklist.model.dto.*;
 import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.GetMyCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.QGetCheckListResponse;
