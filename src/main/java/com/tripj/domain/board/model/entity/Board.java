@@ -34,9 +34,11 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "board_cate_id")
     private BoardCate boardCate;
 
+    @Builder.Default
     @OneToMany(mappedBy = "board")
     private List<Comment> comment = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "board")
     private List<LikedBoard> likedBoard = new ArrayList<>();
 
