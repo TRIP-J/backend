@@ -4,14 +4,11 @@ import com.tripj.domain.conversation.model.constant.ConversationCate;
 import com.tripj.domain.conversation.model.dto.response.GetConversationListResponse;
 import com.tripj.domain.conversation.model.entity.Conversation;
 import com.tripj.domain.conversation.repository.ConversationRepository;
-import com.tripj.global.code.ErrorCode;
-import com.tripj.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

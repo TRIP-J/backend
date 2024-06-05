@@ -1,7 +1,6 @@
 package com.tripj.domain.conversation.repository;
 
 import com.tripj.domain.conversation.model.constant.ConversationCate;
-import com.tripj.domain.conversation.model.dto.response.GetConversationListResponse;
 import com.tripj.domain.conversation.model.entity.Conversation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

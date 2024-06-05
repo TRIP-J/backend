@@ -3,14 +3,14 @@ package com.tripj.domain.conversation.controller;
 import com.tripj.domain.conversation.model.constant.ConversationCate;
 import com.tripj.domain.conversation.model.dto.response.GetConversationListResponse;
 import com.tripj.domain.conversation.service.ConversationService;
-import com.tripj.domain.precation.model.dto.response.GetPrecautionDetailResponse;
-import com.tripj.domain.precation.model.dto.response.GetPrecautionListResponse;
-import com.tripj.domain.precation.service.PrecautionService;
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
