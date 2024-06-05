@@ -2,27 +2,22 @@ package com.tripj.api.healthcheck;
 
 import com.tripj.global.model.RestApiResponse;
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Hidden
 @Slf4j
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/health-check")
+@Tag(name = "health", description = "try health-check")
 public class HealthCheckController {
 
-    /*@GetMapping("/test")
-    public String healthCheck() {
-        log.info("admin test success!");
-        return "admin test success";
-    }*/
-
-    @GetMapping("/test")
+    @GetMapping("")
     public RestApiResponse healthCheck() {
-        log.info("admin test success!");
-        return RestApiResponse.success("admin test success");
+        log.info("health-check success!");
+        return RestApiResponse.success("health-check success!");
     }
 
 }
