@@ -41,8 +41,8 @@ jobs:
       - name: docker build and push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_REPO }}/v1.0 .
-          docker push ${{ secrets.DOCKER_REPO }}/v1.0
+          docker build -t ${{ secrets.DOCKER_REPO }} .
+          docker push ${{ secrets.DOCKER_REPO }}
 
   deploy:
     # needs를 통해 build job이 수행 성공시에 작업되도록 설정
@@ -60,9 +60,9 @@ jobs:
           port: ${{ secrets.NCP_PORT }}
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            sudo docker stop $(sudo docker ps -a -q)
-            sudo docker rm -f $(sudo docker ps -a -q)
-            sudo docker pull ${{ secrets.DOCKER_REPO }}/v1.0
-            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}/v1.0
+            sudo docker stop $(sudo docker ps -a -q) || true
+            sudo docker rm -f $(sudo docker ps -a -q) || true
+            sudo docker pull ${{ secrets.DOCKER_REPO }}:latest
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}:latest
             sudo docker image prune -f
-            ps -ef | grep
+            ps -ef
