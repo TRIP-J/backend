@@ -21,11 +21,11 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      # Secret YML 파일 생성
+      # YML 파일 생성
       - name: Setting secret
         run: |
           mkdir -p src/main/resources
-          echo "${{ secrets.SECRET_YML }}" | base64 --decode > src/main/resources/application-secret.yml
+          echo "${{ secrets.SECRET_YML }}" > ./src/main/resources/application.yml
           find src
         shell: bash
 
