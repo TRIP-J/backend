@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'zulu'
+          distribution: 'temurin'
 
       # YML 파일 생성
       - name: Setting secret
@@ -41,7 +41,7 @@ jobs:
       - name: docker build and push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_REPO }} .
+          docker build --no-cache -t ${{ secrets.DOCKER_REPO }} .
           docker push ${{ secrets.DOCKER_REPO }}
 
   deploy:
@@ -59,10 +59,12 @@ jobs:
           password: ${{ secrets.NCP_PASSWORD }}
           port: ${{ secrets.NCP_PORT }}
           script: |
+            sudo fuser -k 8080/tcp || true
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker stop $(sudo docker ps -a -q) || true
             sudo docker rm -f $(sudo docker ps -a -q) || true
-            sudo docker pull ${{ secrets.DOCKER_REPO }}:latest
-            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}:latest
+            sudo docker pull ${{ secrets.DOCKER_REPO }}
+            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_REPO }}
             sudo docker image prune -f
+            sudo docker images
             ps -ef
