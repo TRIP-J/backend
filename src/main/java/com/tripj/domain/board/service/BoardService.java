@@ -67,7 +67,8 @@ public class BoardService {
      * 게시글 수정
      */
     public CreateBoardResponse updateBoard(
-            CreateBoardRequest request, Long boardId, Long userId) throws IOException {
+            CreateBoardRequest request, Long boardId, Long userId,
+            List<MultipartFile> images) throws IOException {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
@@ -85,6 +86,11 @@ public class BoardService {
             throw new ForbiddenException("자신의 게시물만 수정 가능합니다.", ErrorCode.E403_FORBIDDEN);
         }
 
+        if (images != null) {
+            boardImgService.validateImgCount(images, 5L);
+        }
+        boardImgService.updateImg(board, images);
+
         return CreateBoardResponse.of(board.getId());
     }
 
@@ -101,6 +107,7 @@ public class BoardService {
             commentRepository.deleteByBoardId(boardId);
             likedBoardRepository.deleteByBoardId(boardId);
             boardRepository.deleteById(board.getId());
+            boardImgService.deleteImagesInS3(board);
         } else {
             throw new ForbiddenException("자신의 게시물만 삭제 가능합니다.", ErrorCode.E403_FORBIDDEN);
         }

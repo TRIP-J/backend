@@ -69,7 +69,7 @@ public class BoardController {
         }
 
         return RestApiResponse.success(
-                boardService.updateBoard(request, boardId, userId));
+                boardService.updateBoard(request, boardId, userId, images));
     }
 
     @Operation(

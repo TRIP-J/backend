@@ -23,6 +23,9 @@ public class BoardImgService {
     private final BoardImgRepository boardImgRepository;
     private final FileUploadUtil fileUploadUtil;
 
+    /**
+     * 이미지 업로드
+     */
     public void uploadBoardImg(Board board, List<MultipartFile> images) throws IOException {
         for (MultipartFile img : images) {
             if (!img.isEmpty()) {
@@ -32,11 +35,43 @@ public class BoardImgService {
         }
     }
 
+    /**
+     * 이미지 수정
+     */
+    public void updateImg(Board board, List<MultipartFile> images) throws IOException {
+        List<BoardImg> oldImages = deleteImagesInS3(board);
+        if (!oldImages.isEmpty()) {
+            // 기존 이미지 삭제
+            boardImgRepository.deleteAllInBatch(oldImages);
+        }
+        if (images != null) {
+            // 새로운 이미지 업로드
+            uploadBoardImg(board, images);
+        }
+    }
+
+    /**
+     * S3에서 이미지 삭제
+     */
+    public List<BoardImg> deleteImagesInS3(Board board) {
+        List<BoardImg> imgInS3 = boardImgRepository.findAllByBoard(board);
+
+        if (!imgInS3.isEmpty()) {
+            imgInS3.forEach(image -> fileUploadUtil.deleteFile(image.getPath()));
+        }
+        return imgInS3;
+    }
+
+    /**
+     * 업로드 가능 파일 개수 검증
+     */
     public void validateImgCount(List<MultipartFile> images, Long limit) {
         if (images.size() > limit) {
             throw new InvalidException(ErrorCode.E400_INVALID_FILE_COUNT_TOO_MANY);
         }
     }
+
+
 
 
 
