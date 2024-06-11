@@ -10,6 +10,7 @@ import com.tripj.domain.board.model.entity.Board;
 import com.tripj.domain.board.repository.BoardRepository;
 import com.tripj.domain.boardcate.model.entity.BoardCate;
 import com.tripj.domain.boardcate.repository.BoardCateRepository;
+import com.tripj.domain.boardimg.service.BoardImgService;
 import com.tripj.domain.comment.repository.CommentRepository;
 import com.tripj.domain.like.repository.LikedBoardRepository;
 import com.tripj.domain.user.model.entity.User;
@@ -23,7 +24,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -36,20 +39,26 @@ public class BoardService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final LikedBoardRepository likedBoardRepository;
+    private final BoardImgService boardImgService;
 
     /**
      * 게시글 등록
      */
-    public CreateBoardResponse createBoard(CreateBoardRequest request,
-                                           Long userId) {
+    public CreateBoardResponse createBoard(
+            CreateBoardRequest request, Long userId, List<MultipartFile> images) throws IOException {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
         BoardCate boardCate = boardCateRepository.findById(request.getBoardCateId())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD_CATE));
+            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD_CATE));
 
         Board savedBoard = boardRepository.save(request.toEntity(user, boardCate));
+
+        if (images != null) {
+            boardImgService.validateImgCount(images, 5L);
+            boardImgService.uploadBoardImg(savedBoard, images);
+        }
 
         return CreateBoardResponse.of(savedBoard.getId());
     }
@@ -58,16 +67,16 @@ public class BoardService {
      * 게시글 수정
      */
     public CreateBoardResponse updateBoard(
-            CreateBoardRequest request, Long boardId, Long userId) {
+            CreateBoardRequest request, Long boardId, Long userId) throws IOException {
 
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
         Board board = boardRepository.findById(boardId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
 
         BoardCate boardCate = boardCateRepository.findById(request.getBoardCateId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD_CATE));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD_CATE));
 
         if (board.getUser().getId().equals(userId)) {
             board.updateBoard(request.getTitle(), request.getContent());
@@ -82,7 +91,8 @@ public class BoardService {
     /**
      * 게시물 삭제
      */
-    public CreateBoardResponse deleteBoard(Long userId, Long boardId) {
+    public CreateBoardResponse deleteBoard(
+            Long userId, Long boardId) {
 
         Board board = boardRepository.findById(boardId)
            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));

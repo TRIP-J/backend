@@ -12,7 +12,9 @@ public enum ErrorCode {
     /**
      * 400 Bad Request (잘못된 요청)
      */
-    E401_BINDING_RESULT(BAD_REQUEST, false, "BR001", "잘못된 Binding 입니다"),
+    E400_BINDING_RESULT(BAD_REQUEST, false, "BR001", "잘못된 Binding 입니다"),
+    E400_INVALID_UPLOAD_FILE_EXTENSION(BAD_REQUEST, false , "BR002", "잘못된 파일 확장자입니다."),
+    E400_INVALID_FILE_COUNT_TOO_MANY(BAD_REQUEST, false , "BR003", "업로드 가능한 파일 개수를 초과했습니다."),
 
     /**
      * 403 Forbidden (권한 등의 이유로 허용하지 않는 요청)

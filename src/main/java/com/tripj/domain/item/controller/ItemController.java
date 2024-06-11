@@ -47,7 +47,7 @@ public class ItemController {
 
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            return RestApiResponse.error(ErrorCode.E401_BINDING_RESULT, errorMessage);
+            return RestApiResponse.error(ErrorCode.E400_BINDING_RESULT, errorMessage);
         }
 
         return RestApiResponse.success(
