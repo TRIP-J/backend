@@ -1,6 +1,7 @@
 package com.tripj.domain.board.model.entity;
 
 import com.tripj.domain.boardcate.model.entity.BoardCate;
+import com.tripj.domain.boardimg.model.entity.BoardImg;
 import com.tripj.domain.comment.model.entity.Comment;
 import com.tripj.domain.common.entity.BaseEntity;
 import com.tripj.domain.common.entity.BaseTimeEntity;
@@ -35,12 +36,16 @@ public class Board extends BaseTimeEntity {
     private BoardCate boardCate;
 
     @Builder.Default
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comment = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<LikedBoard> likedBoard = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<BoardImg> boardImg = new ArrayList<>();
 
     private String title;
 

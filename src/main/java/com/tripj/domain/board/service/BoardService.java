@@ -104,10 +104,8 @@ public class BoardService {
            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
 
         if (board.getUser().getId().equals(userId)) {
-            commentRepository.deleteByBoardId(boardId);
-            likedBoardRepository.deleteByBoardId(boardId);
-            boardRepository.deleteById(board.getId());
             boardImgService.deleteImagesInS3(board);
+            boardRepository.deleteById(board.getId());
         } else {
             throw new ForbiddenException("자신의 게시물만 삭제 가능합니다.", ErrorCode.E403_FORBIDDEN);
         }
