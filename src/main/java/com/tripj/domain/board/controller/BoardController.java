@@ -5,6 +5,7 @@ import com.tripj.domain.board.model.dto.request.GetBoardRequest;
 import com.tripj.domain.board.model.dto.request.GetBoardSearchRequest;
 import com.tripj.domain.board.model.dto.response.CreateBoardResponse;
 import com.tripj.domain.board.model.dto.response.GetBoardCommentResponse;
+import com.tripj.domain.board.model.dto.response.GetBoardDetailResponse;
 import com.tripj.domain.board.model.dto.response.GetBoardResponse;
 import com.tripj.domain.board.service.BoardService;
 import com.tripj.global.code.ErrorCode;
@@ -89,11 +90,11 @@ public class BoardController {
             description = "게시글을 상세조회 합니다."
     )
     @GetMapping("/{boardId}")
-    public RestApiResponse<GetBoardResponse> getBoard(
+    public RestApiResponse<GetBoardDetailResponse> getBoardDetail(
             @PathVariable Long boardId) {
 
         return RestApiResponse.success(
-                boardService.getBoard(boardId));
+                boardService.getBoardDetail(boardId));
     }
 
     @Operation(

@@ -5,17 +5,22 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tripj.domain.board.model.dto.request.GetBoardSearchRequest;
+import com.tripj.domain.board.model.dto.response.GetBoardDetailResponse;
 import com.tripj.domain.board.model.dto.response.GetBoardResponse;
+import com.tripj.domain.board.model.dto.response.QGetBoardDetailResponse;
 import com.tripj.domain.board.model.dto.response.QGetBoardResponse;
 import com.tripj.domain.board.model.entity.Board;
 import com.tripj.domain.board.model.entity.QBoard;
+import com.tripj.domain.boardimg.model.entity.QBoardImg;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
 import java.util.List;
 
+import static com.querydsl.jpa.JPAExpressions.select;
 import static com.tripj.domain.board.model.entity.QBoard.board;
+import static com.tripj.domain.boardimg.model.entity.QBoardImg.*;
 import static com.tripj.domain.comment.model.entity.QComment.comment;
 import static com.tripj.domain.like.model.entity.QLikedBoard.likedBoard;
 import static com.tripj.domain.user.model.entity.QUser.user;
@@ -75,10 +80,10 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
     }
 
     @Override
-    public GetBoardResponse getBoardDetail(Long boardId) {
+    public GetBoardDetailResponse getBoardDetail(Long boardId) {
 
-        GetBoardResponse result = queryFactory
-                .select(new QGetBoardResponse(
+        GetBoardDetailResponse result = queryFactory
+                .select(new QGetBoardDetailResponse(
                         user.id,
                         user.userName,
                         user.profile,
@@ -98,6 +103,7 @@ public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
                 ))
                 .from(board)
                 .join(board.user, user)
+                .leftJoin(board.boardImg, boardImg)
                 .where(board.id.eq(boardId))
                 .groupBy(user.id, user.userName, user.profile,
                         board.id, board.boardCate.boardCateName,
