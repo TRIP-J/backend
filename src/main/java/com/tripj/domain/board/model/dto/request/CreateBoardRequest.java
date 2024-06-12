@@ -21,7 +21,6 @@ public class CreateBoardRequest {
     //TODO : 첨부파일
 
     public Board toEntity(User user, BoardCate boardCate) {
-        return Board.newBoard(title, content,
-                              user, boardCate);
+        return Board.newBoard(title, content, user, boardCate);
     }
 }

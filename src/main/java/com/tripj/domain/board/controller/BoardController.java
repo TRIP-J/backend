@@ -19,6 +19,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,19 +37,19 @@ public class BoardController {
             description = "게시글을 등록합니다."
     )
     @PostMapping("")
-    //TODO : S3에 첨부파일 올리기
     public RestApiResponse<CreateBoardResponse> createBoard(
+            @RequestParam Long userId,
             @Validated @RequestPart CreateBoardRequest request,
-            Long userId,
+            @RequestPart(required = false, value = "images") List<MultipartFile> images,
             BindingResult bindingResult) throws IOException {
 
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            return RestApiResponse.error(ErrorCode.E401_BINDING_RESULT, errorMessage);
+            return RestApiResponse.error(ErrorCode.E400_BINDING_RESULT, errorMessage);
         }
 
         return RestApiResponse.success(
-                boardService.createBoard(request, userId));
+                boardService.createBoard(request, userId, images));
     }
 
     @Operation(
@@ -57,17 +58,18 @@ public class BoardController {
     )
     @PostMapping("/{boardId}")
     public RestApiResponse<CreateBoardResponse> updateBoard(
-            @Validated @RequestPart CreateBoardRequest request,
             @PathVariable Long boardId, Long userId,
+            @Validated @RequestPart CreateBoardRequest request,
+            @RequestPart(required = false, value = "images") List<MultipartFile> images,
             BindingResult bindingResult) throws IOException {
 
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            return RestApiResponse.error(ErrorCode.E401_BINDING_RESULT, errorMessage);
+            return RestApiResponse.error(ErrorCode.E400_BINDING_RESULT, errorMessage);
         }
 
         return RestApiResponse.success(
-                boardService.updateBoard(request, boardId, userId));
+                boardService.updateBoard(request, boardId, userId, images));
     }
 
     @Operation(
