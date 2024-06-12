@@ -5,11 +5,13 @@ import com.tripj.domain.board.model.dto.request.GetBoardRequest;
 import com.tripj.domain.board.model.dto.request.GetBoardSearchRequest;
 import com.tripj.domain.board.model.dto.response.CreateBoardResponse;
 import com.tripj.domain.board.model.dto.response.GetBoardCommentResponse;
+import com.tripj.domain.board.model.dto.response.GetBoardDetailResponse;
 import com.tripj.domain.board.model.dto.response.GetBoardResponse;
 import com.tripj.domain.board.model.entity.Board;
 import com.tripj.domain.board.repository.BoardRepository;
 import com.tripj.domain.boardcate.model.entity.BoardCate;
 import com.tripj.domain.boardcate.repository.BoardCateRepository;
+import com.tripj.domain.boardimg.model.entity.BoardImg;
 import com.tripj.domain.boardimg.service.BoardImgService;
 import com.tripj.domain.comment.repository.CommentRepository;
 import com.tripj.domain.like.repository.LikedBoardRepository;
@@ -18,7 +20,6 @@ import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.ForbiddenException;
 import com.tripj.global.error.exception.NotFoundException;
-import com.tripj.global.model.RestApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -27,7 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -117,18 +121,22 @@ public class BoardService {
      * 게시글 상세조회
      */
     @Transactional(readOnly = true)
-    public GetBoardResponse getBoard(Long boardId) {
+    public GetBoardDetailResponse getBoardDetail(Long boardId) {
 
-        boardRepository.findById(boardId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_BOARD));
 
-        return boardRepository.getBoardDetail(boardId);
+        GetBoardDetailResponse boardDetail = boardRepository.getBoardDetail(boardId);
 
-        /*return GetBoardResponse.of(
-                boardDetail.getUserId(), boardDetail.getUserName(),
-                boardDetail.getProfile(), boardDetail.getBoardId(),
-                boardDetail.getTitle(), boardDetail.getContent(),
-                boardDetail.getCommentCnt(), boardDetail.getLikeCnt());*/
+        List<String> imgUrlList = board.getBoardImg().stream()
+                 .map(boardImg -> boardImg.getUrl())
+                 .collect(Collectors.toList());
+
+        if (boardDetail.getImgUrl() == null) {
+            boardDetail.setImgUrl(imgUrlList);
+        }
+
+        return boardDetail;
     }
 
 
