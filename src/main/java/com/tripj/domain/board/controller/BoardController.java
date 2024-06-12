@@ -90,7 +90,7 @@ public class BoardController {
             description = "게시글을 상세조회 합니다."
     )
     @GetMapping("/{boardId}")
-    public RestApiResponse<GetBoardDetailResponse> getBoard(
+    public RestApiResponse<GetBoardDetailResponse> getBoardDetail(
             @PathVariable Long boardId) {
 
         return RestApiResponse.success(
