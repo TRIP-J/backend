@@ -5,11 +5,16 @@ import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateTripRequest {
 
     @NotNull(message = "여행 이름은 필수로 입력해 주세요")
@@ -36,8 +41,6 @@ public class CreateTripRequest {
     public Trip toEntity(User user, Country country) {
         return Trip.newTrip(tripName, purpose, previous,
                             startDate, endDate, user, country);
-
-
     }
 
 
