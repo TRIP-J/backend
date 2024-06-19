@@ -5,6 +5,7 @@ import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.GetMyCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.QGetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.QGetMyCheckListResponse;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import static com.tripj.domain.item.model.entity.QItem.item;
 import static com.tripj.domain.itemcate.model.entity.QItemCate.itemCate;
 import static com.tripj.domain.trip.model.entity.QTrip.*;
 
+@Repository
 public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;

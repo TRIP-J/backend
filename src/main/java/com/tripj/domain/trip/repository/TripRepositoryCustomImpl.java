@@ -3,12 +3,14 @@ package com.tripj.domain.trip.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tripj.domain.trip.model.dto.response.GetTripResponse;
 import com.tripj.domain.trip.model.dto.response.QGetTripResponse;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 import static com.tripj.domain.country.model.entity.QCountry.*;
 import static com.tripj.domain.trip.model.entity.QTrip.trip;
 
+@Repository
 public class TripRepositoryCustomImpl implements TripRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;

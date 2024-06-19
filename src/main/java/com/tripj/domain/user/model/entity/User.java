@@ -62,8 +62,9 @@ public class User extends BaseTimeEntity {
     private LocalDateTime tokenExpirationTime;
 
     @Builder
-    public User(UserType userType, String email, String password, String nickname,
+    public User(Long id, UserType userType, String email, String password, String nickname,
                   String userName, String profile, Role role) {
+        this.id = id;
         this.userType = userType;
         this.email = email;
         this.password = password;

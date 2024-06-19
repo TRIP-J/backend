@@ -15,6 +15,7 @@ import com.tripj.domain.boardimg.model.entity.QBoardImg;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ import static com.tripj.domain.like.model.entity.QLikedBoard.likedBoard;
 import static com.tripj.domain.user.model.entity.QUser.user;
 import static org.springframework.util.StringUtils.*;
 
+@Repository
 public class BoardRepositoryCustomImpl implements BoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
