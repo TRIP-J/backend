@@ -73,10 +73,11 @@ public class TripController {
    				description = "여행 선택완료 후 메인페이지에 조회되는 여행 정보 조회"
    	)
    	@GetMapping("")
-    public RestApiResponse<GetTripResponse> getTrip(Long userId) {
+    public RestApiResponse<GetTripResponse> getTrip(
+            @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                tripService.getTrip(userId));
+                tripService.getTrip(userInfo.getUserId()));
     }
 
     @Operation(
@@ -84,9 +85,11 @@ public class TripController {
             description = "자신의 지난 여행 기록 모두 조회"
     )
     @GetMapping("/past")
-    public RestApiResponse<List<GetTripResponse>> getPastTrip(Long userId) {
+    public RestApiResponse<List<GetTripResponse>> getPastTrip(
+            @UserInfo UserInfoDto userInfo) {
+
         return RestApiResponse.success(
-                tripService.getPastTrip(userId));
+                tripService.getPastTrip(userInfo.getUserId()));
     }
 
     @Operation(
@@ -94,8 +97,10 @@ public class TripController {
             description = "몇 번째 여행 준비중 조회"
     )
     @GetMapping("/count")
-    public RestApiResponse<GetTripCountResponse> getTripCount(Long userId) {
-        return RestApiResponse.success(tripService.getTripCount(userId));
+    public RestApiResponse<GetTripCountResponse> getTripCount(
+            @UserInfo UserInfoDto userInfo) {
+
+        return RestApiResponse.success(tripService.getTripCount(userInfo.getUserId()));
     }
 
 

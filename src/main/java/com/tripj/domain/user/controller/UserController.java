@@ -3,6 +3,8 @@ package com.tripj.domain.user.controller;
 import com.tripj.domain.user.model.dto.response.GetNicknameResponse;
 import com.tripj.domain.user.service.UserService;
 import com.tripj.global.model.RestApiResponse;
+import com.tripj.resolver.userinfo.UserInfo;
+import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +25,11 @@ public class UserController {
             description = "사용자 닉네임을 조회합니다."
     )
     @GetMapping("")
-    public RestApiResponse<GetNicknameResponse> getNickname(Long userId) {
-        return RestApiResponse.success(userService.getNickname(userId));
+    public RestApiResponse<GetNicknameResponse> getNickname(
+            @UserInfo UserInfoDto userInfo) {
+
+        return RestApiResponse.success(
+                userService.getNickname(userInfo.getUserId()));
     }
 
 }

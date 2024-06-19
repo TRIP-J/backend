@@ -5,6 +5,8 @@ import com.tripj.domain.comment.model.dto.response.CreateCommentResponse;
 import com.tripj.domain.comment.model.dto.response.DeleteCommentResponse;
 import com.tripj.domain.comment.service.CommentService;
 import com.tripj.global.model.RestApiResponse;
+import com.tripj.resolver.userinfo.UserInfo;
+import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +27,10 @@ public class CommentController {
     @PostMapping("")
     public RestApiResponse<CreateCommentResponse> createComment(
             @RequestBody CreateCommentRequest request,
-            Long userId) {
+            @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                commentService.createComment(request, userId));
+                commentService.createComment(request, userInfo.getUserId()));
     }
 
     @Operation(
@@ -39,10 +41,10 @@ public class CommentController {
     public RestApiResponse<CreateCommentResponse> updateComment(
             @RequestBody CreateCommentRequest request,
             @PathVariable Long commentId,
-            Long userId) {
+            @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                commentService.updateComment(request, commentId, userId));
+                commentService.updateComment(request, commentId, userInfo.getUserId()));
     }
 
     @Operation(
@@ -51,10 +53,11 @@ public class CommentController {
     )
     @DeleteMapping("/{commentId}")
     public RestApiResponse<DeleteCommentResponse> deleteComment(
-            @PathVariable Long commentId, Long userId) {
+            @PathVariable Long commentId,
+            @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                commentService.deleteComment(commentId, userId));
+                commentService.deleteComment(commentId, userInfo.getUserId()));
     }
 
 }

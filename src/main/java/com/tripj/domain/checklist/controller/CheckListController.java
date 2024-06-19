@@ -5,6 +5,8 @@ import com.tripj.domain.checklist.model.dto.request.PackCheckListRequest;
 import com.tripj.domain.checklist.model.dto.response.*;
 import com.tripj.domain.checklist.service.CheckListService;
 import com.tripj.global.model.RestApiResponse;
+import com.tripj.resolver.userinfo.UserInfo;
+import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +27,13 @@ public class CheckListController {
             description = "체크리스트 > 카테고리별 아이템 조회"
     )
     @GetMapping("")
-    public RestApiResponse <List<GetCheckListResponse>> getCheckList(Long itemCateId,
-                                                                     Long userId,
-                                                                     Long countryId) {
+    public RestApiResponse <List<GetCheckListResponse>> getCheckList(
+            @UserInfo UserInfoDto userInfo,
+            Long itemCateId,
+            Long countryId) {
+
         return RestApiResponse.success(
-                checkListService.getCheckList(itemCateId, userId, countryId));
+                checkListService.getCheckList(itemCateId, userInfo.getUserId(), countryId));
     }
 
     @Operation(
@@ -37,10 +41,12 @@ public class CheckListController {
             description = "체크리스트에 아이템을 추가합니다."
     )
     @PostMapping("")
-    public RestApiResponse<CreateCheckListResponse> createCheckList(@RequestBody CreateCheckListRequest request,
-                                                                    Long userId) {
+    public RestApiResponse<CreateCheckListResponse> createCheckList(
+            @RequestBody CreateCheckListRequest request,
+            @UserInfo UserInfoDto userInfo) {
+
         return RestApiResponse.success(
-                checkListService.createCheckList(request, userId));
+                checkListService.createCheckList(request, userInfo.getUserId()));
     }
 
     @Operation(
@@ -48,10 +54,12 @@ public class CheckListController {
             description = "체크리스트에 아이템을 삭제합니다."
     )
     @DeleteMapping("/{checkListId}")
-    public RestApiResponse<DeleteCheckListResponse> deleteCheckList(@PathVariable("checkListId") Long checkListId,
-                                                                    Long userId) {
+    public RestApiResponse<DeleteCheckListResponse> deleteCheckList(
+            @PathVariable("checkListId") Long checkListId,
+            @UserInfo UserInfoDto userInfo) {
+
         return RestApiResponse.success(
-                checkListService.deleteCheckList(checkListId, userId));
+                checkListService.deleteCheckList(checkListId, userInfo.getUserId()));
     }
 
     @Operation(
@@ -59,10 +67,12 @@ public class CheckListController {
             description = "체크리스트에 추가한 아이템 체크박스 클릭시 챙김여부 변경"
     )
     @PostMapping("/pack")
-    public RestApiResponse<PackCheckListResponse> packCheckList(@RequestBody PackCheckListRequest request,
-                                                                Long userId) {
+    public RestApiResponse<PackCheckListResponse> packCheckList(
+            @RequestBody PackCheckListRequest request,
+            @UserInfo UserInfoDto userInfo) {
+
         return RestApiResponse.success(
-                checkListService.packCheckList(request, userId));
+                checkListService.packCheckList(request, userInfo.getUserId()));
     }
     
     @Operation(
@@ -70,17 +80,12 @@ public class CheckListController {
             description = "체크리스트 > 체크리스트에 내가 담은 아이템 카테고리별 조회"
     )
     @GetMapping("/added")
-    public RestApiResponse <List<GetMyCheckListResponse>> getMyCheckList(Long itemCateId,
-                                                                         Long userId,
-                                                                         Long tripId) {
+    public RestApiResponse <List<GetMyCheckListResponse>> getMyCheckList(
+            @UserInfo UserInfoDto userInfo,
+            Long itemCateId,
+            Long tripId) {
         return RestApiResponse.success(
-                checkListService.getMyCheckList(itemCateId, userId, tripId));
+                checkListService.getMyCheckList(itemCateId, userInfo.getUserId(), tripId));
     }
-
-
-
-
-
-
 
 }
