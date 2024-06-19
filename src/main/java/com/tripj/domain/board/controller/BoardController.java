@@ -10,6 +10,8 @@ import com.tripj.domain.board.model.dto.response.GetBoardResponse;
 import com.tripj.domain.board.service.BoardService;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;
+import com.tripj.resolver.userinfo.UserInfo;
+import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +41,7 @@ public class BoardController {
     )
     @PostMapping("")
     public RestApiResponse<CreateBoardResponse> createBoard(
-            @RequestParam Long userId,
+            @UserInfo UserInfoDto userInfo,
             @Validated @RequestPart CreateBoardRequest request,
             @RequestPart(required = false, value = "images") List<MultipartFile> images,
             BindingResult bindingResult) throws IOException {
@@ -50,7 +52,7 @@ public class BoardController {
         }
 
         return RestApiResponse.success(
-                boardService.createBoard(request, userId, images));
+                boardService.createBoard(request, userInfo.getUserId(), images));
     }
 
     @Operation(
@@ -59,7 +61,8 @@ public class BoardController {
     )
     @PostMapping("/{boardId}")
     public RestApiResponse<CreateBoardResponse> updateBoard(
-            @PathVariable Long boardId, Long userId,
+            @PathVariable Long boardId,
+            @UserInfo UserInfoDto userInfo,
             @Validated @RequestPart CreateBoardRequest request,
             @RequestPart(required = false, value = "images") List<MultipartFile> images,
             BindingResult bindingResult) throws IOException {
@@ -70,7 +73,7 @@ public class BoardController {
         }
 
         return RestApiResponse.success(
-                boardService.updateBoard(request, boardId, userId, images));
+                boardService.updateBoard(request, boardId, userInfo.getUserId(), images));
     }
 
     @Operation(
@@ -79,10 +82,11 @@ public class BoardController {
     )
     @DeleteMapping("/{boardId}")
     public RestApiResponse<CreateBoardResponse> deleteBoard(
-            Long userId, @PathVariable Long boardId) {
+            @UserInfo UserInfoDto userInfo,
+            @PathVariable Long boardId) {
 
         return RestApiResponse.success(
-                boardService.deleteBoard(userId, boardId));
+                boardService.deleteBoard(userInfo.getUserId(), boardId));
     }
 
     @Operation(
@@ -173,9 +177,10 @@ public class BoardController {
     )
     @GetMapping("/my/{userId}")
     public RestApiResponse<List<GetBoardResponse>> getMyBoardList(
-            @RequestParam Long userId) {
+            @UserInfo UserInfoDto userInfo) {
 
-        return RestApiResponse.success(boardService.getMyBoardList(userId));
+        return RestApiResponse.success(
+                boardService.getMyBoardList(userInfo.getUserId()));
     }
 
     @Operation(
@@ -184,8 +189,9 @@ public class BoardController {
     )
     @GetMapping("/my/liked/{userId}")
     public RestApiResponse<List<GetBoardResponse>> getMyLikedBoard(
-            @RequestParam Long userId) {
-        return RestApiResponse.success(boardService.getMyLikedBoard(userId));
+            @UserInfo UserInfoDto userInfo) {
+        return RestApiResponse.success(
+                boardService.getMyLikedBoard(userInfo.getUserId()));
     }
 
 

@@ -36,9 +36,11 @@ public class CheckListService {
      * 체크리스트 조회
      */
     @Transactional(readOnly = true)
-    public List<GetCheckListResponse> getCheckList(Long itemCateId,
-                                                   Long userId,
-                                                   Long countryId) {
+    public List<GetCheckListResponse> getCheckList(
+            Long itemCateId,
+            Long userId,
+            Long countryId) {
+
         return checkListRepository.getCheckList(itemCateId, userId, countryId);
     }
 

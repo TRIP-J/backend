@@ -8,7 +8,10 @@ import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
 import com.tripj.domain.trip.service.TripService;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;
+import com.tripj.resolver.userinfo.UserInfo;
+import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
@@ -30,9 +33,10 @@ public class TripController {
             description = "나라 선택 후 여행을 등록합니다."
     )
     @PostMapping("")
-    public RestApiResponse<CreateTripResponse> createTrip(@RequestBody @Validated CreateTripRequest request,
-                                                          Long userId,
-                                                          BindingResult bindingResult) {
+    public RestApiResponse<CreateTripResponse> createTrip(
+            @RequestBody @Validated CreateTripRequest request,
+            @UserInfo UserInfoDto userInfo,
+            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
@@ -40,7 +44,7 @@ public class TripController {
         }
 
         return RestApiResponse.success(
-                tripService.createTrip(request, userId));
+                tripService.createTrip(request, userInfo.getUserId()));
     }
 
     @Operation(
@@ -48,10 +52,11 @@ public class TripController {
             description = "등록했던 여행을 수정합니다."
     )
     @PostMapping("/{tripId}")
-    public RestApiResponse<CreateTripResponse> updateTrip(@RequestBody @Validated UpdateTripRequest request,
-                                                          @PathVariable Long tripId,
-                                                          Long userId,
-                                                          BindingResult bindingResult) {
+    public RestApiResponse<CreateTripResponse> updateTrip(
+            @RequestBody @Validated UpdateTripRequest request,
+            @PathVariable Long tripId,
+            @UserInfo UserInfoDto userInfo,
+            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
@@ -59,7 +64,7 @@ public class TripController {
         }
 
         return RestApiResponse.success(
-                tripService.updateTrip(request, tripId, userId));
+                tripService.updateTrip(request, tripId, userInfo.getUserId()));
     }
 
 
@@ -68,10 +73,11 @@ public class TripController {
    				description = "여행 선택완료 후 메인페이지에 조회되는 여행 정보 조회"
    	)
    	@GetMapping("")
-    public RestApiResponse<GetTripResponse> getTrip(Long userId) {
+    public RestApiResponse<GetTripResponse> getTrip(
+            @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                tripService.getTrip(userId));
+                tripService.getTrip(userInfo.getUserId()));
     }
 
     @Operation(
@@ -79,9 +85,11 @@ public class TripController {
             description = "자신의 지난 여행 기록 모두 조회"
     )
     @GetMapping("/past")
-    public RestApiResponse<List<GetTripResponse>> getPastTrip(Long userId) {
+    public RestApiResponse<List<GetTripResponse>> getPastTrip(
+            @UserInfo UserInfoDto userInfo) {
+
         return RestApiResponse.success(
-                tripService.getPastTrip(userId));
+                tripService.getPastTrip(userInfo.getUserId()));
     }
 
     @Operation(
@@ -89,8 +97,10 @@ public class TripController {
             description = "몇 번째 여행 준비중 조회"
     )
     @GetMapping("/count")
-    public RestApiResponse<GetTripCountResponse> getTripCount(Long userId) {
-        return RestApiResponse.success(tripService.getTripCount(userId));
+    public RestApiResponse<GetTripCountResponse> getTripCount(
+            @UserInfo UserInfoDto userInfo) {
+
+        return RestApiResponse.success(tripService.getTripCount(userInfo.getUserId()));
     }
 
 

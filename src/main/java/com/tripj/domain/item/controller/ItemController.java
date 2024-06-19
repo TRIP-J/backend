@@ -8,6 +8,8 @@ import com.tripj.domain.item.model.dto.response.UpdateItemResponse;
 import com.tripj.domain.item.service.ItemService;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;
+import com.tripj.resolver.userinfo.UserInfo;
+import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +31,12 @@ public class ItemController {
             description = "체크리스트에서 아이템을 등록합니다."
     )
     @PostMapping("")
-    public RestApiResponse<CreateItemResponse> createItem(@RequestBody CreateItemRequest request,
-                                                          Long userId) {
+    public RestApiResponse<CreateItemResponse> createItem(
+            @RequestBody CreateItemRequest request,
+            @UserInfo UserInfoDto userInfo) {
 
-        return RestApiResponse.success(itemService.createItem(request, userId));
+        return RestApiResponse.success(
+                itemService.createItem(request, userInfo.getUserId()));
     }
 
     @Operation(
@@ -42,7 +46,8 @@ public class ItemController {
     @PostMapping("/{itemId}")
     public RestApiResponse<UpdateItemResponse> updateItem(
             @Validated @RequestBody UpdateItemRequest request,
-            @PathVariable Long itemId, Long userId,
+            @PathVariable Long itemId,
+            @UserInfo UserInfoDto userInfo,
             BindingResult bindingResult) throws BindException {
 
         if (bindingResult.hasErrors()) {
@@ -51,7 +56,7 @@ public class ItemController {
         }
 
         return RestApiResponse.success(
-                itemService.updateItem(request, itemId, userId));
+                itemService.updateItem(request, itemId, userInfo.getUserId()));
     }
 
     @Operation(
@@ -60,10 +65,11 @@ public class ItemController {
     )
     @DeleteMapping("/{itemId}")
     public RestApiResponse<DeleteItemResponse> deleteItem(
-            @PathVariable Long itemId, Long userId) {
+            @PathVariable Long itemId,
+            @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                itemService.deleteItem(itemId, userId));
+                itemService.deleteItem(itemId, userInfo.getUserId()));
     }
 
 }

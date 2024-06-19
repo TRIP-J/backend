@@ -1,14 +1,23 @@
 package com.tripj.global.config.web;
 
+import com.tripj.global.interceptor.AuthenticationInterceptor;
+import com.tripj.resolver.UserInfoArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+
+    private final AuthenticationInterceptor authenticationInterceptor;
+    private final UserInfoArgumentResolver userInfoArgumentResolver;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -23,7 +32,25 @@ public class WebConfig implements WebMvcConfigurer {
                         HttpMethod.OPTIONS.name()
                 )
                 .maxAge(3600);
+    }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+
+        registry.addInterceptor(authenticationInterceptor)
+                .order(1) // interceptor 동작 순위 지정
+                .addPathPatterns("/api/**") // api로 시작하는 모든 요청에 대해 인증 인터셉터 수행
+                .excludePathPatterns( // 인증이 필요 없는 url
+                        "/api/oauth/login",
+                        "/api/logout",
+                        "/v3/api-docs/**",
+                        "/api/health-check");
+
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(userInfoArgumentResolver);
     }
 
 
