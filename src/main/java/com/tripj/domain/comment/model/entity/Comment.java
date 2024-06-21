@@ -14,7 +14,7 @@ public class Comment {
 
     @Id
     @Column(name = "comment_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JoinColumn(name = "user_id")

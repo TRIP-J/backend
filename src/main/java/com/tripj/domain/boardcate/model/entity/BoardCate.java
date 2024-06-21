@@ -9,7 +9,7 @@ public class BoardCate {
 
     @Id
     @Column(name = "board_cate_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String boardCateName;

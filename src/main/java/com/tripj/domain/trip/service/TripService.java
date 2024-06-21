@@ -73,11 +73,10 @@ public class TripService {
 
         if (trip.getUser().getId().equals(userId)) {
             trip.updateTrip(request.getTripName(), request.getPurpose(),
-                            request.getStartDate(), request.getEndDate(),
-                            country);
+                            request.getStartDate(), request.getEndDate(), country);
         }
 
-        return UpdateTripResponse.of(tripId);
+        return UpdateTripResponse.of(trip);
     }
 
     /**

@@ -13,7 +13,7 @@ public class ItemCate {
 
     @Id
     @Column(name = "item_cate_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @OneToMany(mappedBy = "itemCate")

@@ -14,7 +14,7 @@ public class LikedBoard {
 
     @Id
     @Column(name = "liked_board_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JoinColumn(name = "user_id")
