@@ -1,12 +1,11 @@
 package com.tripj.domain.trip.service;
 
-import com.tripj.batch.trip.TripBatchScheduler;
-import com.tripj.batch.trip.TripDailyJob;
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
 import com.tripj.domain.trip.model.dto.request.CreateTripRequest;
 import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
 import com.tripj.domain.trip.model.dto.response.CreateTripResponse;
+import com.tripj.domain.trip.model.dto.response.GetTripCountResponse;
 import com.tripj.domain.trip.model.dto.response.GetTripResponse;
 import com.tripj.domain.trip.model.dto.response.UpdateTripResponse;
 import com.tripj.domain.trip.model.entity.Trip;
@@ -16,23 +15,21 @@ import com.tripj.domain.user.constant.UserType;
 import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.error.exception.BusinessException;
-import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -47,6 +44,27 @@ class TripServiceTest {
     @Autowired
     private CountryRepository countryRepository;
 
+    private Country country;
+    private User user;
+
+    @BeforeEach
+    void setUp() {
+        country = Country.builder()
+                .name("일본")
+                .code("JP")
+                .build();
+        countryRepository.save(country);
+
+        user = User.builder()
+                .userType(UserType.KAKAO)
+                .email("asdf@naver.com")
+                .nickname("다람지기엽지")
+                .userName("홍길동")
+                .role(Role.ROLE_USER)
+                .build();
+        userRepository.save(user);
+    }
+
     @AfterEach
     void tearDown() {
         tripRepository.deleteAllInBatch();
@@ -58,12 +76,6 @@ class TripServiceTest {
     @DisplayName("여행 계획을 최초 등록한다.")
     void createTripWhenBeforeExistingTrip() {
         // given
-        Country country = createCountry();
-        countryRepository.save(country);
-
-        User user = createUser();
-        userRepository.save(user);
-
         CreateTripRequest createTripRequest =
                 createTripRequest(
                         "NOW",
@@ -86,12 +98,6 @@ class TripServiceTest {
     @Test
     void 여행_계획은_EndDate가_끝나기_전까지_한개밖에_생성하지_못한다() {
         // given
-        Country country = createCountry();
-        countryRepository.save(country);
-
-        User user = createUser();
-        userRepository.save(user);
-
         CreateTripRequest createTripRequest =
                 createTripRequest(
                         "NOW",
@@ -109,12 +115,6 @@ class TripServiceTest {
     @Test
     void EndDate가_지나면_여행_계획의_Previous는_B01_로_업데이트_된다() {
         // given
-        Country country = createCountry();
-        countryRepository.save(country);
-
-        User user = createUser();
-        userRepository.save(user);
-
         CreateTripRequest createTripRequest =
                 createTripRequest(
                         "NOW",
@@ -134,15 +134,10 @@ class TripServiceTest {
         assertEquals("B01", updatedTrip.get().getPrevious());
     }
 
+//    @Disabled
     @Test
     void EndDate가_지나면_여행_계획의_Previous는_B01에서_순차적으로_증가한다() {
         // given
-        Country country = createCountry();
-        countryRepository.save(country);
-
-        User user = createUser();
-        userRepository.save(user);
-
         CreateTripRequest createTripRequest =
                 createTripRequest(
                         "NOW",
@@ -158,10 +153,12 @@ class TripServiceTest {
                         "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
-                        LocalDate.now().plusDays(1));
+                        LocalDate.now());
+
+        CreateTripResponse trip2 = tripService.createTrip(createTripRequest2, user.getId());
 
         // when
-        CreateTripResponse trip2 = tripService.createTrip(createTripRequest2, user.getId());
+        tripService.changeTripPrevious();
 
         // then
         Optional<Trip> updatedTrip = tripRepository.findById(trip2.getTripId());
@@ -174,12 +171,8 @@ class TripServiceTest {
     @Test
     void 여행_계획을_수정한다() {
         //given
-        Country country = createCountry();
         Country country2 = createCountry("홍콩", "HK");
-        countryRepository.saveAll(List.of(country, country2));
-
-        User user = createUser();
-        userRepository.save(user);
+        countryRepository.save(country2);
 
         CreateTripRequest createTripRequest =
                 createTripRequest(
@@ -210,12 +203,6 @@ class TripServiceTest {
     @Test
     void 여행_계획을_조회한다 ()  {
         //given
-        Country country = createCountry();
-        countryRepository.save(country);
-
-        User user = createUser();
-        userRepository.save(user);
-
         CreateTripRequest createTripRequest =
                 createTripRequest(
                         "NOW",
@@ -237,32 +224,71 @@ class TripServiceTest {
 
     @Test
     void 지난_여행_계획을_조회한다 ()  {
-        //given
-        Country country = createCountry();
-        countryRepository.save(country);
-
-        User user = createUser();
-        userRepository.save(user);
-
+        // given
         CreateTripRequest createTripRequest =
                 createTripRequest(
-                        "B01",
+                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
-                        LocalDate.of(2022, 10, 2));
-        tripService.createTrip(createTripRequest, user.getId());
+                        LocalDate.now());
+        CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
+
+        tripService.changeTripPrevious();
+
+        CreateTripRequest createTripRequest2 =
+                createTripRequest(
+                        "NOW",
+                        country.getId(),
+                        LocalDate.of(2022, 10, 1),
+                        LocalDate.now());
+
+        CreateTripResponse trip2 = tripService.createTrip(createTripRequest2, user.getId());
+
+        tripService.changeTripPrevious();
 
         //when
-        List<GetTripResponse> trip = tripService.getPastTrip(user.getId());
+        List<GetTripResponse> pastTrip = tripService.getPastTrip(user.getId());
 
         //then
+        assertThat(pastTrip).hasSize(2)
+                .extracting("tripName", "purpose", "previous", "startDate", "endDate")
+                .containsExactly(
+                        tuple("즐거운 오사카 여행", "여행", "B01", LocalDate.of(2022, 10, 1), LocalDate.now()),
+                        tuple("즐거운 오사카 여행", "여행", "B02", LocalDate.of(2022, 10, 1), LocalDate.now())
+                );
     }
 
+    @Test
+    void 여행_횟수를_조회한다 ()  {
+        // given
+        CreateTripRequest createTripRequest =
+                createTripRequest(
+                        "NOW",
+                        country.getId(),
+                        LocalDate.of(2022, 10, 1),
+                        LocalDate.now());
+        CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
+        tripService.changeTripPrevious();
 
+        CreateTripRequest createTripRequest2 =
+                createTripRequest(
+                        "NOW",
+                        country.getId(),
+                        LocalDate.of(2022, 10, 1),
+                        LocalDate.now());
 
+        CreateTripResponse trip2 = tripService.createTrip(createTripRequest2, user.getId());
 
+        tripService.changeTripPrevious();
 
+        //when
+        GetTripCountResponse tripCount = tripService.getTripCount(user.getId());
+
+        //then
+        assertThat(tripCount.getUserId()).isEqualTo(user.getId());
+        assertThat(tripCount.getTripCount()).isEqualTo(2);
+    }
 
     private CreateTripRequest createTripRequest(String previous, Long countryId, LocalDate startDate, LocalDate endDate) {
         return CreateTripRequest.builder()
@@ -272,23 +298,6 @@ class TripServiceTest {
                 .startDate(startDate)
                 .endDate(endDate)
                 .countryId(countryId)
-                .build();
-    }
-
-    private User createUser() {
-        return User.builder()
-                .userType(UserType.KAKAO)
-                .email("asdf@naver.com")
-                .nickname("다람지기엽지")
-                .userName("홍길동")
-                .role(Role.ROLE_USER)
-                .build();
-    }
-
-    private Country createCountry() {
-        return Country.builder()
-                .name("일본")
-                .code("JP")
                 .build();
     }
 
