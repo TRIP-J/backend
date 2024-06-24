@@ -7,9 +7,11 @@ import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class UpdateItemRequest {
 
     @Schema(description = "아이템명", example = "고데기")

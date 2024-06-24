@@ -55,7 +55,7 @@ public class ItemService {
 
         if (trip.getUser().getId().equals(userId)) {
             Item savedItem = itemRepository.save(request.toEntity(user, itemCate, country, trip));
-            return CreateItemResponse.of(savedItem.getId());
+            return CreateItemResponse.of(savedItem);
         } else {
             throw new ForbiddenException(ErrorCode.NOT_MY_TRIP);
         }
@@ -71,17 +71,17 @@ public class ItemService {
 
         // 나라별 고정 아이템 수정 불가
         if (item.getUser() == null || "F".equals(item.getFix())) {
-            throw new ForbiddenException("이 아이템은 수정이 불가능합니다.", ErrorCode.E403_FORBIDDEN);
+            throw new ForbiddenException(ErrorCode.NOT_ALLOWED_FIX_ITEM);
         }
 
         // 자신의 아이템만 수정 가능
         if (!item.getUser().getId().equals(userId)) {
-            throw new ForbiddenException("자신의 아이템만 수정 가능합니다.", ErrorCode.E403_FORBIDDEN);
+            throw new ForbiddenException(ErrorCode.E403_NOT_MY_ITEM);
         }
 
         item.updateItem(request.getItemName());
 
-        return UpdateItemResponse.of(item.getId());
+        return UpdateItemResponse.of(item);
     }
 
     /**

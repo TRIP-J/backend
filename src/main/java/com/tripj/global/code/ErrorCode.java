@@ -20,6 +20,7 @@ public enum ErrorCode {
      * 403 Forbidden (권한 등의 이유로 허용하지 않는 요청)
      */
     E403_FORBIDDEN(FORBIDDEN, false, "FB000", "허용하지 않는 요청입니다"),
+    E403_NOT_MY_ITEM(FORBIDDEN, false, "FB001", "자신의 아이템만 수정 가능합니다."),
 
     /**
      * 404 Not Found
@@ -39,8 +40,6 @@ public enum ErrorCode {
     E404_NOT_EXISTS_FIXED_ITEM(NOT_FOUND, false, "NF013", "고정되어 있는 아이템이 아닙니다."),
     E404_NOT_EXISTS_CONVERSATION(NOT_FOUND, false, "NF014", "해당나라의 회화가 존재하지 않습니다."),
 
-
-
     /**
      * 회원
      */
@@ -58,6 +57,11 @@ public enum ErrorCode {
      */
     ALREADY_EXISTS_CHECKLIST(BAD_REQUEST, false, "C001", "이미 체크리스트에 추가된 아이템입니다."),
     NOT_MY_CHECKLIST(BAD_REQUEST, false, "C002", "자신이 생성한 체크리스트가 아닙니다."),
+
+    /**
+     * 아이템
+     */
+    NOT_ALLOWED_FIX_ITEM(BAD_REQUEST, false, "I001", "고정 아이템은 수정이 불가능합니다."),
 
     /**
      * 인증 && 인가
