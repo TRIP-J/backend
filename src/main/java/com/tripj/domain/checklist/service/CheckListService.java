@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,7 +43,16 @@ public class CheckListService {
             Long userId,
             Long countryId) {
 
-        return checkListRepository.getCheckList(itemCateId, userId, countryId);
+        List<GetCheckListResponse> checkList = checkListRepository.getCheckList(itemCateId, userId, countryId);
+
+        return checkList.stream()
+                .map(response -> {
+                    if (response.getCountryId() == null) {
+                        response.setCountryId(countryId);
+                    }
+                    return response;
+                })
+                .collect(Collectors.toList());
     }
 
     /**
@@ -53,7 +64,7 @@ public class CheckListService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
-        //지난 여행에 아이템 등록 불가
+        //지난 여행에 아이템을 체크리스트에 등록 불가
         Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_NOW_TRIP));
 
@@ -69,7 +80,7 @@ public class CheckListService {
 
         if (trip.getUser().getId().equals(userId)) {
             CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user, trip));
-            return CreateCheckListResponse.of(savedCheckList.getId());
+            return CreateCheckListResponse.of(savedCheckList);
         } else {
             throw new ForbiddenException(ErrorCode.NOT_MY_CHECKLIST);
         }

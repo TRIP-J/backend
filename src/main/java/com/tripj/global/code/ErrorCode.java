@@ -20,7 +20,7 @@ public enum ErrorCode {
      * 403 Forbidden (권한 등의 이유로 허용하지 않는 요청)
      */
     E403_FORBIDDEN(FORBIDDEN, false, "FB000", "허용하지 않는 요청입니다"),
-    E403_NOT_MY_ITEM(FORBIDDEN, false, "FB001", "자신의 아이템만 수정 가능합니다."),
+    E403_NOT_MY_ITEM(FORBIDDEN, false, "FB001", "자신의 아이템만 수정, 삭제 가능합니다."),
 
     /**
      * 404 Not Found
@@ -61,7 +61,8 @@ public enum ErrorCode {
     /**
      * 아이템
      */
-    NOT_ALLOWED_FIX_ITEM(BAD_REQUEST, false, "I001", "고정 아이템은 수정이 불가능합니다."),
+    NOT_ALLOWED_FIX_ITEM(BAD_REQUEST, false, "I001", "고정 아이템은 수정, 삭제 불가능합니다."),
+    NOT_ALLOWED_PAST_ITEM(BAD_REQUEST, false, "I002", "지난 여행 계획의 아이템은 수정, 삭제 불가능합니다."),
 
     /**
      * 인증 && 인가

@@ -5,9 +5,12 @@ import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateCheckListRequest {
 
     @Schema(description = "아이템 카테고리 Id", example = "1")
@@ -19,4 +22,5 @@ public class CreateCheckListRequest {
     public CheckList toEntity(Item item, User user, Trip trip) {
         return CheckList.newCheckList(item, user, trip);
     }
+
 }

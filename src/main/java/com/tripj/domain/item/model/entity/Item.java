@@ -44,7 +44,7 @@ public class Item extends BaseTimeEntity {
 
     public static Item newItem(String itemName, String previous,
                                User user, ItemCate itemCate,
-                               Country country, Trip trip) {
+                               Country country, Trip trip, String fix) {
         return Item.builder()
                 .itemName(itemName)
                 .previous("NOW")
@@ -52,6 +52,7 @@ public class Item extends BaseTimeEntity {
                 .itemCate(itemCate)
                 .country(country)
                 .trip(trip)
+                .fix(fix)
                 .build();
     }
 
