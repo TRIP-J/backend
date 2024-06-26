@@ -1,7 +1,6 @@
 package com.tripj.domain.checklist.service;
 
 import com.tripj.domain.checklist.model.dto.request.CreateCheckListRequest;
-import com.tripj.domain.checklist.model.dto.request.PackCheckListRequest;
 import com.tripj.domain.checklist.model.dto.response.*;
 import com.tripj.domain.checklist.model.entity.CheckList;
 import com.tripj.domain.checklist.repository.CheckListRepository;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,6 +51,17 @@ public class CheckListService {
                     return response;
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 내 체크리스트 조회
+     */
+    @Transactional(readOnly = true)
+    public List<GetMyCheckListResponse> getMyCheckList(Long itemCateId,
+                                                       Long userId,
+                                                       Long tripId) {
+
+        return checkListRepository.getMyCheckList(itemCateId, userId, tripId);
     }
 
     /**
@@ -89,57 +98,57 @@ public class CheckListService {
     /**
      * 아이템을 체크리스트에서 삭제
      */
-    public DeleteCheckListResponse deleteCheckList(Long checkListId, Long userId) {
+    public DeleteCheckListResponse deleteCheckList(Long checklistId, Long userId) {
 
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
-        CheckList checkList = checkListRepository.findById(checkListId)
+        CheckList checkList = checkListRepository.findById(checklistId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_CHECKLIST));
 
         String fix = checkList.getItem().getFix();
 
-        if (fix == null) {
+        if (fix.equals("N")) {
             // fix가 "F"가 아닌 경우, 사용자 ID 확인
-            if (checkList.getItem().getUser().getId().equals(userId)) {
-                checkListRepository.deleteById(checkListId);
+            if (checkList.getUser().getId().equals(userId)) {
+                checkListRepository.deleteById(checklistId);
             } else {
-                throw new ForbiddenException("아이템 삭제 권한이 없습니다.", ErrorCode.E403_FORBIDDEN);
+                throw new ForbiddenException(ErrorCode.E403_NOT_MY_CHECKLIST);
             }
         } else {
-            checkListRepository.deleteById(checkListId);
+            checkListRepository.deleteById(checklistId);
         }
 
-        return DeleteCheckListResponse.of(checkListId);
+        return DeleteCheckListResponse.of(checklistId);
     }
 
     /**
      * 체크리스트에 추가한 아이템 체크박스 클릭
      */
-    public PackCheckListResponse packCheckList(PackCheckListRequest request, Long userId) {
+    public PackCheckListResponse packCheckList(Long checklistId, Long userId) {
 
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
 
-        CheckList checkList = checkListRepository.findById(request.getChecklistId())
+        CheckList checkList = checkListRepository.findById(checklistId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_CHECKLIST));
 
         //체크박스 누르기
-        boolean addPack = addPack(request);
+        boolean addPack = addPack(checklistId);
 
         if (addPack == true) {
             //true이면 YES 로 변경
-            checkList.updatePack(request.getChecklistId(),"YES");
+            checkList.updatePack(checklistId,"YES");
         } else {
             //false이면 다시 NO로 변경
-            checkList.updatePack(request.getChecklistId(),"NO");
+            checkList.updatePack(checklistId,"NO");
         }
-        return PackCheckListResponse.of(checkList.getId(), checkList.getPack());
+        return PackCheckListResponse.of(checkList);
     }
 
-    private boolean addPack(PackCheckListRequest request) {
+    private boolean addPack(Long checklistId) {
         //이미 챙긴 아이템인지 확인
-        if (validatePacked(request)) {
+        if (validatePacked(checklistId)) {
             return true;
         } else {
             //이미 챙겼으면 체크박스 취소
@@ -147,9 +156,9 @@ public class CheckListService {
         }
     }
 
-    private boolean validatePacked(PackCheckListRequest request) {
+    private boolean validatePacked(Long checklistId) {
 //        return checkListRepository.findByItemIdAndChecklistIdAndPack(request.getItemId(), request.getCheckListId(), "NO").isEmpty();
-        Optional<CheckList> checkList = checkListRepository.findById(request.getChecklistId());
+        Optional<CheckList> checkList = checkListRepository.findById(checklistId);
         if (checkList.isPresent()) {
             if (checkList.get().getPack().equals("NO")) {
                 return true;
@@ -159,17 +168,6 @@ public class CheckListService {
         } else {
             return true;
         }
-    }
-
-    /**
-     * 내 체크리스트 조회
-     */
-    @Transactional(readOnly = true)
-    public List<GetMyCheckListResponse> getMyCheckList(Long itemCateId,
-                                                       Long userId,
-                                                       Long tripId) {
-
-        return checkListRepository.getMyCheckList(itemCateId, userId, tripId);
     }
 
     /**

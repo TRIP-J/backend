@@ -21,6 +21,7 @@ public enum ErrorCode {
      */
     E403_FORBIDDEN(FORBIDDEN, false, "FB000", "허용하지 않는 요청입니다"),
     E403_NOT_MY_ITEM(FORBIDDEN, false, "FB001", "자신의 아이템만 수정, 삭제 가능합니다."),
+    E403_NOT_MY_CHECKLIST(FORBIDDEN, false, "FB002", "자신의 체크리스트만 수정, 삭제 가능합니다."),
 
     /**
      * 404 Not Found

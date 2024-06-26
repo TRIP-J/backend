@@ -2,7 +2,9 @@ package com.tripj.domain.checklist.service;
 
 import com.tripj.domain.checklist.model.dto.request.CreateCheckListRequest;
 import com.tripj.domain.checklist.model.dto.response.CreateCheckListResponse;
+import com.tripj.domain.checklist.model.dto.response.DeleteCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
+import com.tripj.domain.checklist.model.dto.response.PackCheckListResponse;
 import com.tripj.domain.checklist.model.entity.CheckList;
 import com.tripj.domain.checklist.repository.CheckListRepository;
 import com.tripj.domain.country.model.entity.Country;
@@ -96,23 +98,6 @@ class CheckListServiceTest {
                 .fix("F")
                 .build();
         itemRepository.save(item);
-
-/*        checkList = checkList.builder()
-                .item(item)
-                .user(user)
-                .trip(
-                        Trip.newTrip(
-                                "즐거운 오사카 여행",
-                                "여행",
-                                "NOW",
-                                LocalDate.of(2022, 10, 1),
-                                LocalDate.now().plusDays(1),
-                                user,
-                                country
-                        )
-                )
-                .build();
-        checkListRepository.save(checkList);*/
 
     }
 
@@ -243,6 +228,149 @@ class CheckListServiceTest {
                     .hasMessage(ErrorCode.NOT_MY_CHECKLIST.getMessage());
         }
     }
+
+    @Nested
+    class deleteCheckList {
+
+        @Test
+        @DisplayName("체크리스트에서 아이템을 삭제시 성공 합니다.")
+        void deleteCheckList () {
+            //given
+            CreateTripRequest createTripRequest =
+                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+            CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
+
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
+
+            CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
+            CreateCheckListResponse checkList = checkListService.createCheckList(checkListRequest, user.getId());
+
+            //when
+            DeleteCheckListResponse deleteCheckListResponse = checkListService.deleteCheckList(checkList.getCheckListId(), user.getId());
+
+            //then
+            assertThat(deleteCheckListResponse.getCheckListId()).isEqualTo(checkList.getCheckListId());
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 회원이 체크리스트에서 아이템을 삭제시 예외 발생합니다.")
+        void deleteCheckListNotExistingUser () {
+            //given
+            CreateTripRequest createTripRequest =
+                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+            CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
+
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
+
+            CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
+            CreateCheckListResponse checkList = checkListService.createCheckList(checkListRequest, user.getId());
+
+            //when //then
+            assertThatThrownBy(() -> checkListService.deleteCheckList(checkList.getCheckListId(), 2L))
+                    .isInstanceOf(NotFoundException.class)
+                    .hasMessage(ErrorCode.E404_NOT_EXISTS_USER.getMessage());
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 체크리스트에서 아이템을 삭제시 예외가 발생합니다.")
+        void deleteCheckListNotExistingCheckList () {
+            //given
+            CreateTripRequest createTripRequest =
+                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+            CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
+
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
+
+            //when //then
+            assertThatThrownBy(() -> checkListService.deleteCheckList(1L, user.getId()))
+                    .isInstanceOf(NotFoundException.class)
+                    .hasMessage(ErrorCode.E404_NOT_EXISTS_CHECKLIST.getMessage());
+        }
+
+        @Test
+        @DisplayName("체크리스트에서 고정이 아닌 아이템을 삭제시 회원정보가 다르면 예외가 발생합니다.")
+        void deleteNotMyCheckList () {
+            //given
+            CreateTripRequest createTripRequest =
+                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+            CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
+
+            User savedUser = userRepository.save(
+                    User.builder()
+                            .userType(UserType.KAKAO)
+                            .email("asdf2@naver.com")
+                            .nickname("다람지기엽지2")
+                            .userName("홍길동2")
+                            .role(Role.ROLE_USER)
+                            .build());
+
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
+
+            CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
+            CreateCheckListResponse checkList = checkListService.createCheckList(checkListRequest, user.getId());
+
+            //when //then
+            assertThatThrownBy(() -> checkListService.deleteCheckList(checkList.getCheckListId(), savedUser.getId()))
+                    .isInstanceOf(ForbiddenException.class)
+                    .hasMessage(ErrorCode.E403_NOT_MY_CHECKLIST.getMessage());
+        }
+    }
+
+    @Nested
+    class packCheckList {
+
+        @Test
+        @DisplayName("체크리스트에서 추가한 아이템 체크박스 클릭시 챙김 상태가 성공합니다.")
+        void packCheckListStatusIsNO() {
+            //given
+            CreateTripRequest createTripRequest =
+                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+            CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
+
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
+
+            CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
+            CreateCheckListResponse checkList = checkListService.createCheckList(checkListRequest, user.getId());
+
+            //when
+            PackCheckListResponse packCheckListResponse = checkListService.packCheckList(checkList.getCheckListId(), user.getId());
+
+            //then
+            assertThat(packCheckListResponse.getChecklistId()).isEqualTo(checkList.getCheckListId());
+            assertThat(packCheckListResponse.getPack()).isEqualTo("YES");
+        }
+
+        @Test
+        @DisplayName("체크리스트에서 챙긴 아이템 체크박스 클릭시 챙김 상태가 취소됩니다.")
+        void packCheckListStatusIsYES() {
+            //given
+            CreateTripRequest createTripRequest =
+                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+            CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
+
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
+
+            CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
+            CreateCheckListResponse checkList = checkListService.createCheckList(checkListRequest, user.getId());
+
+            checkListService.packCheckList(checkList.getCheckListId(), user.getId());
+
+            //when
+            PackCheckListResponse packCheckListResponse2 = checkListService.packCheckList(checkList.getCheckListId(), user.getId());
+
+            //then
+            assertThat(packCheckListResponse2.getChecklistId()).isEqualTo(checkList.getCheckListId());
+            assertThat(packCheckListResponse2.getPack()).isEqualTo("NO");
+        }
+    }
+
+
 
     @Disabled
     @Test

@@ -13,6 +13,9 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GetCheckListResponse {
 
+    @Schema(description = "체크리스트 Id", example = "1")
+    private Long checkListId;
+
     @Schema(description = "아이템 Id", example = "1")
     private Long itemId;
 
@@ -31,14 +34,19 @@ public class GetCheckListResponse {
     @Schema(description = "아이템 고정 여부", example = "N")
     private String fix;
 
+    @Schema(description = "아이템 챙김 여부", example = "NO")
+    private String pack;
+
     @QueryProjection
-    public GetCheckListResponse(Long itemId, Long userId, Long countryId, String itemName, String itemCateName, String fix) {
+    public GetCheckListResponse(Long checkListId, Long itemId, Long userId, Long countryId, String itemName, String itemCateName, String fix, String pack) {
+        this.checkListId = checkListId;
         this.itemId = itemId;
         this.userId = userId;
         this.countryId = countryId;
         this.itemName = itemName;
         this.itemCateName = itemCateName;
         this.fix = fix;
+        this.pack = pack;
     }
 
 }

@@ -55,12 +55,14 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
                                                    Long countryId) {
         List<GetCheckListResponse> results = queryFactory
                 .select(new QGetCheckListResponse(
+                        checkList.id,
                         item.id,
                         checkList.user.id,
                         item.country.id,
                         item.itemName,
                         itemCate.itemCateName,
-                        item.fix
+                        item.fix,
+                        checkList.pack
                 ))
                 .from(checkList)
                 .join(checkList.item, item)
