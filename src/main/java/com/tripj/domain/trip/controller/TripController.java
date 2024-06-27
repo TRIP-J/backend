@@ -5,6 +5,7 @@ import com.tripj.domain.trip.model.dto.response.CreateTripResponse;
 import com.tripj.domain.trip.model.dto.response.GetTripCountResponse;
 import com.tripj.domain.trip.model.dto.response.GetTripResponse;
 import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
+import com.tripj.domain.trip.model.dto.response.UpdateTripResponse;
 import com.tripj.domain.trip.service.TripService;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;
@@ -52,7 +53,7 @@ public class TripController {
             description = "등록했던 여행을 수정합니다."
     )
     @PostMapping("/{tripId}")
-    public RestApiResponse<CreateTripResponse> updateTrip(
+    public RestApiResponse<UpdateTripResponse> updateTrip(
             @RequestBody @Validated UpdateTripRequest request,
             @PathVariable Long tripId,
             @UserInfo UserInfoDto userInfo,

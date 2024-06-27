@@ -28,6 +28,8 @@ public class GetTripResponse {
     @Schema(description = "여행 목적", example = "여유로운 휴식,휴가")
     private String purpose;
 
+    private String previous;
+
     @Schema(description = "여행 시작일", example = "2024-03-30")
     private LocalDate startDate;
 
@@ -36,13 +38,14 @@ public class GetTripResponse {
 
     @QueryProjection
     public GetTripResponse(Long tripId, Long userId, String countryName,
-                           String tripName, String purpose,
+                           String tripName, String purpose, String previous,
                            LocalDate startDate, LocalDate endDate) {
         this.tripId = tripId;
         this.userId = userId;
         this.countryName = countryName;
         this.tripName = tripName;
         this.purpose = purpose;
+        this.previous = previous;
         this.startDate = startDate;
         this.endDate = endDate;
     }

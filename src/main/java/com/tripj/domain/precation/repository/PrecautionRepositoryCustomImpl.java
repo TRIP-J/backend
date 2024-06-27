@@ -3,9 +3,11 @@ package com.tripj.domain.precation.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tripj.domain.precation.model.dto.response.GetPrecautionDetailResponse;
 import com.tripj.domain.precation.model.dto.response.QGetPrecautionDetailResponse;
+import org.springframework.stereotype.Repository;
 
 import static com.tripj.domain.precation.model.entity.QPrecaution.*;
 
+@Repository
 public class PrecautionRepositoryCustomImpl implements PrecautionRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;

@@ -11,7 +11,7 @@ public class Precaution extends BaseTimeEntity {
 
     @Id
     @Column(name = "precaution_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

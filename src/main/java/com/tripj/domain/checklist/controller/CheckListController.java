@@ -1,12 +1,12 @@
 package com.tripj.domain.checklist.controller;
 
 import com.tripj.domain.checklist.model.dto.request.CreateCheckListRequest;
-import com.tripj.domain.checklist.model.dto.request.PackCheckListRequest;
 import com.tripj.domain.checklist.model.dto.response.*;
 import com.tripj.domain.checklist.service.CheckListService;
 import com.tripj.global.model.RestApiResponse;
 import com.tripj.resolver.userinfo.UserInfo;
 import com.tripj.resolver.userinfo.UserInfoDto;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -53,28 +53,29 @@ public class CheckListController {
             summary = "체크리스트 삭제 API",
             description = "체크리스트에 아이템을 삭제합니다."
     )
-    @DeleteMapping("/{checkListId}")
+    @DeleteMapping("/{checklistId}")
     public RestApiResponse<DeleteCheckListResponse> deleteCheckList(
-            @PathVariable("checkListId") Long checkListId,
+            @PathVariable("checklistId") Long checklistId,
             @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                checkListService.deleteCheckList(checkListId, userInfo.getUserId()));
+                checkListService.deleteCheckList(checklistId, userInfo.getUserId()));
     }
 
     @Operation(
             summary = "체크리스트 챙김 API",
             description = "체크리스트에 추가한 아이템 체크박스 클릭시 챙김여부 변경"
     )
-    @PostMapping("/pack")
+    @PostMapping("/pack/{checkListId}")
     public RestApiResponse<PackCheckListResponse> packCheckList(
-            @RequestBody PackCheckListRequest request,
+            @PathVariable("checkListId") Long checkListId,
             @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                checkListService.packCheckList(request, userInfo.getUserId()));
+                checkListService.packCheckList(checkListId, userInfo.getUserId()));
     }
-    
+
+    @Hidden
     @Operation(
             summary = "체크리스트에 담은 아이템 조회 API",
             description = "체크리스트 > 체크리스트에 내가 담은 아이템 카테고리별 조회"

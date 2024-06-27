@@ -5,6 +5,7 @@ import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.GetMyCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.QGetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.QGetMyCheckListResponse;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import static com.tripj.domain.item.model.entity.QItem.item;
 import static com.tripj.domain.itemcate.model.entity.QItemCate.itemCate;
 import static com.tripj.domain.trip.model.entity.QTrip.*;
 
+@Repository
 public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
@@ -21,7 +23,7 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
         this.queryFactory = queryFactory;
     }
 
-    @Override
+    /*@Override
     public List<GetCheckListResponse> getCheckList(Long itemCateId,
                                                    Long userId,
                                                    Long countryId) {
@@ -29,7 +31,8 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
                 .select(new QGetCheckListResponse(
                         item.id,
                         item.itemName,
-                        itemCate.itemCateName
+                        itemCate.itemCateName,
+                        item.fix
                 ))
                 .from(item)
                 .join(item.itemCate, itemCate)
@@ -40,6 +43,34 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
                             .or(item.previous.eq("NOW")
                             .and(item.user.id.eq(userId)))
                             )
+                )
+                .fetch();
+
+        return results;
+    }*/
+
+    @Override
+    public List<GetCheckListResponse> getCheckList(Long itemCateId,
+                                                   Long userId,
+                                                   Long countryId) {
+        List<GetCheckListResponse> results = queryFactory
+                .select(new QGetCheckListResponse(
+                        checkList.id,
+                        item.id,
+                        checkList.user.id,
+                        item.country.id,
+                        item.itemName,
+                        itemCate.itemCateName,
+                        item.fix,
+                        checkList.pack
+                ))
+                .from(checkList)
+                .join(checkList.item, item)
+                .join(item.itemCate, itemCate)
+                .join(checkList.trip, trip)
+                .where(
+                        trip.previous.eq("NOW"),
+                        item.itemCate.Id.eq(itemCateId)
                 )
                 .fetch();
 

@@ -7,6 +7,7 @@ import com.tripj.domain.trip.model.dto.response.CreateTripResponse;
 import com.tripj.domain.trip.model.dto.response.GetTripCountResponse;
 import com.tripj.domain.trip.model.dto.response.GetTripResponse;
 import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
+import com.tripj.domain.trip.model.dto.response.UpdateTripResponse;
 import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.trip.repository.TripRepository;
 import com.tripj.domain.user.model.entity.User;
@@ -54,13 +55,13 @@ public class TripService {
 
         Trip savedTrip = tripRepository.save(request.toEntity(user, country));
 
-        return CreateTripResponse.of(savedTrip.getId());
+        return CreateTripResponse.of(savedTrip);
     }
 
     /**
      * 여행 수정
      */
-    public CreateTripResponse updateTrip(UpdateTripRequest request,
+    public UpdateTripResponse updateTrip(UpdateTripRequest request,
                                          Long tripId,
                                          Long userId) {
 
@@ -72,11 +73,10 @@ public class TripService {
 
         if (trip.getUser().getId().equals(userId)) {
             trip.updateTrip(request.getTripName(), request.getPurpose(),
-                            request.getStartDate(), request.getEndDate(),
-                            country);
+                            request.getStartDate(), request.getEndDate(), country);
         }
 
-        return CreateTripResponse.of(tripId);
+        return UpdateTripResponse.of(trip);
     }
 
     /**
