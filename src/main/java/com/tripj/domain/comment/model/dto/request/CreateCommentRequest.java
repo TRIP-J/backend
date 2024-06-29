@@ -4,9 +4,12 @@ import com.tripj.domain.board.model.entity.Board;
 import com.tripj.domain.comment.model.entity.Comment;
 import com.tripj.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateCommentRequest {
 
     @Schema(description = " 게시글 ID", example = "1")

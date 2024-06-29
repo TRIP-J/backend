@@ -3,10 +3,7 @@ package com.tripj.domain.board.service;
 import com.tripj.domain.board.model.dto.request.CreateBoardRequest;
 import com.tripj.domain.board.model.dto.request.GetBoardRequest;
 import com.tripj.domain.board.model.dto.request.GetBoardSearchRequest;
-import com.tripj.domain.board.model.dto.response.CreateBoardResponse;
-import com.tripj.domain.board.model.dto.response.GetBoardCommentResponse;
-import com.tripj.domain.board.model.dto.response.GetBoardDetailResponse;
-import com.tripj.domain.board.model.dto.response.GetBoardResponse;
+import com.tripj.domain.board.model.dto.response.*;
 import com.tripj.domain.board.model.entity.Board;
 import com.tripj.domain.board.repository.BoardRepository;
 import com.tripj.domain.boardcate.model.entity.BoardCate;
@@ -64,7 +61,7 @@ public class BoardService {
             boardImgService.uploadBoardImg(savedBoard, images);
         }
 
-        return CreateBoardResponse.of(savedBoard.getId());
+        return CreateBoardResponse.of(savedBoard);
     }
 
     /**
@@ -86,8 +83,7 @@ public class BoardService {
         if (board.getUser().getId().equals(userId)) {
             board.updateBoard(request.getTitle(), request.getContent());
         } else {
-            // throws
-            throw new ForbiddenException("자신의 게시물만 수정 가능합니다.", ErrorCode.E403_FORBIDDEN);
+            throw new ForbiddenException(ErrorCode.E403_NOT_MY_BOARD);
         }
 
         if (images != null) {
@@ -95,13 +91,13 @@ public class BoardService {
         }
         boardImgService.updateImg(board, images);
 
-        return CreateBoardResponse.of(board.getId());
+        return CreateBoardResponse.of(board);
     }
 
     /**
      * 게시물 삭제
      */
-    public CreateBoardResponse deleteBoard(
+    public DeleteBoardResponse deleteBoard(
             Long userId, Long boardId) {
 
         Board board = boardRepository.findById(boardId)
@@ -111,10 +107,10 @@ public class BoardService {
             boardImgService.deleteImagesInS3(board);
             boardRepository.deleteById(board.getId());
         } else {
-            throw new ForbiddenException("자신의 게시물만 삭제 가능합니다.", ErrorCode.E403_FORBIDDEN);
+            throw new ForbiddenException(ErrorCode.E403_NOT_MY_BOARD);
         }
 
-        return CreateBoardResponse.of(board.getId());
+        return DeleteBoardResponse.of(board);
     }
 
     /**

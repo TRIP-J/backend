@@ -28,8 +28,8 @@ public class CommentService {
     /**
      * 댓글 등록
      */
-    public CreateCommentResponse createComment(CreateCommentRequest request,
-                                               Long userId) {
+    public CreateCommentResponse createComment(
+            CreateCommentRequest request, Long userId) {
 
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
@@ -39,8 +39,7 @@ public class CommentService {
 
         Comment savedComment = commentRepository.save(request.toEntity(user, board));
 
-        return CreateCommentResponse.of(savedComment.getId(),
-                                        savedComment.getBoard().getId());
+        return CreateCommentResponse.of(savedComment);
     }
 
     /**
@@ -62,11 +61,10 @@ public class CommentService {
         if (board.getUser().getId().equals(userId)) {
             comment.updateComment(request.getContent());
         } else {
-            throw new ForbiddenException("자신의 댓글만 수정 가능합니다", ErrorCode.E403_FORBIDDEN);
+            throw new ForbiddenException(ErrorCode.E403_NOT_MY_COMMENT);
         }
 
-        return CreateCommentResponse.of(comment.getId(),
-                                        board.getId());
+        return CreateCommentResponse.of(comment);
     }
 
     /**
@@ -80,7 +78,7 @@ public class CommentService {
         if (comment.getUser().getId().equals(userId)) {
             commentRepository.deleteById(commentId);
         } else {
-            throw new ForbiddenException("자신의 댓글만 삭제 가능합니다", ErrorCode.E403_FORBIDDEN);
+            throw new ForbiddenException(ErrorCode.E403_NOT_MY_COMMENT);
         }
 
         return DeleteCommentResponse.of(comment.getId(),
