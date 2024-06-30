@@ -41,13 +41,7 @@ class BoardServiceTest {
     @Autowired
     private BoardRepository boardRepository;
     @Autowired
-    private TripService tripService;
-    @Autowired
-    private TripRepository tripRepository;
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private CountryRepository countryRepository;
     @Autowired
     private BoardCateRepository boardCateRepository;
     @Autowired

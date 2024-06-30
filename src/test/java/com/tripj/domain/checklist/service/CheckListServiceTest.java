@@ -67,7 +67,6 @@ class CheckListServiceTest {
     private User user;
     private ItemCate itemCate;
     private Item item;
-    private CheckList checkList;
 
     @BeforeEach
     void setUp() {
