@@ -14,6 +14,7 @@ import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -35,14 +36,13 @@ public class TripController {
     )
     @PostMapping("")
     public RestApiResponse<CreateTripResponse> createTrip(
-            @RequestBody @Validated CreateTripRequest request,
-            @UserInfo UserInfoDto userInfo,
-            BindingResult bindingResult) {
+            @RequestBody @Valid CreateTripRequest request,
+            @UserInfo UserInfoDto userInfo) {
 
-        if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            return RestApiResponse.error(ErrorCode.E400_BINDING_RESULT, errorMessage);
-        }
+//        if (bindingResult.hasErrors()) {
+//            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+//            return RestApiResponse.error(ErrorCode.E400_BINDING_RESULT, errorMessage);
+//        }
 
         return RestApiResponse.success(
                 tripService.createTrip(request, userInfo.getUserId()));
