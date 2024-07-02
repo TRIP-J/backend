@@ -36,13 +36,8 @@ public class TripController {
     )
     @PostMapping("")
     public RestApiResponse<CreateTripResponse> createTrip(
-            @RequestBody @Valid CreateTripRequest request,
+            @Valid @RequestBody CreateTripRequest request,
             @UserInfo UserInfoDto userInfo) {
-
-//        if (bindingResult.hasErrors()) {
-//            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-//            return RestApiResponse.error(ErrorCode.E400_BINDING_RESULT, errorMessage);
-//        }
 
         return RestApiResponse.success(
                 tripService.createTrip(request, userInfo.getUserId()));
@@ -54,15 +49,9 @@ public class TripController {
     )
     @PostMapping("/{tripId}")
     public RestApiResponse<UpdateTripResponse> updateTrip(
-            @RequestBody @Validated UpdateTripRequest request,
+            @RequestBody @Valid UpdateTripRequest request,
             @PathVariable Long tripId,
-            @UserInfo UserInfoDto userInfo,
-            BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            return RestApiResponse.error(ErrorCode.E400_BINDING_RESULT, errorMessage);
-        }
+            @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
                 tripService.updateTrip(request, tripId, userInfo.getUserId()));

@@ -12,7 +12,6 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-@Validated
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateTripRequest {

@@ -11,8 +11,8 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UpdateTripRequest {
 
     @NotNull(message = "여행 이름은 필수로 입력해 주세요")
