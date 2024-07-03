@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripj.domain.trip.model.dto.request.CreateTripRequest;
 import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
 import com.tripj.domain.trip.model.dto.response.CreateTripResponse;
+import com.tripj.domain.trip.model.dto.response.GetTripCountResponse;
+import com.tripj.domain.trip.model.dto.response.GetTripResponse;
 import com.tripj.domain.trip.model.dto.response.UpdateTripResponse;
 import com.tripj.domain.trip.service.TripService;
 import com.tripj.global.error.GlobalExceptionHandler;
@@ -20,9 +22,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
+import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -142,6 +148,75 @@ class TripControllerTest {
         }
     }
 
+    @Nested
+    class getTrip {
+
+        @Test
+        @DisplayName("메인페이지에서 여행계획을 조회합니다")
+        void getTrip() throws Exception {
+            //given
+            given(tripService.getTrip(any()))
+                    .willReturn(getTripResponse("여행이름", "NOW", LocalDate.of(2022, 10, 1), LocalDate.now()));
+
+            //when //then
+            mockMvc.perform(
+                            get("/api/trip")
+                                    .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.httpStatus").value("OK"))
+                    .andExpect(jsonPath("$.data.tripId").value(1L))
+                    .andExpect(jsonPath("$.data.userId").value(1L))
+                    .andExpect(jsonPath("$.data.tripName").value("여행이름"))
+                    .andExpect(jsonPath("$.data.countryName").value("일본"))
+                    .andExpect(jsonPath("$.data.purpose").value("관광"))
+                    .andExpect(jsonPath("$.data.previous").value("NOW"));
+        }
+
+        @Test
+        @DisplayName("지난 여행계획을 조회합니다")
+        void getPastTrip() throws Exception {
+            //given
+            List<GetTripResponse> pastTrip =
+                    Arrays.asList(
+                            getTripResponse("여행이름1", "B01", LocalDate.of(2022, 10, 1), LocalDate.of(2022, 10, 10)),
+                            getTripResponse("여행이름2", "B02", LocalDate.of(2022, 10, 11), LocalDate.of(2022, 11, 1))
+                    );
+
+            given(tripService.getPastTrip(any()))
+                    .willReturn(pastTrip);
+
+            //when //then
+            mockMvc.perform(
+                            get("/api/trip/past")
+                                    .param("size", String.valueOf(2))
+                                    .param("lastId", String.valueOf(2))
+                                    .contentType(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.data.length()", is(2)));
+        }
+    }
+
+    @Test
+    @DisplayName("여행 횟수 조회에 성공합니다.")
+    void getTripCount() throws Exception {
+        //given
+        GetTripCountResponse tripCountResponse = getTripCountResponse();
+        given(tripService.getTripCount(any()))
+                .willReturn(tripCountResponse);
+
+        //when //then
+        mockMvc.perform(
+                        get("/api/trip/count")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.httpStatus").value("OK"))
+                .andExpect(jsonPath("$.data.userId").value(1L))
+                .andExpect(jsonPath("$.data.tripCount").value(3L));
+    }
+
 
     private CreateTripRequest createTripRequest(String tripName, String purpose, LocalDate startDate, LocalDate endDate, Long countryId) {
         return CreateTripRequest.builder()
@@ -184,6 +259,26 @@ class TripControllerTest {
                 .startDate(startDate)
                 .endDate(endDate)
                 .countryId(countryId)
+                .build();
+    }
+
+    private GetTripResponse getTripResponse(String tripName, String previous, LocalDate startDate, LocalDate endDate) {
+        return GetTripResponse.builder()
+                .tripId(1L)
+                .userId(1L)
+                .tripName(tripName)
+                .purpose("관광")
+                .previous(previous)
+                .startDate(startDate)
+                .endDate(endDate)
+                .countryName("일본")
+                .build();
+    }
+
+    private GetTripCountResponse getTripCountResponse() {
+        return GetTripCountResponse.builder()
+                .userId(1L)
+                .tripCount(3L)
                 .build();
     }
 

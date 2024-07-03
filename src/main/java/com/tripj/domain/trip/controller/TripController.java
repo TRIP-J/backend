@@ -1,23 +1,19 @@
 package com.tripj.domain.trip.controller;
 
 import com.tripj.domain.trip.model.dto.request.CreateTripRequest;
+import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
 import com.tripj.domain.trip.model.dto.response.CreateTripResponse;
 import com.tripj.domain.trip.model.dto.response.GetTripCountResponse;
 import com.tripj.domain.trip.model.dto.response.GetTripResponse;
-import com.tripj.domain.trip.model.dto.request.UpdateTripRequest;
 import com.tripj.domain.trip.model.dto.response.UpdateTripResponse;
 import com.tripj.domain.trip.service.TripService;
-import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;
 import com.tripj.resolver.userinfo.UserInfo;
 import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -90,7 +86,8 @@ public class TripController {
     public RestApiResponse<GetTripCountResponse> getTripCount(
             @UserInfo UserInfoDto userInfo) {
 
-        return RestApiResponse.success(tripService.getTripCount(userInfo.getUserId()));
+        return RestApiResponse.success(
+                tripService.getTripCount(userInfo.getUserId()));
     }
 
 

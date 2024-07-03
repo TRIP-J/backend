@@ -3,12 +3,14 @@ package com.tripj.domain.trip.model.dto.response;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
+@Builder
 @Schema(description = "현재 여행 정보 조회 DTO")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GetTripResponse {
