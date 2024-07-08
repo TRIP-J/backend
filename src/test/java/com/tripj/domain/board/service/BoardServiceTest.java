@@ -1,20 +1,14 @@
 package com.tripj.domain.board.service;
 
 import com.tripj.domain.board.model.dto.request.CreateBoardRequest;
-import com.tripj.domain.board.model.dto.response.CreateBoardResponse;
-import com.tripj.domain.board.model.dto.response.DeleteBoardResponse;
-import com.tripj.domain.board.model.dto.response.GetBoardCommentResponse;
-import com.tripj.domain.board.model.dto.response.GetBoardDetailResponse;
+import com.tripj.domain.board.model.dto.request.GetBoardSearchRequest;
+import com.tripj.domain.board.model.dto.response.*;
 import com.tripj.domain.board.repository.BoardRepository;
 import com.tripj.domain.boardcate.model.entity.BoardCate;
 import com.tripj.domain.boardcate.repository.BoardCateRepository;
 import com.tripj.domain.comment.model.dto.request.CreateCommentRequest;
-import com.tripj.domain.comment.model.dto.response.CreateCommentResponse;
 import com.tripj.domain.comment.repository.CommentRepository;
 import com.tripj.domain.comment.service.CommentService;
-import com.tripj.domain.country.repository.CountryRepository;
-import com.tripj.domain.trip.repository.TripRepository;
-import com.tripj.domain.trip.service.TripService;
 import com.tripj.domain.user.constant.Role;
 import com.tripj.domain.user.constant.UserType;
 import com.tripj.domain.user.model.entity.User;
@@ -249,7 +243,7 @@ class BoardServiceTest {
 
         @Test
         @DisplayName("게시글 삭제에 성공합니다.")
-        void deleteBoard() throws IOException{
+        void deleteBoard() throws IOException {
             //given
             CreateBoardRequest request = createBoardRequest("게시글 제목", "게시글 내용", boardCate.getId());
             CreateBoardResponse board = boardService.createBoard(request, user.getId(), null);
@@ -344,8 +338,8 @@ class BoardServiceTest {
 
             CreateCommentRequest commentRequest = createCommentRequest(board.getBoardId(), "댓글 내용");
             CreateCommentRequest commentRequest2 = createCommentRequest(board.getBoardId(), "댓글 내용2");
-            CreateCommentResponse comment = commentService.createComment(commentRequest, user.getId());
-            CreateCommentResponse comment2 = commentService.createComment(commentRequest2, user.getId());
+            commentService.createComment(commentRequest, user.getId());
+            commentService.createComment(commentRequest2, user.getId());
 
             //when
             List<GetBoardCommentResponse> boardComment = boardService.getBoardComment(board.getBoardId());
@@ -359,19 +353,145 @@ class BoardServiceTest {
                     );
         }
 
-        private CreateCommentRequest createCommentRequest(Long boardId, String content) {
-            return CreateCommentRequest.builder()
-                    .boardId(boardId)
-                    .content(content)
-                    .build();
+        @Test
+        @DisplayName("존재하지 않는 게시글의 댓글 조회시 예외가 발생합니다.")
+        void getNotExistingBoardComment() throws Exception {
+            //given
+            CreateBoardRequest request = createBoardRequest("게시글 제목", "게시글 내용", boardCate.getId());
+            CreateBoardResponse board = boardService.createBoard(request, user.getId(), null);
+
+            CreateCommentRequest commentRequest = createCommentRequest(board.getBoardId(), "댓글 내용");
+            CreateCommentRequest commentRequest2 = createCommentRequest(board.getBoardId(), "댓글 내용2");
+            commentService.createComment(commentRequest, user.getId());
+            commentService.createComment(commentRequest2, user.getId());
+
+            //when //then
+            assertThatThrownBy(() -> boardService.getBoardComment(2L))
+                    .isInstanceOf(NotFoundException.class)
+                    .hasMessage(E404_NOT_EXISTS_BOARD.getMessage());
         }
     }
 
+    @Test
+    @DisplayName("(후기,질문,꿀팁) 카테고리별 게시글 전체 리스트 조회에 성공합니다.")
+    void getBoardList() throws Exception {
+        //given
+        BoardCate boardCate2 = boardCateRepository.save(
+                BoardCate.builder()
+                        .boardCateCode("TIP")
+                        .boardCateName("꿀팁")
+                        .build());
+
+        CreateBoardRequest request = createBoardRequest("게시글 제목", "게시글 내용", boardCate.getId());
+        CreateBoardResponse board = boardService.createBoard(request, user.getId(), null);
+
+        CreateBoardRequest request2 = createBoardRequest("게시글 제목2", "게시글 내용2", boardCate.getId());
+        CreateBoardResponse board2 = boardService.createBoard(request2, user.getId(), null);
+
+        CreateBoardRequest request3 = createBoardRequest("게시글 제목3", "게시글 내용3", boardCate2.getId());
+        boardService.createBoard(request3, user.getId(), null);
+
+        //when
+        List<GetBoardResponse> boardList = boardService.getBoardList(boardCate.getId());
+
+        //then
+        assertThat(boardList).hasSize(2)
+                .extracting("boardId", "title", "content", "boardCateId")
+                .containsExactlyInAnyOrder(
+                        tuple(board.getBoardId(), "게시글 제목", "게시글 내용", boardCate.getId()),
+                        tuple(board2.getBoardId(), "게시글 제목2", "게시글 내용2", boardCate.getId())
+                );
+    }
+
+    @Test
+    @DisplayName("최신글 전체 리스트 조회에 성공합니다.")
+    void getBoardLatestList() throws Exception {
+        //given
+        CreateBoardRequest request = createBoardRequest("게시글 제목", "게시글 내용", boardCate.getId());
+        CreateBoardResponse board = boardService.createBoard(request, user.getId(), null);
+
+        CreateBoardRequest request2 = createBoardRequest("게시글 제목2", "게시글 내용2", boardCate.getId());
+        CreateBoardResponse board2 = boardService.createBoard(request2, user.getId(), null);
+
+        //when
+        List<GetBoardResponse> boardList = boardService.getBoardLatestList();
+
+        //then
+        assertThat(boardList).hasSize(2)
+                .extracting("boardId", "title", "content", "boardCateId")
+                .containsExactly(
+                        tuple(board2.getBoardId(), "게시글 제목2", "게시글 내용2", boardCate.getId()),
+                        tuple(board.getBoardId(), "게시글 제목", "게시글 내용", boardCate.getId())
+                );
+
+        assertThat(boardList.get(0).getRegTime()).isAfter(boardList.get(1).getRegTime());
+    }
+
+    @Test
+    @DisplayName("게시글 전체 검색 조회에 성공합니다.")
+    void getAllBoardList() throws Exception {
+        //given
+        CreateBoardRequest request = createBoardRequest("게시글 제목", "게시글 내용", boardCate.getId());
+        CreateBoardResponse board = boardService.createBoard(request, user.getId(), null);
+
+        CreateBoardRequest request2 = createBoardRequest("게시굴 제목", "게시굴 내용", boardCate.getId());
+        boardService.createBoard(request2, user.getId(), null);
+
+        //when
+        List<GetBoardResponse> boardList = boardService.getAllBoardList(new GetBoardSearchRequest("게시글"));
+
+        //then
+        assertThat(boardList).hasSize(1)
+                .extracting("boardId", "title", "content", "boardCateId")
+                .containsExactlyInAnyOrder(
+                        tuple(board.getBoardId(), "게시글 제목", "게시글 내용", boardCate.getId())
+                );
+    }
+
+    @Test
+    @DisplayName("내 게시글 조회에 성공합니다.")
+    void getMyBoardList() throws Exception {
+        //given
+        User user2 = userRepository.save(
+                User.builder()
+                        .userType(UserType.KAKAO)
+                        .email("asdf2@naver.com")
+                        .nickname("다람지기엽지2")
+                        .userName("홍길동2")
+                        .role(Role.ROLE_USER)
+                        .build());
+
+        CreateBoardRequest request = createBoardRequest("게시글 제목", "게시글 내용", boardCate.getId());
+        CreateBoardResponse board = boardService.createBoard(request, user.getId(), null);
+
+        CreateBoardRequest request2 = createBoardRequest("게시글 제목2", "게시글 내용2", boardCate.getId());
+        boardService.createBoard(request2, user2.getId(), null);
+
+        //when
+        List<GetBoardResponse> boardList = boardService.getMyBoardList(user.getId());
+
+        //then
+        assertThat(boardList).hasSize(1)
+                .extracting("boardId", "title", "content", "boardCateId")
+                .containsExactlyInAnyOrder(
+                        tuple(board.getBoardId(), "게시글 제목", "게시글 내용", boardCate.getId())
+                );
+    }
+
+    //TODO : 인기글 전체 리스트 조회
+    //TODO : 내 좋아요
+
+    private CreateCommentRequest createCommentRequest(Long boardId, String content) {
+        return CreateCommentRequest.builder()
+                .boardId(boardId)
+                .content(content)
+                .build();
+    }
 
     private CreateBoardRequest createBoardRequest(String title, String content, Long boardCateId) {
         return CreateBoardRequest.builder()
-                .title("게시글 제목")
-                .content("게시글 내용")
+                .title(title)
+                .content(content)
                 .boardCateId(boardCateId)
                 .build();
     }

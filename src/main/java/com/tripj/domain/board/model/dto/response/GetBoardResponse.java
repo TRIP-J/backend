@@ -16,6 +16,7 @@ public class GetBoardResponse {
     private String profile;
 
     private Long boardId;
+    private Long boardCateId;
     private String boardCateName;
     private String title;
     private String content;
@@ -26,24 +27,26 @@ public class GetBoardResponse {
 
     public static GetBoardResponse of(
             Long userId, String userName, String profile,
-            Long boardId, String title, String content, String boardCateName, LocalDateTime regTime,
+            Long boardId, Long boardCateId, String title,
+            String content, String boardCateName, LocalDateTime regTime,
             Long commentCnt, Long likeCnt) {
 
         return new GetBoardResponse(userId, userName, profile,
-                                    boardId, title, content,
+                                    boardId, boardCateId, title, content,
                                     boardCateName, regTime,
                                     commentCnt, likeCnt);
     }
 
     @QueryProjection
     public GetBoardResponse(Long userId, String userName, String profile,
-                            Long boardId, String boardCateName,
+                            Long boardId, Long boardCateId, String boardCateName,
                             String title, String content, LocalDateTime regTime,
                             Long commentCnt, Long likeCnt) {
         this.userId = userId;
         this.userName = userName;
         this.profile = profile;
         this.boardId = boardId;
+        this.boardCateId = boardCateId;
         this.boardCateName = boardCateName;
         this.title = title;
         this.content = content;

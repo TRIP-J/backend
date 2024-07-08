@@ -159,6 +159,7 @@ public class BoardService {
                         board.getUserName(),
                         board.getProfile(),
                         board.getBoardId(),
+                        board.getBoardCateId(),
                         board.getTitle(),
                         board.getContent(),
                         board.getBoardCateName(),
