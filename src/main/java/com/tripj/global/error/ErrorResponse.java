@@ -1,11 +1,14 @@
 package com.tripj.global.error;
 
 
+import com.tripj.global.code.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -14,6 +17,11 @@ public class ErrorResponse {
 
     private String errorCode;
     private String errorMessage;
+
+    private final LocalDateTime timestamp = LocalDateTime.now();
+    private final int status;
+    private final String code;
+    private final String message;
 
     public static ErrorResponse of(String errorCode, String errorMessage) {
         return ErrorResponse.builder()
@@ -47,6 +55,16 @@ public class ErrorResponse {
         }
 
         return sb.toString();
+    }
+
+    public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode) {
+        return ResponseEntity
+                .status(errorCode.getStatusCode().getCode())
+                .body(ErrorResponse.builder()
+                        .status(errorCode.getStatusCode().getCode())
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                        .build());
     }
 
 }

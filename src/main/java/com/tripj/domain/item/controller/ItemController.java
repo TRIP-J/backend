@@ -12,6 +12,7 @@ import com.tripj.resolver.userinfo.UserInfo;
 import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -32,7 +33,7 @@ public class ItemController {
     )
     @PostMapping("")
     public RestApiResponse<CreateItemResponse> createItem(
-            @RequestBody CreateItemRequest request,
+            @RequestBody @Valid CreateItemRequest request,
             @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(

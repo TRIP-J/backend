@@ -3,10 +3,7 @@ package com.tripj.domain.board.controller;
 import com.tripj.domain.board.model.dto.request.CreateBoardRequest;
 import com.tripj.domain.board.model.dto.request.GetBoardRequest;
 import com.tripj.domain.board.model.dto.request.GetBoardSearchRequest;
-import com.tripj.domain.board.model.dto.response.CreateBoardResponse;
-import com.tripj.domain.board.model.dto.response.GetBoardCommentResponse;
-import com.tripj.domain.board.model.dto.response.GetBoardDetailResponse;
-import com.tripj.domain.board.model.dto.response.GetBoardResponse;
+import com.tripj.domain.board.model.dto.response.*;
 import com.tripj.domain.board.service.BoardService;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.model.RestApiResponse;
@@ -81,7 +78,7 @@ public class BoardController {
             description = "게시글을 삭제합니다."
     )
     @DeleteMapping("/{boardId}")
-    public RestApiResponse<CreateBoardResponse> deleteBoard(
+    public RestApiResponse<DeleteBoardResponse> deleteBoard(
             @UserInfo UserInfoDto userInfo,
             @PathVariable Long boardId) {
 

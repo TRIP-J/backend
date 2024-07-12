@@ -2,8 +2,8 @@ package com.tripj.global.model;
 
 import com.tripj.global.code.ErrorCode;
 import lombok.*;
+import org.springframework.http.HttpStatus;
 
-@ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -26,6 +26,10 @@ public class RestApiResponse<T> {
 
     public static <T> RestApiResponse<T> error(ErrorCode errorCode, String message) {
         return new RestApiResponse<>(errorCode.getCode(), message, null);
+    }
+
+    public static <T> RestApiResponse<T> of(String httpStatus, String message, T data) {
+        return new RestApiResponse<>(httpStatus.toString(), message, data);
     }
 }
 
