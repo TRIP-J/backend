@@ -9,6 +9,10 @@ import com.tripj.domain.boardcate.repository.BoardCateRepository;
 import com.tripj.domain.comment.model.dto.request.CreateCommentRequest;
 import com.tripj.domain.comment.repository.CommentRepository;
 import com.tripj.domain.comment.service.CommentService;
+import com.tripj.domain.like.model.dto.request.CreateLikedBoardRequest;
+import com.tripj.domain.like.model.dto.response.CreateLikedBoardResponse;
+import com.tripj.domain.like.repository.LikedBoardRepository;
+import com.tripj.domain.like.service.LikedBoardService;
 import com.tripj.domain.user.constant.Role;
 import com.tripj.domain.user.constant.UserType;
 import com.tripj.domain.user.model.entity.User;
@@ -42,6 +46,10 @@ class BoardServiceTest {
     private CommentService commentService;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private LikedBoardService likedBoardService;
+    @Autowired
+    private LikedBoardRepository likedBoardRepository;
 
     private User user;
     private BoardCate boardCate;
@@ -69,6 +77,7 @@ class BoardServiceTest {
     @AfterEach
     void tearDown() {
         commentRepository.deleteAllInBatch();
+        likedBoardRepository.deleteAllInBatch();
         boardRepository.deleteAllInBatch();
         boardCateRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
@@ -93,7 +102,7 @@ class BoardServiceTest {
         }
 
         @Test
-        @DisplayName("존재 하지 않는 사용자가 등록시 예외를 발생시킵니다.")
+        @DisplayName("존재 하지 않는 사용자가 등록시예외를 발생시킵니다.")
         void createBoardNotExistingUser() throws IOException {
             //given
             CreateBoardRequest request = createBoardRequest("게시글 제목", "게시글 내용", boardCate.getId());
@@ -478,8 +487,61 @@ class BoardServiceTest {
                 );
     }
 
-    //TODO : 인기글 전체 리스트 조회
-    //TODO : 내 좋아요
+    @Test
+    @DisplayName("인기글 전체 리스트 조회에 성공합니다.")
+    void getBoardPopularList() throws Exception {
+        User user2 = userRepository.save(
+                User.builder()
+                        .userType(UserType.KAKAO)
+                        .email("asdf2@naver.com")
+                        .nickname("다람지기엽지2")
+                        .userName("홍길동2")
+                        .role(Role.ROLE_USER)
+                        .build());
+
+        //given
+        CreateLikedBoardResponse likedBoard = createLikedBoard("게시글 제목", "게시글 내용", user.getId());
+        CreateLikedBoardResponse likedBoard2 = createLikedBoard("게시글 제목2", "게시글 내용2", user2.getId());
+        likedBoardService.createLikedBoard(new CreateLikedBoardRequest(likedBoard.getBoardId()), user2.getId());
+
+        //when
+        List<GetBoardResponse> boardPopularList = boardService.getBoardPopularList();
+
+        //then
+        assertThat(boardPopularList).hasSize(2)
+                .extracting("userId", "boardId", "title", "content", "boardCateId", "likeCnt")
+                .containsExactly(
+                        tuple(user.getId(), likedBoard.getBoardId(), "게시글 제목", "게시글 내용", boardCate.getId(), 2L),
+                        tuple(user.getId(), likedBoard2.getBoardId(), "게시글 제목2", "게시글 내용2", boardCate.getId(), 1L)
+                );
+    }
+
+    @Test
+    @DisplayName("내 좋아요 리스트 조회에 성공합니다.")
+    void getMyLikedBoard() throws Exception {
+        //given
+        CreateLikedBoardResponse likedBoard = createLikedBoard("게시글 제목", "게시글 내용", user.getId());
+        CreateLikedBoardResponse likedBoard2 = createLikedBoard("게시글 제목2", "게시글 내용2", user.getId());
+
+        //when
+        List<GetBoardResponse> myLikedBoard = boardService.getMyLikedBoard(user.getId());
+
+        //then
+        assertThat(myLikedBoard).hasSize(2)
+                .extracting("userId", "boardId", "title", "content", "boardCateId")
+                .containsExactly(
+                        tuple(user.getId(), likedBoard2.getBoardId(), "게시글 제목2", "게시글 내용2", boardCate.getId()),
+                        tuple(user.getId(), likedBoard.getBoardId(), "게시글 제목", "게시글 내용", boardCate.getId())
+                );
+    }
+
+    private CreateLikedBoardResponse createLikedBoard(String title, String content, Long userId) throws IOException {
+        CreateBoardRequest request = createBoardRequest(title, content, boardCate.getId());
+        CreateBoardResponse board = boardService.createBoard(request, user.getId(), null);
+        CreateLikedBoardResponse likedBoard =
+                likedBoardService.createLikedBoard(new CreateLikedBoardRequest(board.getBoardId()), userId);
+        return likedBoard;
+    }
 
     private CreateCommentRequest createCommentRequest(Long boardId, String content) {
         return CreateCommentRequest.builder()
