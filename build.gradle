@@ -92,8 +92,11 @@ dependencies {
 	// h2
  	runtimeOnly 'com.h2database:h2'
 
-	//feign
+	// feign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.6'
+
+	// jsoup
+	implementation 'org.jsoup:jsoup:1.17.2'
 
 	//devtools
 //	developmentOnly 'org.springframework.boot:spring-boot-devtools'

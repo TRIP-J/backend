@@ -3,10 +3,13 @@ package com.tripj.domain.precation.model.entity;
 import com.tripj.domain.common.entity.BaseTimeEntity;
 import com.tripj.domain.country.model.entity.Country;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Precaution extends BaseTimeEntity {
 
     @Id
@@ -20,8 +23,14 @@ public class Precaution extends BaseTimeEntity {
 
     private String title;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-
-
+    public static Precaution newPrecaution(String title, String content) {
+        return Precaution.builder()
+                .title(title)
+                .content(content)
+                .build();
+    }
 }
