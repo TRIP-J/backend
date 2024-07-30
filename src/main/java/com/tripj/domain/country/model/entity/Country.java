@@ -23,6 +23,9 @@ public class Country {
     @OneToMany(mappedBy = "country")
     private List<Item> items = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private CountryCate countryCate;
+
     @Column(name = "country_name", nullable = false)
     private String name;
 
