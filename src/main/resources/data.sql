@@ -27,17 +27,17 @@ VALUES (1, 'REC', '추천템'),
        (5, 'ELE', '전자기기'),
        (6, 'PRI', '출력물');
 
-INSERT INTO country (country_id, country_code, country_name)
-VALUES (1, 'JP', '일본'),
-       (2, 'CN', '중국'),
-       (3, 'TH', '태국'),
-       (4, 'HK', '홍콩'),
-       (5, 'EG', '영국'),
-       (6, 'FR', '프랑스'),
-       (7, 'IT', '이탈리아'),
-       (8, 'AM', '미국'),
-       (9, 'CA', '캐나다'),
-       (10, 'AR', '아르헨티나');
+INSERT INTO country (country_id, country_code, country_name, country_Cate)
+VALUES (1, 'JP', '일본', 'ASIA'),
+       (2, 'CN', '중국', 'ASIA'),
+       (3, 'TH', '태국', 'ASIA'),
+       (4, 'HK', '홍콩', 'ASIA'),
+       (5, 'EG', '영국', 'EUROPE'),
+       (6, 'FR', '프랑스', 'EUROPE'),
+       (7, 'IT', '이탈리아', 'EUROPE'),
+       (8, 'AM', '미국', 'AMERICA'),
+       (9, 'CA', '캐나다', 'AMERICA'),
+       (10, 'AR', '아르헨티나', 'AMERICA');
 
 INSERT INTO item (item_id, item_name, item_cate_id, fix, country_id)
 VALUES (1, '여권', 2, 'F', null),

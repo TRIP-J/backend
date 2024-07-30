@@ -29,8 +29,4 @@ public class CountryController {
     public RestApiResponse <List<GetCountryResponse>> getCountry() {
         return RestApiResponse.success(countryService.getCountry());
     }
-
-
-
-
 }
