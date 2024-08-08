@@ -42,7 +42,4 @@ public class OauthLoginController {
 
         return ResponseEntity.ok(jwtTokenResponseDto);
     }
-
-
-
 }

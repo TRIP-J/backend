@@ -79,6 +79,4 @@ public class User extends BaseTimeEntity {
         tokenExpirationTime = DateTimeUtils.convertToLocalDateTime(jwtTokenDto.getRefreshTokenExpireTime());
     }
 
-
-
 }

@@ -43,6 +43,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns( // 인증이 필요 없는 url
                         "/api/oauth/login",
                         "/api/logout",
+                        "/api/access-token/issue",
                         "/v3/api-docs/**",
                         "/api/health-check");
 

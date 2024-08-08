@@ -5,6 +5,7 @@ import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.nickname.GenerateRandomNicknameRepository;
 import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.code.ErrorCode;
+import com.tripj.global.error.exception.AuthenticationException;
 import com.tripj.global.error.exception.BusinessException;
 import com.tripj.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static com.tripj.global.code.ErrorCode.*;
 
 @Slf4j
 @Service
@@ -34,11 +38,12 @@ public class UserService {
     /**
      * 회원 중복 검사
      */
+    @Transactional(readOnly = true)
     private void validateDuplicateUser(User user) {
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
 
         if (optionalUser.isPresent()) {
-            throw new BusinessException(ErrorCode.ALREADY_REGISTERED_USER);
+            throw new BusinessException(ALREADY_REGISTERED_USER);
         }
     }
 
@@ -69,8 +74,25 @@ public class UserService {
     public GetNicknameResponse getNickname(Long userId) {
 
         User user = userRepository.findNicknameById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         return GetNicknameResponse.of(user.getNickname());
     }
+
+    /**
+     * accessToken 재발급
+     */
+    @Transactional(readOnly = true)
+    public User findUserByRefreshToken(String refreshToken) {
+        User user = userRepository.findByRefreshToken(refreshToken)
+            .orElseThrow(() -> new AuthenticationException(REFRESH_TOKEN_NOT_FOUND));
+
+        LocalDateTime tokenExpireTime = user.getTokenExpirationTime();
+        if (tokenExpireTime.isBefore(LocalDateTime.now())) {
+            throw new AuthenticationException(REFRESH_TOKEN_EXPIRED);
+        }
+
+        return user;
+    }
+
 }
