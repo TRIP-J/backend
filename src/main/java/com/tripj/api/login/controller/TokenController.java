@@ -1,6 +1,6 @@
 package com.tripj.api.login.controller;
 
-import com.tripj.api.login.dto.AccessTokenResponse;
+import com.tripj.api.login.dto.TokenResponse;
 import com.tripj.api.login.service.TokenService;
 import com.tripj.global.model.RestApiResponse;
 import com.tripj.global.util.AuthorizationHeaderUtils;
@@ -23,16 +23,16 @@ public class TokenController {
     @Tag(name = "authentication")
     @Operation(summary = "Access Token 재발급 API", description = "Access Token 재발급 API")
     @PostMapping("/access-token/issue")
-    public RestApiResponse<AccessTokenResponse> createAccessToken(HttpServletRequest httpServletRequest) {
+    public RestApiResponse<TokenResponse> createAccessToken(HttpServletRequest httpServletRequest) {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
 
         AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
 
         String refreshToken = authorizationHeader.split(" ")[1];
-        AccessTokenResponse accessTokenResponseDto
+        TokenResponse tokenResponseDto
                 = tokenService.createAccessTokenByRefreshToken(refreshToken);
 
-        return RestApiResponse.success(accessTokenResponseDto);
+        return RestApiResponse.success(tokenResponseDto);
     }
 
 }
