@@ -42,6 +42,17 @@ public class TokenManager {
                 .build();
     }
 
+    public JwtTokenDto createRefreshTokenDto(Long userId) {
+        Date refreshTokenExpireTime = createRefreshTokenExpireTime();
+        String refreshToken = createRefreshToken(userId, refreshTokenExpireTime);
+
+        return JwtTokenDto.builder()
+                .grantType(GrantType.BEARER.getType())
+                .refreshToken(refreshToken)
+                .refreshTokenExpireTime(refreshTokenExpireTime)
+                .build();
+    }
+
     public Date createAccessTokenExpireTime() {
         return new Date(System.currentTimeMillis() + Long.parseLong(accessTokenExpirationTime));
     }
