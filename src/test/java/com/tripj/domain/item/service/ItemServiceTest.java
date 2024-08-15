@@ -91,7 +91,7 @@ class ItemServiceTest {
     void createItemWhenPreviousIsNow()  {
         //given
         CreateTripRequest createTripRequest =
-                createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
         CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
         CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
@@ -110,7 +110,7 @@ class ItemServiceTest {
     void createItemWhenPreviousIsNotNow()  {
         //given
         CreateTripRequest createTripRequest =
-                createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now());
+                createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now());
         CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
         tripService.changeTripPrevious();
 
@@ -130,7 +130,7 @@ class ItemServiceTest {
         void updateItem()  {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
@@ -155,7 +155,7 @@ class ItemServiceTest {
         void updateNotExistItem() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             //when //then
@@ -174,7 +174,7 @@ class ItemServiceTest {
         void updateNotMyItem() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
@@ -200,7 +200,7 @@ class ItemServiceTest {
         void deleteItem() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
@@ -218,7 +218,7 @@ class ItemServiceTest {
         void deleteItemFromPreviousTrip() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now());
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now());
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
@@ -237,7 +237,7 @@ class ItemServiceTest {
         void deleteNotMyItem() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
@@ -250,11 +250,8 @@ class ItemServiceTest {
         }
     }
 
-    private CreateTripRequest createTripRequest(String previous, Long countryId, LocalDate startDate, LocalDate endDate) {
+    private CreateTripRequest createTripRequest(Long countryId, LocalDate startDate, LocalDate endDate) {
         return CreateTripRequest.builder()
-                .tripName("즐거운 오사카 여행")
-                .purpose("여행")
-                .previous(previous)
                 .startDate(startDate)
                 .endDate(endDate)
                 .countryId(countryId)

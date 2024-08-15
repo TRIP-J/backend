@@ -69,7 +69,7 @@ class TripRepositoryTest {
     void findAllPreviousIsNow() {
         //given
         CreateTripRequest createTripRequest =
-                createTripRequest("NOW", country.getId(), LocalDate.of(2024, 06, 20), LocalDate.now());
+                createTripRequest(country.getId(), LocalDate.of(2024, 06, 20), LocalDate.now());
         tripService.createTrip(createTripRequest, user.getId());
 
         // when
@@ -88,12 +88,12 @@ class TripRepositoryTest {
     void findMaxPrevious() {
         // given
         CreateTripRequest createTripRequest =
-                createTripRequest("NOW", country.getId(), LocalDate.of(2024, 06, 20), LocalDate.now());
+                createTripRequest(country.getId(), LocalDate.of(2024, 06, 20), LocalDate.now());
         tripService.createTrip(createTripRequest, user.getId());
         tripService.changeTripPrevious();
 
         CreateTripRequest createTripRequest2 =
-                createTripRequest("NOW", country.getId(), LocalDate.of(2024, 06, 20), LocalDate.now());
+                createTripRequest(country.getId(), LocalDate.of(2024, 06, 20), LocalDate.now());
         tripService.createTrip(createTripRequest2, user.getId());
         tripService.changeTripPrevious();
 
@@ -104,36 +104,13 @@ class TripRepositoryTest {
         assertThat(maxPrevious).isEqualTo("B02");
     }
 
-
-
-
-
-
-    private CreateTripRequest createTripRequest(String previous, Long countryId, LocalDate startDate, LocalDate endDate) {
+    private CreateTripRequest createTripRequest(Long countryId, LocalDate startDate, LocalDate endDate) {
         return CreateTripRequest.builder()
-                .tripName("즐거운 오사카 여행")
-                .purpose("여행")
-                .previous(previous)
                 .startDate(startDate)
                 .endDate(endDate)
                 .countryId(countryId)
                 .build();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
