@@ -37,12 +37,7 @@ public class UpdateTripRequest {
     private Long countryId;
 
     public Trip toEntity(User user, Country country) {
-        return Trip.newTrip(tripName, purpose, previous,
-                            startDate, endDate, user, country);
-
-
+        return Trip.newTrip(startDate, endDate, user, country);
     }
-
-
 
 }
