@@ -78,7 +78,6 @@ class TripServiceTest {
         // given
         CreateTripRequest createTripRequest =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.of(2022, 10, 10));
@@ -88,8 +87,6 @@ class TripServiceTest {
 
         // then
         assertNotNull(trip);
-        assertEquals("즐거운 오사카 여행", trip.getTripName());
-        assertEquals("여행", trip.getPurpose());
         assertEquals("NOW", trip.getPrevious());
         assertEquals(LocalDate.of(2022, 10, 1), trip.getStartDate());
         assertEquals(LocalDate.of(2022, 10, 10), trip.getEndDate());
@@ -100,7 +97,6 @@ class TripServiceTest {
         // given
         CreateTripRequest createTripRequest =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.of(2022, 10, 10));
@@ -117,7 +113,6 @@ class TripServiceTest {
         // given
         CreateTripRequest createTripRequest =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.now());
@@ -129,8 +124,6 @@ class TripServiceTest {
         // then
         Optional<Trip> updatedTrip = tripRepository.findById(trip.getTripId());
         assertNotNull(updatedTrip);
-        assertEquals("즐거운 오사카 여행", updatedTrip.get().getTripName());
-        assertEquals("여행", updatedTrip.get().getPurpose());
         assertEquals("B01", updatedTrip.get().getPrevious());
     }
 
@@ -140,7 +133,6 @@ class TripServiceTest {
         // given
         CreateTripRequest createTripRequest =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.now());
@@ -150,7 +142,6 @@ class TripServiceTest {
 
         CreateTripRequest createTripRequest2 =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.now());
@@ -163,8 +154,6 @@ class TripServiceTest {
         // then
         Optional<Trip> updatedTrip = tripRepository.findById(trip2.getTripId());
         assertNotNull(updatedTrip);
-        assertEquals("즐거운 오사카 여행", updatedTrip.get().getTripName());
-        assertEquals("여행", updatedTrip.get().getPurpose());
         assertEquals("B02", updatedTrip.get().getPrevious());
     }
 
@@ -176,7 +165,6 @@ class TripServiceTest {
 
         CreateTripRequest createTripRequest =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.now());
@@ -205,7 +193,6 @@ class TripServiceTest {
         //given
         CreateTripRequest createTripRequest =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.of(2025, 01, 1));
@@ -215,8 +202,6 @@ class TripServiceTest {
         GetTripResponse trip = tripService.getTrip(user.getId());
 
         //then
-        assertThat(trip.getTripName()).isEqualTo("즐거운 오사카 여행");
-        assertThat(trip.getPurpose()).isEqualTo("여행");
         assertThat(trip.getCountryName()).isEqualTo("일본");
         assertThat(trip.getStartDate()).isEqualTo(LocalDate.of(2022, 10, 1));
         assertThat(trip.getEndDate()).isEqualTo(LocalDate.of(2025, 01, 1));
@@ -227,7 +212,6 @@ class TripServiceTest {
         // given
         CreateTripRequest createTripRequest =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.now());
@@ -237,7 +221,6 @@ class TripServiceTest {
 
         CreateTripRequest createTripRequest2 =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.now());
@@ -251,10 +234,10 @@ class TripServiceTest {
 
         //then
         assertThat(pastTrip).hasSize(2)
-                .extracting("tripName", "purpose", "previous", "startDate", "endDate")
+                .extracting("previous", "startDate", "endDate")
                 .containsExactly(
-                        tuple("즐거운 오사카 여행", "여행", "B01", LocalDate.of(2022, 10, 1), LocalDate.now()),
-                        tuple("즐거운 오사카 여행", "여행", "B02", LocalDate.of(2022, 10, 1), LocalDate.now())
+                        tuple("B01", LocalDate.of(2022, 10, 1), LocalDate.now()),
+                        tuple("B02", LocalDate.of(2022, 10, 1), LocalDate.now())
                 );
     }
 
@@ -263,7 +246,6 @@ class TripServiceTest {
         // given
         CreateTripRequest createTripRequest =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.now());
@@ -273,7 +255,6 @@ class TripServiceTest {
 
         CreateTripRequest createTripRequest2 =
                 createTripRequest(
-                        "NOW",
                         country.getId(),
                         LocalDate.of(2022, 10, 1),
                         LocalDate.now());
@@ -290,11 +271,8 @@ class TripServiceTest {
         assertThat(tripCount.getTripCount()).isEqualTo(2);
     }
 
-    private CreateTripRequest createTripRequest(String previous, Long countryId, LocalDate startDate, LocalDate endDate) {
+    private CreateTripRequest createTripRequest(Long countryId, LocalDate startDate, LocalDate endDate) {
         return CreateTripRequest.builder()
-                .tripName("즐거운 오사카 여행")
-                .purpose("여행")
-                .previous(previous)
                 .startDate(startDate)
                 .endDate(endDate)
                 .countryId(countryId)

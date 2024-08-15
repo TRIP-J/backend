@@ -56,10 +56,10 @@ class TripControllerTest {
         void createTrip() throws Exception {
             // given
             CreateTripRequest createTripRequest =
-                    createTripRequest("여행이름", "여행목적", LocalDate.of(2022, 10, 1), LocalDate.now(), 1L);
+                    createTripRequest(LocalDate.of(2022, 10, 1), LocalDate.now(), 1L);
 
             CreateTripResponse createTripResponse =
-                    createTripResponse("여행이름", "여행목적", LocalDate.of(2022, 10, 1), LocalDate.now(), 1L);
+                    createTripResponse(LocalDate.of(2022, 10, 1), LocalDate.now(), 1L);
 
             given(tripService.createTrip(any(), any()))
                     .willReturn(createTripResponse);
@@ -78,23 +78,6 @@ class TripControllerTest {
                     .andExpect(jsonPath("$.data.purpose").value("여행목적"))
                     .andExpect(jsonPath("$.data.startDate").value("2022-10-01"))
                     .andExpect(jsonPath("$.data.endDate").value(LocalDate.now().toString()));
-        }
-
-        @DisplayName("여행 계획 등록시 여행 이름은 필수 입니다.")
-        @Test
-        void createTripInvalidTripName() throws Exception {
-
-            CreateTripRequest createTripRequest =
-                    createTripRequest(null, "여행목적", LocalDate.of(2022, 10, 1), LocalDate.now(), 1L);
-
-            mockMvc.perform(
-                    post("/api/trip")
-                            .content(objectMapper.writeValueAsString(createTripRequest))
-                            .contentType(MediaType.APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.httpStatus").value("400 BAD_REQUEST"))
-                    .andExpect(jsonPath("$.message").value("여행 이름은 필수로 입력해 주세요"));
         }
     }
 
@@ -218,11 +201,8 @@ class TripControllerTest {
     }
 
 
-    private CreateTripRequest createTripRequest(String tripName, String purpose, LocalDate startDate, LocalDate endDate, Long countryId) {
+    private CreateTripRequest createTripRequest(LocalDate startDate, LocalDate endDate, Long countryId) {
         return CreateTripRequest.builder()
-                .tripName(tripName)
-                .purpose(purpose)
-                .previous("NOW")
                 .startDate(startDate)
                 .endDate(endDate)
                 .countryId(countryId)
@@ -251,10 +231,8 @@ class TripControllerTest {
                 .build();
     }
 
-    private CreateTripResponse createTripResponse(String tripName, String purpose, LocalDate startDate, LocalDate endDate, Long countryId) {
+    private CreateTripResponse createTripResponse(LocalDate startDate, LocalDate endDate, Long countryId) {
         return CreateTripResponse.builder()
-                .tripName(tripName)
-                .purpose(purpose)
                 .previous("NOW")
                 .startDate(startDate)
                 .endDate(endDate)

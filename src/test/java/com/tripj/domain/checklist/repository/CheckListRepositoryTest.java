@@ -106,7 +106,7 @@ class CheckListRepositoryTest {
     void findByUserIdAndItemIdAndTripIdAndPreviousNow() {
         //given
         CreateTripRequest createTripRequest =
-                createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
         CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
         CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -129,11 +129,8 @@ class CheckListRepositoryTest {
                 .build();
     }
 
-    private CreateTripRequest createTripRequest(String previous, Long countryId, LocalDate startDate, LocalDate endDate) {
+    private CreateTripRequest createTripRequest(Long countryId, LocalDate startDate, LocalDate endDate) {
         return CreateTripRequest.builder()
-                .tripName("즐거운 오사카 여행")
-                .purpose("여행")
-                .previous(previous)
                 .startDate(startDate)
                 .endDate(endDate)
                 .countryId(countryId)

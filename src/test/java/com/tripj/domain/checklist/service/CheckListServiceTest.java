@@ -118,7 +118,7 @@ class CheckListServiceTest {
         void createCheckList() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -141,7 +141,7 @@ class CheckListServiceTest {
         void createCheckListNotExistingUser() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -161,7 +161,7 @@ class CheckListServiceTest {
         void createCheckListWhenPreviousTrip() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now());
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now());
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -182,7 +182,7 @@ class CheckListServiceTest {
         void createCheckListExistingItem() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -203,7 +203,7 @@ class CheckListServiceTest {
         void createCheckListNotMyTrip() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now());
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now());
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             User savedUser = userRepository.save(
@@ -236,7 +236,7 @@ class CheckListServiceTest {
         void deleteCheckList () {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -257,7 +257,7 @@ class CheckListServiceTest {
         void deleteCheckListNotExistingUser () {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -277,7 +277,7 @@ class CheckListServiceTest {
         void deleteCheckListNotExistingCheckList () {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -294,7 +294,7 @@ class CheckListServiceTest {
         void deleteNotMyCheckList () {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             User savedUser = userRepository.save(
@@ -327,7 +327,7 @@ class CheckListServiceTest {
         void packCheckListStatusIsNO() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -349,7 +349,7 @@ class CheckListServiceTest {
         void packCheckListStatusIsYES() {
             //given
             CreateTripRequest createTripRequest =
-                    createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                    createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
             CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -377,7 +377,7 @@ class CheckListServiceTest {
     void getCheckList() {
         //given
         CreateTripRequest createTripRequest =
-                createTripRequest("NOW", country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
+                createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
         CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
         CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
@@ -409,11 +409,8 @@ class CheckListServiceTest {
                 .build();
     }
 
-    private CreateTripRequest createTripRequest(String previous, Long countryId, LocalDate startDate, LocalDate endDate) {
+    private CreateTripRequest createTripRequest(Long countryId, LocalDate startDate, LocalDate endDate) {
         return CreateTripRequest.builder()
-                .tripName("즐거운 오사카 여행")
-                .purpose("여행")
-                .previous(previous)
                 .startDate(startDate)
                 .endDate(endDate)
                 .countryId(countryId)
