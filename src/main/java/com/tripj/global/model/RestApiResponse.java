@@ -1,8 +1,10 @@
 package com.tripj.global.model;
 
 import com.tripj.global.code.ErrorCode;
-import lombok.*;
-import org.springframework.http.HttpStatus;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
