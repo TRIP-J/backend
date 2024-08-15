@@ -24,14 +24,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
 
-        // 0. refreshToken으로 accessToken 재발급시에는 검증 생략
-        if (requestURI.equals("/api/access-token/issue2")) {
-            return true;
-        }
 
         // 1. Authorization Header 검증
         String authorizationHeader = request.getHeader("Authorization");
         AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
+
+        // 0. refreshToken으로 accessToken 재발급시에는 검증 생략
+        if (requestURI.equals("/api/access-token/issue2")) {
+            return true;
+        }
 
         // 2. 토큰 검증
         String accessToken = authorizationHeader.split(" ")[1];
