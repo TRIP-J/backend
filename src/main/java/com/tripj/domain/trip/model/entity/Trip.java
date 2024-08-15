@@ -38,12 +38,9 @@ public class Trip extends BaseTimeEntity {
 
     private String previous;
 
-    public static Trip newTrip(String tripName, String purpose, String previous,
-                               LocalDate startDate, LocalDate endDate,
+    public static Trip newTrip(LocalDate startDate, LocalDate endDate,
                                User user, Country country) {
         return Trip.builder()
-                .tripName(tripName)
-                .purpose(purpose)
                 .previous("NOW")
                 .startDate(startDate)
                 .endDate(endDate)

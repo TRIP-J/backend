@@ -16,17 +16,6 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateTripRequest {
 
-    @NotNull(message = "여행 이름은 필수로 입력해 주세요")
-    @Schema(description = "여행 이름", example = "즐거운 오사카 여행")
-    private String tripName;
-
-    @NotNull(message = "여행 목적은 필수로 입력해 주세요")
-    @Schema(description = "여행 목적", example = "여행")
-    private String purpose;
-
-    @Schema(description = "지난 여행 분류", example = "NOW")
-    private String previous;
-
     @NotNull(message = "시작일은 필수로 입력해 주세요")
     private LocalDate startDate;
 
@@ -38,10 +27,7 @@ public class CreateTripRequest {
     private Long countryId;
 
     public Trip toEntity(User user, Country country) {
-        return Trip.newTrip(tripName, purpose, previous,
-                            startDate, endDate, user, country);
-
-
+        return Trip.newTrip(startDate, endDate, user, country);
     }
 
 
