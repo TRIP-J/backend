@@ -22,6 +22,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     //preHandle() 메서드는 컨트롤러보다 먼저 수행
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String requestURI = request.getRequestURI();
+
+        // 0. refreshToken으로 accessToken 재발급시에는 검증 생략
+        if (requestURI.equals("/api/access-token/issue2")) {
+            return true;
+        }
 
         // 1. Authorization Header 검증
         String authorizationHeader = request.getHeader("Authorization");
