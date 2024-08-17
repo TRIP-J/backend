@@ -26,8 +26,6 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
                         trip.id,
                         trip.user.id,
                         country.name,
-                        trip.tripName,
-                        trip.purpose,
                         trip.previous,
                         trip.startDate,
                         trip.endDate
@@ -50,8 +48,6 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
                         trip.id,
                         trip.user.id,
                         trip.country.name,
-                        trip.tripName,
-                        trip.purpose,
                         trip.previous,
                         trip.startDate,
                         trip.endDate

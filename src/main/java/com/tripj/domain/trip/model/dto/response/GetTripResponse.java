@@ -24,12 +24,7 @@ public class GetTripResponse {
     @Schema(description = "나라명", example = "일본")
     private String countryName;
 
-    @Schema(description = "여행 이름", example = "즐거운 오사카 여행")
-    private String tripName;
-
-    @Schema(description = "여행 목적", example = "여유로운 휴식,휴가")
-    private String purpose;
-
+    @Schema(description = "현재/이전 여행 분기 컬럼", example = "NOW")
     private String previous;
 
     @Schema(description = "여행 시작일", example = "2024-03-30")
@@ -39,14 +34,12 @@ public class GetTripResponse {
     private LocalDate endDate;
 
     @QueryProjection
-    public GetTripResponse(Long tripId, Long userId, String countryName,
-                           String tripName, String purpose, String previous,
+    public GetTripResponse(Long tripId, Long userId,
+                           String countryName, String previous,
                            LocalDate startDate, LocalDate endDate) {
         this.tripId = tripId;
         this.userId = userId;
         this.countryName = countryName;
-        this.tripName = tripName;
-        this.purpose = purpose;
         this.previous = previous;
         this.startDate = startDate;
         this.endDate = endDate;
