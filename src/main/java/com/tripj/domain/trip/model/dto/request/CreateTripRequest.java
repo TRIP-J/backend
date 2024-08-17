@@ -29,7 +29,4 @@ public class CreateTripRequest {
     public Trip toEntity(User user, Country country) {
         return Trip.newTrip(startDate, endDate, user, country);
     }
-
-
-
 }
