@@ -86,8 +86,8 @@ class TripControllerTest {
         @DisplayName("여행 계획을 수정에 성공합니다.")
         void updateTrip() throws Exception {
             //given
-            UpdateTripRequest updateTripRequest = updateTripRequest("여행이름");
-            UpdateTripResponse updateTripResponse = updateTripResponse("여행이름");
+            UpdateTripRequest updateTripRequest = updateTripRequest();
+            UpdateTripResponse updateTripResponse = updateTripResponse();
 
             given(tripService.updateTrip(any(), any(), any()))
                     .willReturn(updateTripResponse);
@@ -105,27 +105,6 @@ class TripControllerTest {
                     .andExpect(jsonPath("$.data.purpose").value("여행목적"))
                     .andExpect(jsonPath("$.data.startDate").value("2022-10-01"))
                     .andExpect(jsonPath("$.data.endDate").value(LocalDate.now().toString()));
-        }
-
-        @Test
-        @DisplayName("여행 계획을 수정 시 여행 이름은 필수입니다.")
-        void updateTripInvalidTripName() throws Exception {
-            //given
-            UpdateTripRequest updateTripRequest = updateTripRequest(null);
-            UpdateTripResponse updateTripResponse = updateTripResponse("여행이름");
-
-            given(tripService.updateTrip(any(), any(), any()))
-                    .willReturn(updateTripResponse);
-
-            //when //then
-            mockMvc.perform(
-                            post("/api/trip/{tripId}", 1L)
-                                    .content(objectMapper.writeValueAsString(updateTripRequest))
-                                    .contentType(MediaType.APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.httpStatus").value("400 BAD_REQUEST"))
-                    .andExpect(jsonPath("$.message").value("여행 이름은 필수로 입력해 주세요"));
         }
     }
 
@@ -207,7 +186,7 @@ class TripControllerTest {
                 .build();
     }
 
-    private UpdateTripRequest updateTripRequest(String tripName) {
+    private UpdateTripRequest updateTripRequest() {
         return UpdateTripRequest.builder()
                 .startDate(LocalDate.of(2022, 10, 1))
                 .endDate(LocalDate.now())
@@ -215,7 +194,7 @@ class TripControllerTest {
                 .build();
     }
 
-    private UpdateTripResponse updateTripResponse(String tripName) {
+    private UpdateTripResponse updateTripResponse() {
         return UpdateTripResponse.builder()
                 .previous("NOW")
                 .startDate(LocalDate.of(2022, 10, 1))
@@ -237,8 +216,6 @@ class TripControllerTest {
         return GetTripResponse.builder()
                 .tripId(1L)
                 .userId(1L)
-                .tripName(tripName)
-                .purpose("관광")
                 .previous(previous)
                 .startDate(startDate)
                 .endDate(endDate)

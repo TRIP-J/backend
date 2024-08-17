@@ -87,7 +87,7 @@ public class TripService {
     public GetTripResponse getTrip(Long userId) {
 
         userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         return tripRepository.getTrip(userId);
     }
@@ -98,11 +98,8 @@ public class TripService {
     @Transactional(readOnly = true)
     public List<GetTripResponse> getPastTrip(Long userId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
-
-        tripRepository.findById(user.getTrip().get(0).getId())
-                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_TRIP));
+        userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         return tripRepository.getPastTrip(userId);
     }
