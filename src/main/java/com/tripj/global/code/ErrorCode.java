@@ -42,6 +42,7 @@ public enum ErrorCode {
     E404_NOT_EXISTS_NOW_ITEM(NOT_FOUND, false, "NF012", "존재하지 않는 현재 아이템입니다."),
     E404_NOT_EXISTS_FIXED_ITEM(NOT_FOUND, false, "NF013", "고정되어 있는 아이템이 아닙니다."),
     E404_NOT_EXISTS_CONVERSATION(NOT_FOUND, false, "NF014", "해당나라의 회화가 존재하지 않습니다."),
+    E404_NOT_EXISTS_PAST_TRIP(NOT_FOUND, false, "NF0015", "존재하지 않는 지난 여행계획입니다."),
 
     /**
      * 회원
