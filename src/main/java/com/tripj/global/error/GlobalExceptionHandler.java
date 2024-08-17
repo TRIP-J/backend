@@ -1,7 +1,10 @@
 package com.tripj.global.error;
 
 
+import com.tripj.global.code.ErrorCode;
+import com.tripj.global.code.HttpStatusCode;
 import com.tripj.global.error.exception.BusinessException;
+import com.tripj.global.error.exception.NotFoundException;
 import com.tripj.global.model.RestApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -68,6 +71,16 @@ public class GlobalExceptionHandler {
         log.error("Exception", e);
         ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+
+    /**
+     * 404 예외 발생시
+     */
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException e) {
+        log.error("NotFoundException", e);
+        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode().toString(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
 }

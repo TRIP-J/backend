@@ -89,6 +89,9 @@ public class TripService {
         userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
+        tripRepository.findTripPreviousIsNow(userId)
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_TRIP));
+
         return tripRepository.getTrip(userId);
     }
 
@@ -100,6 +103,11 @@ public class TripService {
 
         userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
+
+        List<Trip> tripPreviousIsNotNow = tripRepository.findTripPreviousIsNotNow(userId);
+        if (tripPreviousIsNotNow.isEmpty()) {
+            throw new NotFoundException(E404_NOT_EXISTS_PAST_TRIP);
+        }
 
         return tripRepository.getPastTrip(userId);
     }
