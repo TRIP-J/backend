@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.tripj.global.code.ErrorCode.*;
+
 @Slf4j
 @Service
 @Transactional
@@ -43,15 +45,15 @@ public class TripService {
         trip
             .forEach(trips -> {
                 if (trips.getPrevious().equals("NOW")) {
-                    throw new BusinessException(ErrorCode.ALREADY_EXISTS_TRIP);
+                    throw new BusinessException(ALREADY_EXISTS_TRIP);
                 }
             });
 
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         Country country = countryRepository.findById(request.getCountryId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_COUNTRY));
 
         Trip savedTrip = tripRepository.save(request.toEntity(user, country));
 
@@ -66,14 +68,13 @@ public class TripService {
                                          Long userId) {
 
         Trip trip = tripRepository.findById(tripId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_TRIP));
 
         Country country = countryRepository.findById(request.getCountryId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_COUNTRY));
 
         if (trip.getUser().getId().equals(userId)) {
-            trip.updateTrip(request.getTripName(), request.getPurpose(),
-                            request.getStartDate(), request.getEndDate(), country);
+            trip.updateTrip(request.getStartDate(), request.getEndDate(), country);
         }
 
         return UpdateTripResponse.of(trip);
@@ -86,7 +87,7 @@ public class TripService {
     public GetTripResponse getTrip(Long userId) {
 
         userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         return tripRepository.getTrip(userId);
     }
@@ -98,10 +99,10 @@ public class TripService {
     public List<GetTripResponse> getPastTrip(Long userId) {
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         tripRepository.findById(user.getTrip().get(0).getId())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_TRIP));
+                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_TRIP));
 
         return tripRepository.getPastTrip(userId);
     }
@@ -136,7 +137,7 @@ public class TripService {
     public GetTripCountResponse getTripCount(Long userId) {
 
         userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         Long tripCount = tripRepository.countByUserId(userId);
         return GetTripCountResponse.of(userId, tripCount);

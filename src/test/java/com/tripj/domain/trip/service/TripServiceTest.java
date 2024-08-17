@@ -173,8 +173,6 @@ class TripServiceTest {
         //when
         UpdateTripResponse updateTripResponse = tripService.updateTrip(
                 UpdateTripRequest.builder()
-                        .tripName("즐거운 홍콩 여행")
-                        .purpose("사업")
                         .startDate(LocalDate.of(2022, 10, 1))
                         .endDate(LocalDate.now().plusDays(1))
                         .countryId(country2.getId())
@@ -183,8 +181,6 @@ class TripServiceTest {
                 user.getId());
 
         //then
-        assertEquals(updateTripResponse.getTripName(), "즐거운 홍콩 여행");
-        assertEquals(updateTripResponse.getPurpose(), "사업");
         assertEquals(updateTripResponse.getCountryId(), country2.getId());
     }
 

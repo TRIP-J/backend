@@ -74,8 +74,6 @@ class TripControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.httpStatus").value("OK"))
                     .andExpect(jsonPath("$.message").value("OK"))
-                    .andExpect(jsonPath("$.data.tripName").value("여행이름"))
-                    .andExpect(jsonPath("$.data.purpose").value("여행목적"))
                     .andExpect(jsonPath("$.data.startDate").value("2022-10-01"))
                     .andExpect(jsonPath("$.data.endDate").value(LocalDate.now().toString()));
         }
@@ -211,9 +209,6 @@ class TripControllerTest {
 
     private UpdateTripRequest updateTripRequest(String tripName) {
         return UpdateTripRequest.builder()
-                .tripName(tripName)
-                .purpose("여행목적")
-                .previous("NOW")
                 .startDate(LocalDate.of(2022, 10, 1))
                 .endDate(LocalDate.now())
                 .countryId(1L)
@@ -222,8 +217,6 @@ class TripControllerTest {
 
     private UpdateTripResponse updateTripResponse(String tripName) {
         return UpdateTripResponse.builder()
-                .tripName(tripName)
-                .purpose("여행목적")
                 .previous("NOW")
                 .startDate(LocalDate.of(2022, 10, 1))
                 .endDate(LocalDate.now())

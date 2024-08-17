@@ -52,11 +52,7 @@ public class Trip extends BaseTimeEntity {
     /**
      * 여행 수정
      */
-    public void updateTrip(String tripName, String purpose,
-                           LocalDate startDate, LocalDate endDate,
-                           Country country) {
-        this.tripName = tripName;
-        this.purpose = purpose;
+    public void updateTrip(LocalDate startDate, LocalDate endDate, Country country) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.country = country;

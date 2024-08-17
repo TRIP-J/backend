@@ -16,12 +16,6 @@ public class UpdateTripResponse {
     @Schema(description = "여행 ID", example = "1")
     private Long tripId;
 
-    @Schema(description = "여행 이름", example = "즐거운 오사카 여행")
-    private String tripName;
-
-    @Schema(description = "여행 목적", example = "여행")
-    private String purpose;
-
     @Schema(description = "지난 여행 분류", example = "NOW")
     private String previous;
 
@@ -34,7 +28,9 @@ public class UpdateTripResponse {
     private Long countryId;
 
     public static UpdateTripResponse of(Trip trip) {
-        return new UpdateTripResponse(trip.getId(), trip.getTripName(), trip.getPurpose(), trip.getPrevious(),
-                                      trip.getStartDate(), trip.getEndDate(), trip.getCountry().getId());
+        return new UpdateTripResponse(
+                trip.getId(), trip.getPrevious(),
+                trip.getStartDate(), trip.getEndDate(),
+                trip.getCountry().getId());
     }
 }
