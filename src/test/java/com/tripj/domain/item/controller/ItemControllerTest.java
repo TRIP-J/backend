@@ -158,8 +158,6 @@ class ItemControllerTest {
     private CreateItemRequest createItemRequest(String itemName) {
         return CreateItemRequest.builder()
                 .itemName(itemName)
-                .previous("NOW")
-                .fix("F")
                 .countryId(1L)
                 .itemCateId(1L)
                 .tripId(1L)

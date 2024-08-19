@@ -121,7 +121,7 @@ class CheckListServiceTest {
                     createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
@@ -144,7 +144,7 @@ class CheckListServiceTest {
                     createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
@@ -164,7 +164,7 @@ class CheckListServiceTest {
                     createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now());
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             tripService.changeTripPrevious();
@@ -185,7 +185,7 @@ class CheckListServiceTest {
                     createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
@@ -215,7 +215,7 @@ class CheckListServiceTest {
                             .role(Role.ROLE_USER)
                             .build());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
@@ -239,7 +239,7 @@ class CheckListServiceTest {
                     createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
@@ -260,7 +260,7 @@ class CheckListServiceTest {
                     createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
@@ -280,7 +280,7 @@ class CheckListServiceTest {
                     createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             //when //then
@@ -306,7 +306,7 @@ class CheckListServiceTest {
                             .role(Role.ROLE_USER)
                             .build());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
@@ -330,7 +330,7 @@ class CheckListServiceTest {
                     createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
@@ -352,7 +352,7 @@ class CheckListServiceTest {
                     createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
             CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+            CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
             CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
             CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
@@ -380,15 +380,15 @@ class CheckListServiceTest {
                 createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
         CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-        CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+        CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
         CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
-        CreateItemRequest fixedItemRequest = createItemRequest("여권", trip.getTripId(), "F");
-        CreateItemResponse fixedItem = itemService.createItem(fixedItemRequest, user.getId());
+//        CreateItemRequest fixedItemRequest = createItemRequest("여권", trip.getTripId(), "F");
+//        CreateItemResponse fixedItem = itemService.createItem(fixedItemRequest, user.getId());
 
         CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
         checkListService.createCheckList(checkListRequest, user.getId());
-        CreateCheckListRequest checkListRequest2 = createCheckListRequest(fixedItem.getItemId(), trip.getTripId());
-        checkListService.createCheckList(checkListRequest2, user.getId());
+//        CreateCheckListRequest checkListRequest2 = createCheckListRequest(fixedItem.getItemId(), trip.getTripId());
+//        checkListService.createCheckList(checkListRequest2, user.getId());
 
         //when
         List<GetCheckListResponse> checkList = checkListService.getCheckList(itemCate.getId(), user.getId(), country.getId());
@@ -397,7 +397,7 @@ class CheckListServiceTest {
         assertThat(checkList).hasSize(2)
                 .extracting("itemName", "itemCateName", "fix")
                 .containsExactlyInAnyOrder(
-                        tuple("고데기", "필수품", "N"),
+                        tuple("고데기", "필수품"),
                         tuple("여권", "필수품", "F")
                 );
     }
@@ -417,11 +417,9 @@ class CheckListServiceTest {
                 .build();
     }
 
-    private CreateItemRequest createItemRequest(String itemName, Long tripId, String fix) {
+    private CreateItemRequest createItemRequest(String itemName, Long tripId) {
         return CreateItemRequest.builder()
                 .itemName(itemName)
-                .previous("NOW")
-                .fix(fix)
                 .countryId(country.getId())
                 .itemCateId(itemCate.getId())
                 .tripId(tripId)
