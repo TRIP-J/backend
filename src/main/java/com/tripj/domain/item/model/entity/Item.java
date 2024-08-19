@@ -42,8 +42,7 @@ public class Item extends BaseTimeEntity {
 
     private String fix;
 
-    public static Item newItem(String itemName, String previous,
-                               User user, ItemCate itemCate,
+    public static Item newItem(String itemName, User user, ItemCate itemCate,
                                Country country, Trip trip, String fix) {
         return Item.builder()
                 .itemName(itemName)

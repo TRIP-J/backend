@@ -19,12 +19,6 @@ public class CreateItemRequest {
     @NotNull(message = "아이템명은 필수로 입력해 주세요.")
     private String itemName;
 
-    @Schema(description = "이전 여행 기록 분기 컬럼", example = "NOW")
-    private String previous;
-
-    @Schema(description = "아이템 고정 여부", example = "N")
-    private String fix; // F:fix , N: not fix
-
     @Schema(description = "나라 Id", example = "1")
     private Long countryId;
 
@@ -37,7 +31,6 @@ public class CreateItemRequest {
     public Item toEntity(User user, ItemCate itemCate, Country country, Trip trip, String fix) {
         return Item.newItem(
                 itemName,
-                previous,
                 user,
                 itemCate,
                 country,
