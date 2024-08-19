@@ -261,8 +261,6 @@ class ItemServiceTest {
     private CreateItemRequest createItemRequest(String itemName, Long tripId) {
         return CreateItemRequest.builder()
                 .itemName(itemName)
-                .previous("NOW")
-                .fix("N")
                 .countryId(country.getId())
                 .itemCateId(itemCate.getId())
                 .tripId(tripId)

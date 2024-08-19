@@ -140,8 +140,6 @@ class CheckListRepositoryTest {
     private CreateItemRequest createItemRequest(String itemName, Long tripId, String fix) {
         return CreateItemRequest.builder()
                 .itemName(itemName)
-                .previous("NOW")
-                .fix(fix)
                 .countryId(country.getId())
                 .itemCateId(itemCate.getId())
                 .tripId(tripId)
