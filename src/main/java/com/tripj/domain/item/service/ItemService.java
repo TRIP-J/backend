@@ -1,5 +1,6 @@
 package com.tripj.domain.item.service;
 
+import com.tripj.domain.checklist.model.dto.response.GetItemListResponse;
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
@@ -130,5 +131,14 @@ public class ItemService {
         }
 
         return DeleteItemResponse.of(item.getId());
+    }
+
+    /**
+     * 체크리스트 > 아이템 일괄 조회
+     */
+    @Transactional(readOnly = true)
+    public List<GetItemListResponse> getItemList(Long userId) {
+
+        return itemRepository.getItemList(userId);
     }
 }

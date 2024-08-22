@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom {
 
     @Query("select i from Item i join Trip t where t.endDate = CURRENT DATE and i.previous = 'NOW'")
     List<Item> findAllPreviousIsNow();
@@ -20,4 +20,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select i from Item i where i.id = :itemId and ((i.previous = 'NOW' and i.fix = 'N') or (i.previous is null and i.fix = 'F'))")
     Optional<Item> findByPreviousIsNowOrFixIsF(@Param("itemId") Long itemId);
+
 }
