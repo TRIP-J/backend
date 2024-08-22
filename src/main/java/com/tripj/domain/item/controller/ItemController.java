@@ -1,5 +1,6 @@
 package com.tripj.domain.item.controller;
 
+import com.tripj.domain.checklist.model.dto.response.GetItemListResponse;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
@@ -18,6 +19,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,6 +74,18 @@ public class ItemController {
 
         return RestApiResponse.success(
                 itemService.deleteItem(itemId, userInfo.getUserId()));
+    }
+
+    @Operation(
+            summary = "체크리스트 > 아이템 일괄 조회 API",
+            description = "체크리스트 > 아이템 조회"
+    )
+    @GetMapping("")
+    public RestApiResponse <List<GetItemListResponse>> getItemList(
+            @UserInfo UserInfoDto userInfo) {
+
+        return RestApiResponse.success(
+                itemService.getItemList(userInfo.getUserId()));
     }
 
 }
