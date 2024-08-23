@@ -43,14 +43,15 @@ public class CheckListService {
 
         List<GetCheckListResponse> checkList = checkListRepository.getCheckList(itemCateId, userId, countryId);
 
-        return checkList.stream()
-                .map(response -> {
-                    if (response.getCountryId() == null) {
-                        response.setCountryId(countryId);
-                    }
-                    return response;
-                })
-                .collect(Collectors.toList());
+//        return checkList.stream()
+//                .map(response -> {
+//                    if (response.getCountryId() == null) {
+//                        response.setCountryId(countryId);
+//                    }
+//                    return response;
+//                })
+//                .collect(Collectors.toList());
+        return null;
     }
 
 

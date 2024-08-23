@@ -58,7 +58,6 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
                         checkList.id,
                         item.id,
                         checkList.user.id,
-                        item.country.id,
                         item.itemName,
                         itemCate.itemCateName,
                         item.fix,

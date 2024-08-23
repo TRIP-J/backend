@@ -19,21 +19,17 @@ public class CreateItemRequest {
     @NotNull(message = "아이템명은 필수로 입력해 주세요.")
     private String itemName;
 
-    @Schema(description = "나라 Id", example = "1")
-    private Long countryId;
-
     @Schema(description = "아이템 카테고리 Id", example = "1")
     private Long itemCateId;
 
     @Schema(description = "여행 Id", example = "1")
     private Long tripId;
 
-    public Item toEntity(User user, ItemCate itemCate, Country country, Trip trip, String fix) {
+    public Item toEntity(User user, ItemCate itemCate, Trip trip, String fix) {
         return Item.newItem(
                 itemName,
                 user,
                 itemCate,
-                country,
                 trip,
                 fix);
     }

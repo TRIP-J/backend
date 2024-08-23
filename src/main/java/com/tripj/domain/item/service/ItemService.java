@@ -52,11 +52,8 @@ public class ItemService {
         ItemCate itemCate = itemCateRepository.findById(request.getItemCateId())
             .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM_CATE));
 
-        Country country = countryRepository.findById(request.getCountryId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_COUNTRY));
-
         if (trip.getUser().getId().equals(userId)) {
-            Item savedItem = itemRepository.save(request.toEntity(user, itemCate, country, trip, "N"));
+            Item savedItem = itemRepository.save(request.toEntity(user, itemCate, trip, "N"));
             return CreateItemResponse.of(savedItem);
         } else {
             throw new ForbiddenException(ErrorCode.NOT_MY_TRIP);

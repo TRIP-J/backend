@@ -20,9 +20,6 @@ public class Country {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "country")
-    private List<Item> items = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private CountryCate countryCate;
 
@@ -33,9 +30,8 @@ public class Country {
     private String code;
 
     @Builder
-    public Country(Long id, List<Item> items, String name, String code) {
+    public Country(Long id, String name, String code) {
         this.id = id;
-        this.items = items;
         this.name = name;
         this.code = code;
     }
