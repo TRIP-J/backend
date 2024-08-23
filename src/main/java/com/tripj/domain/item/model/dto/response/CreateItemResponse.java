@@ -20,9 +20,6 @@ public class CreateItemResponse {
     @Schema(description = "이전 여행 기록 분기 컬럼", example = "NOW")
     private String previous;
 
-    @Schema(description = "나라 Id", example = "1")
-    private Long countryId;
-
     @Schema(description = "아이템 카테고리 Id", example = "1")
     private Long itemCateId;
 
@@ -31,8 +28,8 @@ public class CreateItemResponse {
 
     public static CreateItemResponse of(Item item) {
         return new CreateItemResponse(
-                item.getId(), item.getItemName(), item.getPrevious(),
-                item.getCountry().getId(), item.getItemCate().getId(),
+                item.getId(), item.getItemName(),
+                item.getPrevious(), item.getItemCate().getId(),
                 item.getTrip().getId());
     }
 }

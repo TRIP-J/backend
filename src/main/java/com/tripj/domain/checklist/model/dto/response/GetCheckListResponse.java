@@ -22,9 +22,6 @@ public class GetCheckListResponse {
     @Schema(description = "유저 Id", example = "1")
     private Long userId;
 
-    @Schema(description = "나라 ID", example = "1")
-    private Long countryId;
-
     @Schema(description = "아이템명", example = "동전지갑")
     private String itemName;
 
@@ -38,11 +35,10 @@ public class GetCheckListResponse {
     private String pack;
 
     @QueryProjection
-    public GetCheckListResponse(Long checkListId, Long itemId, Long userId, Long countryId, String itemName, String itemCateName, String fix, String pack) {
+    public GetCheckListResponse(Long checkListId, Long itemId, Long userId, String itemName, String itemCateName, String fix, String pack) {
         this.checkListId = checkListId;
         this.itemId = itemId;
         this.userId = userId;
-        this.countryId = countryId;
         this.itemName = itemName;
         this.itemCateName = itemCateName;
         this.fix = fix;

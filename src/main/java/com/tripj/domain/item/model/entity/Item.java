@@ -25,10 +25,6 @@ public class Item extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
-    private Country country;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_cate_id")
     private ItemCate itemCate;
 
@@ -42,14 +38,13 @@ public class Item extends BaseTimeEntity {
 
     private String fix;
 
-    public static Item newItem(String itemName, User user, ItemCate itemCate,
-                               Country country, Trip trip, String fix) {
+    public static Item newItem(String itemName, User user,
+                               ItemCate itemCate, Trip trip, String fix) {
         return Item.builder()
                 .itemName(itemName)
                 .previous("NOW")
                 .user(user)
                 .itemCate(itemCate)
-                .country(country)
                 .trip(trip)
                 .fix(fix)
                 .build();
