@@ -28,12 +28,16 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
         List<GetItemListResponse> tripItems = queryFactory
                 .select(new QGetItemListResponse(
                         item.id,
-                        item.itemName
+                        item.itemName,
+                        itemCate.Id,
+                        item.fix
                 ))
                 .from(item)
                 .join(item.trip, trip)
+                .join(item.itemCate, itemCate)
                 .where(
-                        trip.previous.eq("NOW")
+                        trip.previous.eq("NOW"),
+                        item.user.id.eq(userId)
                 )
                 .fetch();
 
@@ -41,9 +45,12 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
         List<GetItemListResponse> fixedItems = queryFactory
                 .select(new QGetItemListResponse(
                         item.id,
-                        item.itemName
+                        item.itemName,
+                        itemCate.Id,
+                        item.fix
                 ))
                 .from(item)
+                .join(item.itemCate, itemCate)
                 .where(
                         item.fix.eq("F")
                 )

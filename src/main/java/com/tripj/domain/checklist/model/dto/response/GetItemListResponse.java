@@ -19,10 +19,18 @@ public class GetItemListResponse {
     @Schema(description = "아이템명", example = "동전지갑")
     private String itemName;
 
+    @Schema(description = "아이템 카테고리 Id", example = "1")
+    private Long itemCateId;
+
+    @Schema(description = "아이템 고정 여부", example = "F")
+    private String fix;
+
     @QueryProjection
-    public GetItemListResponse(Long itemId, String itemName) {
+    public GetItemListResponse(Long itemId, String itemName, Long itemCateId, String fix) {
         this.itemId = itemId;
         this.itemName = itemName;
+        this.itemCateId = itemCateId;
+        this.fix = fix;
     }
 
 
