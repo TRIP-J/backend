@@ -4,6 +4,7 @@ package com.tripj.global.error;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.code.HttpStatusCode;
 import com.tripj.global.error.exception.BusinessException;
+import com.tripj.global.error.exception.CustomRunTimeException;
 import com.tripj.global.error.exception.NotFoundException;
 import com.tripj.global.model.RestApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -74,13 +75,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 404 예외 발생시
+     * custom 예외 발생시
      */
-    @ExceptionHandler(NotFoundException.class)
-    protected ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException e) {
-        log.error("NotFoundException", e);
+    @ExceptionHandler(CustomRunTimeException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundException(CustomRunTimeException e) {
+        log.error("CustomRunTimeException", e);
         ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode().toString(), e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        return ResponseEntity.status(e.getErrorCode().getStatusCode().getCode()).body(errorResponse);
     }
 
 }

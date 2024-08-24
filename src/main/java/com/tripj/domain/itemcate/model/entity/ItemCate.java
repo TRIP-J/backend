@@ -15,7 +15,7 @@ public class ItemCate {
     @Id
     @Column(name = "item_cate_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @OneToMany(mappedBy = "itemCate")
     private List<Item> items = new ArrayList<>();
@@ -26,7 +26,7 @@ public class ItemCate {
 
     @Builder
     public ItemCate(Long id, List<Item> items, String itemCateName, String itemCateCode) {
-        this.Id = id;
+        this.id = id;
         this.items = items;
         this.itemCateName = itemCateName;
         this.itemCateCode = itemCateCode;
