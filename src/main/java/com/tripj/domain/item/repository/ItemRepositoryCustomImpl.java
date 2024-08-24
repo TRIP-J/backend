@@ -29,7 +29,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .select(new QGetItemListResponse(
                         item.id,
                         item.itemName,
-                        itemCate.Id,
+                        itemCate.id,
                         item.fix
                 ))
                 .from(item)
@@ -46,7 +46,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .select(new QGetItemListResponse(
                         item.id,
                         item.itemName,
-                        itemCate.Id,
+                        itemCate.id,
                         item.fix
                 ))
                 .from(item)

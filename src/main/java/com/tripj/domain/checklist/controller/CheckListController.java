@@ -23,17 +23,16 @@ public class CheckListController {
     private final CheckListService checkListService;
 
     @Operation(
-            summary = "카테고리별 아이템 조회 API",
-            description = "체크리스트 > 카테고리별 아이템 조회"
+            summary = "체크리스트에 담은 아이템 일괄 조회 API",
+            description = "홈 > 체크리스트에 담은 아이템 일괄 조회"
     )
     @GetMapping("")
     public RestApiResponse <List<GetCheckListResponse>> getCheckList(
             @UserInfo UserInfoDto userInfo,
-            Long itemCateId,
-            Long countryId) {
+            @RequestParam Long tripId) {
 
         return RestApiResponse.success(
-                checkListService.getCheckList(itemCateId, userInfo.getUserId(), countryId));
+                checkListService.getCheckList(userInfo.getUserId(), tripId));
     }
 
     @Operation(
@@ -74,19 +73,4 @@ public class CheckListController {
         return RestApiResponse.success(
                 checkListService.packCheckList(checkListId, userInfo.getUserId()));
     }
-
-    @Hidden
-    @Operation(
-            summary = "체크리스트에 담은 아이템 조회 API",
-            description = "체크리스트 > 체크리스트에 내가 담은 아이템 카테고리별 조회"
-    )
-    @GetMapping("/added")
-    public RestApiResponse <List<GetMyCheckListResponse>> getMyCheckList(
-            @UserInfo UserInfoDto userInfo,
-            Long itemCateId,
-            Long tripId) {
-        return RestApiResponse.success(
-                checkListService.getMyCheckList(itemCateId, userInfo.getUserId(), tripId));
-    }
-
 }

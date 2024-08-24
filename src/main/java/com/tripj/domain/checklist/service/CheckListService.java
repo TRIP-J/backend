@@ -35,37 +35,19 @@ public class CheckListService {
     private final TripRepository tripRepository;
 
     /**
-     * 체크리스트 조회
+     * 체크리스트에 담은 아이템 일괄 조회
      */
     @Transactional(readOnly = true)
     public List<GetCheckListResponse> getCheckList(
-            Long itemCateId,
-            Long userId,
-            Long countryId) {
+            Long userId, Long tripId) {
 
-        List<GetCheckListResponse> checkList = checkListRepository.getCheckList(itemCateId, userId, countryId);
+        List<GetCheckListResponse> checkList = checkListRepository.getCheckList(userId, tripId);
 
-//        return checkList.stream()
-//                .map(response -> {
-//                    if (response.getCountryId() == null) {
-//                        response.setCountryId(countryId);
-//                    }
-//                    return response;
-//                })
-//                .collect(Collectors.toList());
-        return null;
-    }
+        if (checkList.isEmpty()) {
+            throw new NotFoundException(E404_NOT_EXISTS_CHECKLIST);
+        }
 
-
-    /**
-     * 내 체크리스트 조회
-     */
-    @Transactional(readOnly = true)
-    public List<GetMyCheckListResponse> getMyCheckList(Long itemCateId,
-                                                       Long userId,
-                                                       Long tripId) {
-
-        return checkListRepository.getMyCheckList(itemCateId, userId, tripId);
+        return checkList;
     }
 
     /**

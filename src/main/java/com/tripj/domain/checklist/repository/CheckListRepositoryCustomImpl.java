@@ -23,44 +23,15 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
         this.queryFactory = queryFactory;
     }
 
-    /*@Override
-    public List<GetCheckListResponse> getCheckList(Long itemCateId,
-                                                   Long userId,
-                                                   Long countryId) {
-        List<GetCheckListResponse> results = queryFactory
-                .select(new QGetCheckListResponse(
-                        item.id,
-                        item.itemName,
-                        itemCate.itemCateName,
-                        item.fix
-                ))
-                .from(item)
-                .join(item.itemCate, itemCate)
-                .where(
-                        item.itemCate.Id.eq(itemCateId)
-                        .and(item.country.id.eq(countryId))
-                        .and(item.fix.eq("F")
-                            .or(item.previous.eq("NOW")
-                            .and(item.user.id.eq(userId)))
-                            )
-                )
-                .fetch();
-
-        return results;
-    }*/
-
     @Override
-    public List<GetCheckListResponse> getCheckList(Long itemCateId,
-                                                   Long userId,
-                                                   Long countryId) {
+    public List<GetCheckListResponse> getCheckList(Long userId, Long tripId) {
         List<GetCheckListResponse> results = queryFactory
                 .select(new QGetCheckListResponse(
                         checkList.id,
                         item.id,
                         checkList.user.id,
                         item.itemName,
-                        itemCate.itemCateName,
-                        item.fix,
+                        itemCate.id,
                         checkList.pack
                 ))
                 .from(checkList)
@@ -68,34 +39,10 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
                 .join(item.itemCate, itemCate)
                 .join(checkList.trip, trip)
                 .where(
-                        trip.previous.eq("NOW"),
-                        item.itemCate.Id.eq(itemCateId)
+                        trip.id.eq(tripId),
+                        checkList.user.id.eq(userId)
                 )
                 .fetch();
-
-        return results;
-    }
-
-    @Override
-    public List<GetMyCheckListResponse> getMyCheckList(Long itemCateId, Long userId, Long tripId) {
-        List<GetMyCheckListResponse> results = queryFactory
-                        .select(new QGetMyCheckListResponse(
-                                checkList.id,
-                                checkList.item.itemName,
-                                itemCate.itemCateName,
-                                trip.tripName,
-                                checkList.pack
-                        ))
-                        .from(checkList)
-                        .join(checkList.item, item)
-                        .join(item.itemCate, itemCate)
-                        .join(checkList.trip, trip)
-                        .where(
-                                item.itemCate.Id.eq(itemCateId),
-                                checkList.user.id.eq(userId),
-                                checkList.trip.id.eq(tripId)
-                        )
-                        .fetch();
 
         return results;
     }
