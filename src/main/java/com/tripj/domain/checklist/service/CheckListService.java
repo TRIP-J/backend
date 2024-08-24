@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.tripj.global.code.ErrorCode.*;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -73,27 +75,28 @@ public class CheckListService {
                                                    Long userId) {
 
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
-        //지난 여행에 아이템을 체크리스트에 등록 불가
+        // 지난 여행에 아이템을 체크리스트에 등록 불가
         Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_NOW_TRIP));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_TRIP));
 
-        Item item = itemRepository.findByPreviousIsNowOrFixIsF(request.getItemId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_NOW_ITEM));
+        // 고정 아이템 + 자신의 현재 아이템만 추가 가능
+        Item item = itemRepository.findItemsByUserAndPreviousIsNow(request.getItemId(), userId)
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_ITEM));
 
         // 중복 체크
         Optional<CheckList> existingCheckList =
-                checkListRepository.findByUserIdAndItemIdAndTripIdAndPreviousNow(userId, request.getItemId(), trip.getId());
+                checkListRepository.findCheckListByUserItemAndCurrentTrip(userId, request.getItemId(), trip.getId());
         if (existingCheckList.isPresent()) {
-            throw new BusinessException(ErrorCode.ALREADY_EXISTS_CHECKLIST);
+            throw new BusinessException(ALREADY_EXISTS_CHECKLIST);
         }
 
         if (trip.getUser().getId().equals(userId)) {
             CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user, trip));
             return CreateCheckListResponse.of(savedCheckList);
         } else {
-            throw new ForbiddenException(ErrorCode.NOT_MY_CHECKLIST);
+            throw new ForbiddenException(NOT_MY_CHECKLIST);
         }
     }
 
@@ -103,23 +106,15 @@ public class CheckListService {
     public DeleteCheckListResponse deleteCheckList(Long checklistId, Long userId) {
 
         userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         CheckList checkList = checkListRepository.findById(checklistId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_CHECKLIST));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_CHECKLIST));
 
-        String fix = checkList.getItem().getFix();
-
-        if (fix.equals("N")) {
-            // fix가 "F"가 아닌 경우, 사용자 ID 확인
-            if (checkList.getUser().getId().equals(userId)) {
-                checkListRepository.deleteById(checklistId);
-            } else {
-                throw new ForbiddenException(ErrorCode.E403_NOT_MY_CHECKLIST);
-            }
-        } else {
-            checkListRepository.deleteById(checklistId);
+        if (!checkList.getUser().getId().equals(userId)) {
+            throw new ForbiddenException(E403_NOT_MY_CHECKLIST);
         }
+        checkListRepository.deleteById(checklistId);
 
         return DeleteCheckListResponse.of(checklistId);
     }
@@ -130,10 +125,14 @@ public class CheckListService {
     public PackCheckListResponse packCheckList(Long checklistId, Long userId) {
 
         userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         CheckList checkList = checkListRepository.findById(checklistId)
-                .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_CHECKLIST));
+                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_CHECKLIST));
+
+        if (!checkList.getUser().getId().equals(userId)) {
+            throw new ForbiddenException(E403_NOT_MY_CHECKLIST);
+        }
 
         //체크박스 누르기
         boolean addPack = addPack(checklistId);
