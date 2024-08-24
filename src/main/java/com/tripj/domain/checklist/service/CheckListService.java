@@ -156,37 +156,22 @@ public class CheckListService {
     /**
      * Previous 변경
      */
-    public void changeCheckListPrevious() {
-        List<CheckList> allPreviousIsNow = checkListRepository.findAllPreviousIsNow();
-
-        allPreviousIsNow
-                .forEach(checkList -> {
-                    Long tripId = checkList.getTrip().getId();
-                    String maxPrevious = checkListRepository.findMaxPrevious(tripId);
-                    if (maxPrevious != null) {
-                        int nextNum = Integer.parseInt(maxPrevious.substring(1)) + 1;
-                        String nextPrevious = "B" + String.format("%02d", nextNum);
-                        checkList.updatePrevious(nextPrevious);
-                    }
-                    if (checkList.getPrevious().equals("NOW")) {
-                        checkList.updatePrevious("B01");
-                    }
-                }
-        );
-
-
-    }
+//    public void changeCheckListPrevious() {
+//        List<CheckList> allPreviousIsNow = checkListRepository.findAllPreviousIsNow();
+//
+//        allPreviousIsNow
+//                .forEach(checkList -> {
+//                    Long tripId = checkList.getTrip().getId();
+//                    String maxPrevious = checkListRepository.findMaxPrevious(tripId);
+//                    if (maxPrevious != null) {
+//                        int nextNum = Integer.parseInt(maxPrevious.substring(1)) + 1;
+//                        String nextPrevious = "B" + String.format("%02d", nextNum);
+//                        checkList.updatePrevious(nextPrevious);
+//                    }
+//                    if (checkList.getPrevious().equals("NOW")) {
+//                        checkList.updatePrevious("B01");
+//                    }
+//                }
+//        );
+//    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

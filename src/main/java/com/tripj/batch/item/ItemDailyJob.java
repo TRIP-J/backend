@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ItemDailyJob {
 
-    private final ItemService itemService;
-
-    public void run() {
-        itemService.changeItemPrevious();
-    }
+//    private final ItemService itemService;
+//
+//    public void run() {
+//        itemService.changeItemPrevious();
+//    }
 
 
 

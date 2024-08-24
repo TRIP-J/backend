@@ -15,16 +15,16 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Che
 
 //    Optional<PackCheckListResponse> findByItemIdAndChecklistIdAndPack(Long itemId, Long checkListId, String pack);
 //    Optional<PackCheckListResponse> findByItemIdAndId(Long itemId, Long id);
-    @Query("select cl from CheckList cl where cl.user.id = :userId and cl.item.id = :itemId and cl.trip.id = :tripId  and cl.previous = 'NOW'")
-    Optional<CheckList> findByUserIdAndItemIdAndTripIdAndPreviousNow(@Param("userId") Long userId, @Param("itemId") Long itemId, @Param("tripId") Long tripId);
+//    @Query("select cl from CheckList cl where cl.user.id = :userId and cl.item.id = :itemId and cl.trip.id = :tripId  and cl.previous = 'NOW'")
+//    Optional<CheckList> findByUserIdAndItemIdAndTripIdAndPreviousNow(@Param("userId") Long userId, @Param("itemId") Long itemId, @Param("tripId") Long tripId);
+
+//    @Query("select cl from CheckList cl join Trip i where i.endDate = CURRENT DATE and cl.previous = 'NOW'")
+//    List<CheckList> findAllPreviousIsNow();
+
+//    @Query("select max(cl.previous) from CheckList cl where cl.trip.id = :tripId and cl.previous like '%B'")
+//    String findMaxPrevious(@Param("tripId") Long tripId);
 
     @Query("select cl from CheckList cl join Trip t on cl.trip.id = t.id where cl.user.id = :userId and cl.item.id = :itemId and cl.trip.id = :tripId  and t.previous = 'NOW'")
     Optional<CheckList> findCheckListByUserItemAndCurrentTrip(@Param("userId") Long userId, @Param("itemId") Long itemId, @Param("tripId") Long tripId);
-
-    @Query("select cl from CheckList cl join Trip i where i.endDate = CURRENT DATE and cl.previous = 'NOW'")
-    List<CheckList> findAllPreviousIsNow();
-
-    @Query("select max(cl.previous) from CheckList cl where cl.trip.id = :tripId and cl.previous like '%B'")
-    String findMaxPrevious(@Param("tripId") Long tripId);
 
 }

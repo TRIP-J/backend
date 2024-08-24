@@ -33,15 +33,12 @@ public class CheckList extends BaseTimeEntity {
 
     private String pack;
 
-    private String previous;
-
     public static CheckList newCheckList(Item item, User user, Trip trip) {
         return CheckList.builder()
                 .item(item)
                 .user(user)
                 .trip(trip)
                 .pack("NO")
-                .previous("NOW")
                 .build();
     }
 
@@ -52,7 +49,7 @@ public class CheckList extends BaseTimeEntity {
     }
 
     // checkList previous update
-    public void updatePrevious(String nextPrevious) {
-        this.previous = nextPrevious;
-    }
+//    public void updatePrevious(String nextPrevious) {
+//        this.previous = nextPrevious;
+//    }
 }

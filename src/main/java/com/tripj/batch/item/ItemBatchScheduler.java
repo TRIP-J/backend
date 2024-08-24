@@ -13,16 +13,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ItemBatchScheduler {
 
-    private final ItemDailyJob itemDailyJob;
-
-    /**
-     * 매일 자정 여행계획의 EndDate 가 지나면 Previous 상태 변경
-     */
-    @Scheduled(cron = "0 0 12 * * ?")
-    public void runDailyJobPrevious() {
-        log.info("itemDailyJob Update batch execute");
-        itemDailyJob.run();
-    }
+//    private final ItemDailyJob itemDailyJob;
+//
+//    /**
+//     * 매일 자정 여행계획의 EndDate 가 지나면 Previous 상태 변경
+//     */
+//    @Scheduled(cron = "0 0 12 * * ?")
+//    public void runDailyJobPrevious() {
+//        log.info("itemDailyJob Update batch execute");
+//        itemDailyJob.run();
+//    }
 
 
 }

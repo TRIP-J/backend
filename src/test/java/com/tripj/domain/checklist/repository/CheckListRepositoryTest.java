@@ -109,14 +109,14 @@ class CheckListRepositoryTest {
                 createTripRequest(country.getId(), LocalDate.of(2022, 10, 1), LocalDate.now().plusDays(1));
         CreateTripResponse trip = tripService.createTrip(createTripRequest, user.getId());
 
-        CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId(), "N");
+        CreateItemRequest itemRequest = createItemRequest("고데기", trip.getTripId());
         CreateItemResponse item = itemService.createItem(itemRequest, user.getId());
 
         CreateCheckListRequest checkListRequest = createCheckListRequest(item.getItemId(), trip.getTripId());
         checkListService.createCheckList(checkListRequest, user.getId());
 
         //when
-        Optional<CheckList> duplicateItem = checkListRepository.findByUserIdAndItemIdAndTripIdAndPreviousNow(user.getId(), item.getItemId(), trip.getTripId());
+        Optional<CheckList> duplicateItem = checkListRepository.findCheckListByUserItemAndCurrentTrip(user.getId(), item.getItemId(), trip.getTripId());
 
         // then
         assertThat(duplicateItem).isPresent();
@@ -137,7 +137,7 @@ class CheckListRepositoryTest {
                 .build();
     }
 
-    private CreateItemRequest createItemRequest(String itemName, Long tripId, String fix) {
+    private CreateItemRequest createItemRequest(String itemName, Long tripId) {
         return CreateItemRequest.builder()
                 .itemName(itemName)
                 .itemCateId(itemCate.getId())

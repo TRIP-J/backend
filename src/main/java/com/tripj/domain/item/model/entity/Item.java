@@ -34,24 +34,17 @@ public class Item extends BaseTimeEntity {
 
     private String itemName;
 
-    private String previous;
-
     private String fix;
 
     public static Item newItem(String itemName, User user,
                                ItemCate itemCate, Trip trip, String fix) {
         return Item.builder()
                 .itemName(itemName)
-                .previous("NOW")
                 .user(user)
                 .itemCate(itemCate)
                 .trip(trip)
                 .fix(fix)
                 .build();
-    }
-
-    public void updatePrevious(String previous) {
-        this.previous = previous;
     }
 
     /**
@@ -60,4 +53,9 @@ public class Item extends BaseTimeEntity {
     public void updateItem(String itemName) {
         this.itemName = itemName;
     }
+
+//    public void updatePrevious(String previous) {
+//        this.previous = previous;
+//    }
+
 }

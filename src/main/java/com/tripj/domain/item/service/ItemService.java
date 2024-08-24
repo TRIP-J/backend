@@ -84,28 +84,6 @@ public class ItemService {
     }
 
     /**
-     * Previous 변경
-     */
-    public void changeItemPrevious() {
-
-        List<Item> allPreviousIsNow = itemRepository.findAllPreviousIsNow();
-
-        allPreviousIsNow
-                .forEach(item -> {
-                    Long tripId = item.getTrip().getId();
-                    String maxPrevious = itemRepository.findMaxPrevious(tripId);
-                    if (maxPrevious != null) {
-                        int nextNum = Integer.parseInt(maxPrevious.substring(1)) + 1;
-                        String nextPrevious = "B" + String.format("%02d", nextNum);
-                        item.updatePrevious(nextPrevious);
-                    }
-                    if (item.getPrevious().equals("NOW")) {
-                        item.updatePrevious("B01");
-                    }
-                });
-    }
-
-    /**
      * 아이템 삭제
      */
     public DeleteItemResponse deleteItem(Long itemId, Long userId) {
@@ -138,4 +116,27 @@ public class ItemService {
 
         return itemRepository.getItemList(userId);
     }
+
+    /**
+     * Previous 변경
+     */
+//    public void changeItemPrevious() {
+//
+//        List<Item> allPreviousIsNow = itemRepository.findAllPreviousIsNow();
+//
+//        allPreviousIsNow
+//                .forEach(item -> {
+//                    Long tripId = item.getTrip().getId();
+//                    String maxPrevious = itemRepository.findMaxPrevious(tripId);
+//                    if (maxPrevious != null) {
+//                        int nextNum = Integer.parseInt(maxPrevious.substring(1)) + 1;
+//                        String nextPrevious = "B" + String.format("%02d", nextNum);
+//                        item.updatePrevious(nextPrevious);
+//                    }
+//                    if (item.getPrevious().equals("NOW")) {
+//                        item.updatePrevious("B01");
+//                    }
+//                });
+//    }
+
 }
