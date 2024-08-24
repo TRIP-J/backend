@@ -369,8 +369,6 @@ class CheckListServiceTest {
         }
     }
 
-
-
     @Disabled
     @Test
     @DisplayName("자신의 카테고리별 체크리스트를 조회 합니다.")
@@ -391,14 +389,14 @@ class CheckListServiceTest {
 //        checkListService.createCheckList(checkListRequest2, user.getId());
 
         //when
-        List<GetCheckListResponse> checkList = checkListService.getCheckList(itemCate.getId(), user.getId(), country.getId());
+        List<GetCheckListResponse> checkList = checkListService.getCheckList(user.getId(), trip.getTripId());
 
         //then
         assertThat(checkList).hasSize(2)
-                .extracting("itemName", "itemCateName", "fix")
+                .extracting("itemName")
                 .containsExactlyInAnyOrder(
-                        tuple("고데기", "필수품"),
-                        tuple("여권", "필수품", "F")
+                        tuple("고데기"),
+                        tuple("여권")
                 );
     }
 
