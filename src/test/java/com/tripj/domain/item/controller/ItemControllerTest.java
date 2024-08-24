@@ -166,7 +166,6 @@ class ItemControllerTest {
     private CreateItemResponse createItemResponse() {
         return CreateItemResponse.builder()
                 .itemName("포마드")
-                .previous("NOW")
                 .itemCateId(1L)
                 .tripId(1L)
                 .build();

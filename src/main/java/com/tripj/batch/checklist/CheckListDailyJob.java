@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CheckListDailyJob {
 
-    private final CheckListService checkListService;
-
-    public void run() {
-        checkListService.changeCheckListPrevious();
-    }
+//    private final CheckListService checkListService;
+//
+//    public void run() {
+//        checkListService.changeCheckListPrevious();
+//    }
 
 
 

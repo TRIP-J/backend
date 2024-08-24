@@ -102,7 +102,6 @@ class ItemServiceTest {
         //then
         assertThat(item).isNotNull();
         assertThat(item.getItemName()).isEqualTo("고데기");
-        assertThat(item.getPrevious()).isEqualTo("NOW");
     }
 
     @Test
