@@ -116,7 +116,7 @@ class TripControllerTest {
         void getTrip() throws Exception {
             //given
             given(tripService.getTrip(any()))
-                    .willReturn(getTripResponse("여행이름", "NOW", LocalDate.of(2022, 10, 1), LocalDate.now()));
+                    .willReturn(getTripResponse("NOW", LocalDate.of(2022, 10, 1), LocalDate.now()));
 
             //when //then
             mockMvc.perform(
@@ -139,8 +139,8 @@ class TripControllerTest {
             //given
             List<GetTripResponse> pastTrip =
                     Arrays.asList(
-                            getTripResponse("여행이름1", "B01", LocalDate.of(2022, 10, 1), LocalDate.of(2022, 10, 10)),
-                            getTripResponse("여행이름2", "B02", LocalDate.of(2022, 10, 11), LocalDate.of(2022, 11, 1))
+                            getTripResponse("B01", LocalDate.of(2022, 10, 1), LocalDate.of(2022, 10, 10)),
+                            getTripResponse("B02", LocalDate.of(2022, 10, 11), LocalDate.of(2022, 11, 1))
                     );
 
             given(tripService.getPastTrip(any()))
@@ -212,10 +212,9 @@ class TripControllerTest {
                 .build();
     }
 
-    private GetTripResponse getTripResponse(String tripName, String previous, LocalDate startDate, LocalDate endDate) {
+    private GetTripResponse getTripResponse(String previous, LocalDate startDate, LocalDate endDate) {
         return GetTripResponse.builder()
                 .tripId(1L)
-                .userId(1L)
                 .previous(previous)
                 .startDate(startDate)
                 .endDate(endDate)

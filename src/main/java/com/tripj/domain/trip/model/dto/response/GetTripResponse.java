@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Getter
+@Builder
 @Schema(description = "현재 여행 정보 조회 DTO")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GetTripResponse {

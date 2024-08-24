@@ -14,6 +14,7 @@ import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.BusinessException;
+import com.tripj.global.error.exception.ForbiddenException;
 import com.tripj.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,9 +74,10 @@ public class TripService {
         Country country = countryRepository.findById(request.getCountryId())
             .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_COUNTRY));
 
-        if (trip.getUser().getId().equals(userId)) {
-            trip.updateTrip(request.getStartDate(), request.getEndDate(), country);
+        if (!trip.getUser().getId().equals(userId)) {
+            throw new ForbiddenException(NOT_MY_TRIP);
         }
+        trip.updateTrip(request.getStartDate(), request.getEndDate(), country);
 
         return UpdateTripResponse.of(trip);
     }
