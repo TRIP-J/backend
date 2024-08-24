@@ -23,7 +23,7 @@ public class CheckListController {
     private final CheckListService checkListService;
 
     @Operation(
-            summary = "체크리스트에 담은 아이템 일괄 조회 API",
+            summary = "체크리스트에 담은 (현재 여행, 이전 여행) 아이템 일괄 조회 API",
             description = "홈 > 체크리스트에 담은 아이템 일괄 조회"
     )
     @GetMapping("")
