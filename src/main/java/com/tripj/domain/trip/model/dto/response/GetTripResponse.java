@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Getter
-@Builder
 @Schema(description = "현재 여행 정보 조회 DTO")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GetTripResponse {
@@ -18,8 +17,8 @@ public class GetTripResponse {
     @Schema(description = "여행 ID", example = "1")
     private Long tripId;
 
-    @Schema(description = "유저 ID", example = "1")
-    private Long userId;
+    @Schema(description = "나라 ID", example = "1")
+    private Long countryId;
 
     @Schema(description = "나라명", example = "일본")
     private String countryName;
@@ -34,11 +33,11 @@ public class GetTripResponse {
     private LocalDate endDate;
 
     @QueryProjection
-    public GetTripResponse(Long tripId, Long userId,
+    public GetTripResponse(Long tripId, Long countryId,
                            String countryName, String previous,
                            LocalDate startDate, LocalDate endDate) {
         this.tripId = tripId;
-        this.userId = userId;
+        this.countryId = countryId;
         this.countryName = countryName;
         this.previous = previous;
         this.startDate = startDate;
