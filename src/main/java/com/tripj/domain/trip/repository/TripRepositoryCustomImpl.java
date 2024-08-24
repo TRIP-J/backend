@@ -24,7 +24,7 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
         GetTripResponse results = queryFactory
                 .select(new QGetTripResponse(
                         trip.id,
-                        trip.user.id,
+                        country.id,
                         country.name,
                         trip.previous,
                         trip.startDate,
