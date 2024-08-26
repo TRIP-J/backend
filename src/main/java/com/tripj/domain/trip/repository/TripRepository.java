@@ -18,10 +18,10 @@ public interface TripRepository extends JpaRepository<Trip, Long>, TripRepositor
     List<Trip> findAllPreviousIsNow();
 
     @Query("select t from Trip t where t.previous = 'NOW' and t.user.id = :userId")
-    Optional<Trip> findTripPreviousIsNow(Long userId);
+    Optional<Trip> findTripPreviousIsNow(@Param("userId") Long userId);
 
     @Query("select t from Trip t where t.previous != 'NOW' and t.user.id = :userId")
-    List<Trip> findTripPreviousIsNotNow(Long userId);
+    List<Trip> findTripPreviousIsNotNow(@Param("userId") Long userId);
 
     @Query("select max(t.previous) from Trip t where t.user.id = :userId and t.previous like 'B%'")
     String findMaxPrevious(@Param("userId") Long userId);
