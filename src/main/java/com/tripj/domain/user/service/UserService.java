@@ -1,12 +1,14 @@
 package com.tripj.domain.user.service;
 
+import com.tripj.domain.user.model.dto.request.UpdateNicknameRequest;
 import com.tripj.domain.user.model.dto.response.GetNicknameResponse;
+import com.tripj.domain.user.model.dto.response.UpdateNicknameResponse;
 import com.tripj.domain.user.model.entity.User;
-import com.tripj.domain.user.repository.nickname.GenerateRandomNicknameRepository;
 import com.tripj.domain.user.repository.UserRepository;
-import com.tripj.global.code.ErrorCode;
+import com.tripj.domain.user.repository.nickname.GenerateRandomNicknameRepository;
 import com.tripj.global.error.exception.AuthenticationException;
 import com.tripj.global.error.exception.BusinessException;
+import com.tripj.global.error.exception.ForbiddenException;
 import com.tripj.global.error.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +41,7 @@ public class UserService {
      * 회원 중복 검사
      */
     @Transactional(readOnly = true)
-    private void validateDuplicateUser(User user) {
+    public void validateDuplicateUser(User user) {
         Optional<User> optionalUser = userRepository.findByEmail(user.getEmail());
 
         if (optionalUser.isPresent()) {
@@ -80,6 +82,27 @@ public class UserService {
     }
 
     /**
+     * 사용자 닉네임 수정
+     */
+    public UpdateNicknameResponse updateNickname(UpdateNicknameRequest request, Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
+
+        if (!user.getId().equals(userId)) {
+            throw new ForbiddenException(E403_NOT_MY_NICKNAME);
+        }
+
+        if (userRepository.existsByNickname(request.getNickname())) {
+            throw new BusinessException(ALREADY_EXISTED_NICKNAME);
+        }
+
+        user.updateNickname(request.getNickname());
+
+        return UpdateNicknameResponse.of(user.getNickname());
+    }
+
+    /**
      * accessToken 재발급
      */
     @Transactional(readOnly = true)
@@ -94,5 +117,4 @@ public class UserService {
 
         return user;
     }
-
 }
