@@ -44,6 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/api/oauth/login",
                         "/api/logout",
                         "/api/access-token/issue",
+                        "/api/crawling/**",
                         "/v3/api-docs/**",
                         "/api/health-check");
 
