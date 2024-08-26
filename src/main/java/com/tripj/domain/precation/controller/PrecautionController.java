@@ -22,22 +22,22 @@ public class PrecautionController {
 
     private final PrecautionService precautionService;
 
-    @Operation(
-            summary = "주의사항 조회 API",
-            description = "나라별 주의사항 전체 조회"
-    )
-    @GetMapping("")
-    public RestApiResponse <List<GetPrecautionListResponse>> getPrecautionList(Long countryId) {
-        return RestApiResponse.success(precautionService.getPrecautionList(countryId));
-    }
+//    @Operation(
+//            summary = "주의사항 조회 API",
+//            description = "나라별 주의사항 전체 조회"
+//    )
+//    @GetMapping("")
+//    public RestApiResponse <List<GetPrecautionListResponse>> getPrecautionList(Long countryId) {
+//        return RestApiResponse.success(precautionService.getPrecautionList(countryId));
+//    }
 
-    @Operation(
-            summary = "주의사항 상세 조회 API",
-            description = "주의사항 상세 조회"
-    )
-    @GetMapping("/{precautionId}")
-    public RestApiResponse<GetPrecautionDetailResponse> getPrecautionDetail(@PathVariable Long precautionId) {
-        return RestApiResponse.success(precautionService.getPrecautionDetail(precautionId));
-    }
+//    @Operation(
+//            summary = "주의사항 상세 조회 API",
+//            description = "주의사항 상세 조회"
+//    )
+//    @GetMapping("/{precautionId}")
+//    public RestApiResponse<GetPrecautionDetailResponse> getPrecautionDetail(@PathVariable Long precautionId) {
+//        return RestApiResponse.success(precautionService.getPrecautionDetail(precautionId));
+//    }
 
 }

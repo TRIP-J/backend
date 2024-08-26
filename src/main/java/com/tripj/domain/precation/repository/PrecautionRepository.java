@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface PrecautionRepository extends JpaRepository<Precaution, Long>, PrecautionRepositoryCustom {
 
-    List<GetPrecautionListResponse> findByCountryId(Long countryId);
+//    List<GetPrecautionListResponse> findByCountryId(Long countryId);
 
 
 }
