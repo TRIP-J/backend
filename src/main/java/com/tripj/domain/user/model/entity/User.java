@@ -79,4 +79,10 @@ public class User extends BaseTimeEntity {
         tokenExpirationTime = DateTimeUtils.convertToLocalDateTime(jwtTokenDto.getRefreshTokenExpireTime());
     }
 
+    /**
+     * 닉네임 수정
+     */
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

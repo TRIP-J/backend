@@ -24,6 +24,7 @@ public enum ErrorCode {
     E403_NOT_MY_CHECKLIST(FORBIDDEN, false, "FB002", "자신의 체크리스트만 수정, 삭제 가능합니다."),
     E403_NOT_MY_BOARD(FORBIDDEN, false, "FB003", "자신의 게시물만 수정, 삭제 가능합니다."),
     E403_NOT_MY_COMMENT(FORBIDDEN, false, "FB004", "자신의 댓글만 수정, 삭제 가능합니다."),
+    E403_NOT_MY_NICKNAME(FORBIDDEN, false, "FB005", "자신의 닉네임만 수정 가능합니다."),
 
     /**
      * 404 Not Found
@@ -49,6 +50,7 @@ public enum ErrorCode {
      */
     INVALID_USER_TYPE(BAD_REQUEST, false, "M001", "잘못된 회원 타입입니다."),
     ALREADY_REGISTERED_USER(BAD_REQUEST, false, "M002", "이미 가입된 회원입니다."),
+    ALREADY_EXISTED_NICKNAME(BAD_REQUEST, false, "M003", "이미 존재하는 닉네임입니다."),
 
     /**
      * 여행

@@ -1,16 +1,17 @@
 package com.tripj.domain.user.controller;
 
+import com.tripj.domain.user.model.dto.request.UpdateNicknameRequest;
 import com.tripj.domain.user.model.dto.response.GetNicknameResponse;
+import com.tripj.domain.user.model.dto.response.UpdateNicknameResponse;
 import com.tripj.domain.user.service.UserService;
 import com.tripj.global.model.RestApiResponse;
 import com.tripj.resolver.userinfo.UserInfo;
 import com.tripj.resolver.userinfo.UserInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +31,19 @@ public class UserController {
 
         return RestApiResponse.success(
                 userService.getNickname(userInfo.getUserId()));
+    }
+
+    @Operation(
+            summary = "사용자 닉네임 수정 API",
+            description = "사용자 닉네임을 수정합니다."
+    )
+    @PostMapping("")
+    public RestApiResponse<UpdateNicknameResponse> updateNickName(
+            @RequestBody @Valid UpdateNicknameRequest request,
+            @UserInfo UserInfoDto userInfo) {
+
+        return RestApiResponse.success(
+                userService.updateNickname(request, userInfo.getUserId()));
     }
 
 }
