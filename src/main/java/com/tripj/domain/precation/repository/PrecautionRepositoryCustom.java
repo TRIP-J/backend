@@ -4,5 +4,5 @@ import com.tripj.domain.precation.model.dto.response.GetPrecautionDetailResponse
 
 public interface PrecautionRepositoryCustom {
 
-    GetPrecautionDetailResponse getPrecautionDetail(Long precautionId);
+//    GetPrecautionDetailResponse getPrecautionDetail(Long precautionId);
 }
