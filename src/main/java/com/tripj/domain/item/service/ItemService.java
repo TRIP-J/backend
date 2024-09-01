@@ -147,6 +147,7 @@ public class ItemService {
     @Transactional(readOnly = true)
     public List<GetItemListResponse> getItemList(Long userId) {
 
+        //TODO : 체크리스트에 추가된 아이템이랑 비교해서 '넣기' '빼기' 구분 가능하게
         return itemRepository.getItemList(userId);
     }
 
