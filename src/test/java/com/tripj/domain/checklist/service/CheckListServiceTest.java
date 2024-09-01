@@ -94,7 +94,6 @@ class CheckListServiceTest {
         item = Item.builder()
                 .itemName("여권")
                 .itemCate(itemCate)
-                .fix("F")
                 .build();
         itemRepository.save(item);
 

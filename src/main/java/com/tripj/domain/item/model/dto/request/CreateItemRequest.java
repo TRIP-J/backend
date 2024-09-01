@@ -1,6 +1,7 @@
 package com.tripj.domain.item.model.dto.request;
 
 import com.tripj.domain.country.model.entity.Country;
+import com.tripj.domain.item.constant.ItemType;
 import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.itemcate.model.entity.ItemCate;
 import com.tripj.domain.trip.model.entity.Trip;
@@ -25,13 +26,15 @@ public class CreateItemRequest {
     @Schema(description = "여행 Id", example = "1")
     private Long tripId;
 
-    public Item toEntity(User user, ItemCate itemCate, Trip trip, String fix) {
+    @Schema(description = "아이템 타입", example = "USER_ADDED")
+    private ItemType itemType;
+
+    public Item toEntity(User user, ItemCate itemCate, Trip trip) {
         return Item.newItem(
                 itemName,
                 user,
                 itemCate,
-                trip,
-                fix);
+                trip);
     }
 
 }

@@ -4,12 +4,15 @@ import com.tripj.domain.checklist.model.dto.response.GetItemListResponse;
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
 import com.tripj.domain.item.constant.ItemStatus;
+import com.tripj.domain.item.constant.ItemType;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
 import com.tripj.domain.item.model.dto.response.DeleteItemResponse;
 import com.tripj.domain.item.model.dto.response.UpdateItemResponse;
+import com.tripj.domain.item.model.entity.FixedItem;
 import com.tripj.domain.item.model.entity.Item;
+import com.tripj.domain.item.repository.FixedItemRepository;
 import com.tripj.domain.item.repository.ItemRepository;
 import com.tripj.domain.itemcate.model.entity.ItemCate;
 import com.tripj.domain.itemcate.repository.ItemCateRepository;
@@ -28,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.tripj.domain.item.constant.ItemStatus.*;
+import static com.tripj.domain.item.constant.ItemType.*;
 import static com.tripj.global.code.ErrorCode.*;
 
 @Service
@@ -36,9 +40,9 @@ import static com.tripj.global.code.ErrorCode.*;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final FixedItemRepository fixedItemRepository;
     private final UserRepository userRepository;
     private final ItemCateRepository itemCateRepository;
-    private final CountryRepository countryRepository;
     private final TripRepository tripRepository;
 
     /**
@@ -57,8 +61,8 @@ public class ItemService {
             .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM_CATE));
 
         if (trip.getUser().getId().equals(userId)) {
-            Item newItem = request.toEntity(user, itemCate, trip, "N");
-            newItem.updateItemStatus(NOT_ADDED);
+            Item newItem = request.toEntity(user, itemCate, trip);
+            newItem.updateItemType(USER_ADDED);
             Item savedItem = itemRepository.save(newItem);
             return CreateItemResponse.of(savedItem);
         } else {
@@ -74,10 +78,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
             .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM));
 
-        // 나라별 고정 아이템 수정 불가
-        if (item.getUser() == null || "F".equals(item.getFix())) {
-            throw new BusinessException(NOT_ALLOWED_FIX_ITEM);
-        }
+        // TODO : itemType이 USER_ADDED인 경우에만 수정 가능하도록
 
         // 자신의 아이템만 수정 가능
         if (!item.getUser().getId().equals(userId)) {
@@ -92,26 +93,45 @@ public class ItemService {
     /**
      * 아이템 삭제
      */
-    public DeleteItemResponse deleteItem(Long itemId, Long userId) {
+    public DeleteItemResponse deleteItem(Long itemId, Long tripId, String itemType, Long userId) {
 
-        Item item = itemRepository.findById(itemId)
-            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM));
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
-        if (item.getUser() == null || "F".equals(item.getFix())) {
-            throw new BusinessException(NOT_ALLOWED_FIX_ITEM);
+        Trip trip = tripRepository.findById(tripId)
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_TRIP));
+
+        if (USER_ADDED.name().equals(itemType)) {
+            Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM));
+
+            if (!"NOW".equals(item.getTrip().getPrevious())) {
+                throw new BusinessException(NOT_ALLOWED_PAST_ITEM);
+            }
+
+            if (item.getUser().getId().equals(userId)) {
+                itemRepository.deleteById(item.getId());
+            } else {
+                throw new ForbiddenException(E403_NOT_MY_ITEM);
+            }
+
+        } else if (FIXED.name().equals(itemType)) {
+            // 고정 아이템 삭제시에는 item에 fixedItemDelYN 을 'Y'로 등록해준다
+            FixedItem fixedItem = fixedItemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_FIXED_ITEM));
+
+            itemRepository.save(Item.builder()
+                .itemName(fixedItem.getItemName())
+                .user(user)
+                .itemCate(fixedItem.getItemCate())
+                .trip(trip)
+                .fixedItem(fixedItem)
+                .fixedItemDelYN("Y")
+                .itemType(FIXED)
+                .build());
         }
 
-        if (!"NOW".equals(item.getTrip().getPrevious())) {
-            throw new BusinessException(NOT_ALLOWED_PAST_ITEM);
-        }
-
-        if (item.getUser().getId().equals(userId)) {
-            itemRepository.deleteById(item.getId());
-        } else {
-            throw new ForbiddenException(E403_NOT_MY_ITEM);
-        }
-
-        return DeleteItemResponse.of(item.getId());
+        return DeleteItemResponse.of(itemId);
     }
 
     /**

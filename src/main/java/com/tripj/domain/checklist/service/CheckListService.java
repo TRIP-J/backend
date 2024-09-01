@@ -58,31 +58,33 @@ public class CheckListService {
     public CreateCheckListResponse createCheckList(CreateCheckListRequest request,
                                                    Long userId) {
 
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
-
-        // 지난 여행에 아이템을 체크리스트에 등록 불가
-        Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
-            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_TRIP));
-
-        // 고정 아이템 + 자신의 현재 아이템만 추가 가능
-        Item item = itemRepository.findItemsByUserAndPreviousIsNow(request.getItemId(), userId)
-            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_ITEM));
-
-        // 중복 체크
-        Optional<CheckList> existingCheckList =
-                checkListRepository.findCheckListByUserItemAndCurrentTrip(userId, request.getItemId(), trip.getId());
-        if (existingCheckList.isPresent()) {
-            throw new BusinessException(ALREADY_EXISTS_CHECKLIST);
-        }
-
-        if (trip.getUser().getId().equals(userId)) {
-            CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user, trip));
-            savedCheckList.getItem().updateItemStatus(ADDED);
-            return CreateCheckListResponse.of(savedCheckList);
-        } else {
-            throw new ForbiddenException(NOT_MY_CHECKLIST);
-        }
+//        User user = userRepository.findById(userId)
+//            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
+//
+//        // 지난 여행에 아이템을 체크리스트에 등록 불가
+//        Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
+//            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_TRIP));
+//
+//        // 고정 아이템 + 자신의 현재 아이템만 추가 가능
+////         FIXME : 쿼리 수정
+//        Item item = itemRepository.findItemsByUserAndPreviousIsNow(request.getItemId(), userId)
+//            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_ITEM));
+//
+//        // 중복 체크
+//        Optional<CheckList> existingCheckList =
+//                checkListRepository.findCheckListByUserItemAndCurrentTrip(userId, request.getItemId(), trip.getId());
+//        if (existingCheckList.isPresent()) {
+//            throw new BusinessException(ALREADY_EXISTS_CHECKLIST);
+//        }
+//
+//        if (trip.getUser().getId().equals(userId)) {
+//            CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user, trip));
+//            savedCheckList.getItem().updateItemStatus(ADDED);
+//            return CreateCheckListResponse.of(savedCheckList);
+//        } else {
+//            throw new ForbiddenException(NOT_MY_CHECKLIST);
+//        }
+        return null;
     }
 
     /**

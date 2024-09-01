@@ -67,13 +67,15 @@ public class ItemController {
             summary = "아이템 삭제 API",
             description = "체크리스트에서 아이템을 삭제합니다."
     )
-    @DeleteMapping("/{itemId}")
+    @PostMapping("/delete/{itemId}")
     public RestApiResponse<DeleteItemResponse> deleteItem(
             @PathVariable Long itemId,
+            @RequestParam Long tripId,
+            @RequestParam String itemType,
             @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                itemService.deleteItem(itemId, userInfo.getUserId()));
+                itemService.deleteItem(itemId, tripId, itemType, userInfo.getUserId()));
     }
 
     @Operation(
