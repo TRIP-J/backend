@@ -3,6 +3,7 @@ package com.tripj.domain.item.service;
 import com.tripj.domain.checklist.model.dto.response.GetItemListResponse;
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
+import com.tripj.domain.item.constant.ItemStatus;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
@@ -26,6 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.tripj.domain.item.constant.ItemStatus.*;
+import static com.tripj.global.code.ErrorCode.*;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -43,20 +47,22 @@ public class ItemService {
     public CreateItemResponse createItem(CreateItemRequest request, Long userId) {
 
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_USER));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
         //지난 여행에 아이템 등록 불가
         Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_NOW_TRIP));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_TRIP));
 
         ItemCate itemCate = itemCateRepository.findById(request.getItemCateId())
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM_CATE));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM_CATE));
 
         if (trip.getUser().getId().equals(userId)) {
-            Item savedItem = itemRepository.save(request.toEntity(user, itemCate, trip, "N"));
+            Item newItem = request.toEntity(user, itemCate, trip, "N");
+            newItem.updateItemStatus(NOT_ADDED);
+            Item savedItem = itemRepository.save(newItem);
             return CreateItemResponse.of(savedItem);
         } else {
-            throw new ForbiddenException(ErrorCode.NOT_MY_TRIP);
+            throw new ForbiddenException(NOT_MY_TRIP);
         }
     }
 
@@ -66,16 +72,16 @@ public class ItemService {
     public UpdateItemResponse updateItem(UpdateItemRequest request, Long itemId, Long userId) {
 
         Item item = itemRepository.findById(itemId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM));
 
         // 나라별 고정 아이템 수정 불가
         if (item.getUser() == null || "F".equals(item.getFix())) {
-            throw new BusinessException(ErrorCode.NOT_ALLOWED_FIX_ITEM);
+            throw new BusinessException(NOT_ALLOWED_FIX_ITEM);
         }
 
         // 자신의 아이템만 수정 가능
         if (!item.getUser().getId().equals(userId)) {
-            throw new ForbiddenException(ErrorCode.E403_NOT_MY_ITEM);
+            throw new ForbiddenException(E403_NOT_MY_ITEM);
         }
 
         item.updateItem(request.getItemName());
@@ -89,20 +95,20 @@ public class ItemService {
     public DeleteItemResponse deleteItem(Long itemId, Long userId) {
 
         Item item = itemRepository.findById(itemId)
-            .orElseThrow(() -> new NotFoundException(ErrorCode.E404_NOT_EXISTS_ITEM));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM));
 
         if (item.getUser() == null || "F".equals(item.getFix())) {
-            throw new BusinessException(ErrorCode.NOT_ALLOWED_FIX_ITEM);
+            throw new BusinessException(NOT_ALLOWED_FIX_ITEM);
         }
 
         if (!"NOW".equals(item.getTrip().getPrevious())) {
-            throw new BusinessException(ErrorCode.NOT_ALLOWED_PAST_ITEM);
+            throw new BusinessException(NOT_ALLOWED_PAST_ITEM);
         }
 
         if (item.getUser().getId().equals(userId)) {
             itemRepository.deleteById(item.getId());
         } else {
-            throw new ForbiddenException(ErrorCode.E403_NOT_MY_ITEM);
+            throw new ForbiddenException(E403_NOT_MY_ITEM);
         }
 
         return DeleteItemResponse.of(item.getId());

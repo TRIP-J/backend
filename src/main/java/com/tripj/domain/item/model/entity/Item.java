@@ -2,6 +2,7 @@ package com.tripj.domain.item.model.entity;
 
 import com.tripj.domain.common.entity.BaseTimeEntity;
 import com.tripj.domain.country.model.entity.Country;
+import com.tripj.domain.item.constant.ItemStatus;
 import com.tripj.domain.itemcate.model.entity.ItemCate;
 import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.user.model.entity.User;
@@ -36,6 +37,9 @@ public class Item extends BaseTimeEntity {
 
     private String fix;
 
+    @Enumerated(EnumType.STRING)
+    private ItemStatus itemStatus;
+
     public static Item newItem(String itemName, User user,
                                ItemCate itemCate, Trip trip, String fix) {
         return Item.builder()
@@ -52,6 +56,13 @@ public class Item extends BaseTimeEntity {
      */
     public void updateItem(String itemName) {
         this.itemName = itemName;
+    }
+
+    /**
+     * 아이템 상태 변경
+     */
+    public void updateItemStatus(ItemStatus itemStatus) {
+        this.itemStatus = itemStatus;
     }
 
 //    public void updatePrevious(String previous) {

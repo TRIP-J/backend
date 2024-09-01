@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.tripj.domain.item.constant.ItemStatus.ADDED;
+import static com.tripj.domain.item.constant.ItemStatus.NOT_ADDED;
 import static com.tripj.global.code.ErrorCode.*;
 
 @Service
@@ -76,6 +78,7 @@ public class CheckListService {
 
         if (trip.getUser().getId().equals(userId)) {
             CheckList savedCheckList = checkListRepository.save(request.toEntity(item, user, trip));
+            savedCheckList.getItem().updateItemStatus(ADDED);
             return CreateCheckListResponse.of(savedCheckList);
         } else {
             throw new ForbiddenException(NOT_MY_CHECKLIST);
