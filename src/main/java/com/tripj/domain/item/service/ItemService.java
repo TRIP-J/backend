@@ -73,16 +73,23 @@ public class ItemService {
     /**
      * 아이템 수정
      */
-    public UpdateItemResponse updateItem(UpdateItemRequest request, Long itemId, Long userId) {
+    public UpdateItemResponse updateItem(
+            UpdateItemRequest request, Long itemId, String itemType, Long userId) {
+
+        // 고정 아이템 수정 불가
+        if (FIXED.name().equals(itemType)) {
+            throw new BusinessException(NOT_ALLOWED_FIX_ITEM);
+        }
 
         Item item = itemRepository.findById(itemId)
             .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM));
 
-        // TODO : itemType이 USER_ADDED인 경우에만 수정 가능하도록
-
-        // 자신의 아이템만 수정 가능
         if (!item.getUser().getId().equals(userId)) {
             throw new ForbiddenException(E403_NOT_MY_ITEM);
+        }
+
+        if (!"NOW".equals(item.getTrip().getPrevious())) {
+            throw new BusinessException(NOT_ALLOWED_PAST_ITEM);
         }
 
         item.updateItem(request.getItemName());

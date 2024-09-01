@@ -51,6 +51,7 @@ public class ItemController {
     public RestApiResponse<UpdateItemResponse> updateItem(
             @Validated @RequestBody UpdateItemRequest request,
             @PathVariable Long itemId,
+            @RequestParam String itemType,
             @UserInfo UserInfoDto userInfo,
             BindingResult bindingResult) throws BindException {
 
@@ -60,7 +61,7 @@ public class ItemController {
         }
 
         return RestApiResponse.success(
-                itemService.updateItem(request, itemId, userInfo.getUserId()));
+                itemService.updateItem(request, itemId, itemType, userInfo.getUserId()));
     }
 
     @Operation(
