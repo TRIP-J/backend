@@ -37,12 +37,13 @@ public class CheckList extends BaseTimeEntity {
 
     private String pack;
 
-    public static CheckList newCheckList(Item item, User user, Trip trip) {
+    public static CheckList newCheckList(Item item, User user, Trip trip, ItemType itemType) {
         return CheckList.builder()
                 .item(item)
                 .user(user)
                 .trip(trip)
                 .pack("NO")
+                .itemType(itemType)
                 .build();
     }
 

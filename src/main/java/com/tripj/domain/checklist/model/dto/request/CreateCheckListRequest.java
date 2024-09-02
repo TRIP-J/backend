@@ -23,8 +23,8 @@ public class CreateCheckListRequest {
     @Schema(description = "아이템 타입", example = "FIXED")
     private ItemType itemType;
 
-    public CheckList toEntity(Item item, User user, Trip trip) {
-        return CheckList.newCheckList(item, user, trip);
+    public CheckList toEntity(Item item, User user, Trip trip, ItemType itemType) {
+        return CheckList.newCheckList(item, user, trip, itemType);
     }
 
 

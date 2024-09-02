@@ -63,15 +63,15 @@ public class CheckListService {
 
         // 지난 여행에 아이템을 체크리스트에 등록 불가
         Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
-            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_TRIP));
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_TRIP)); //여기서 에러
 
         // 고정 아이템 + 자신의 현재 아이템만 추가 가능
 //        Item item = itemRepository.findItemsByUserAndPreviousIsNow(request.getItemId(), userId)
 //                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_ITEM));
         // FIXME : 쿼리 다시 확인
-        GetItemListResponse item = itemRepository.getItem(request.getItemId(), userId, request.getItemType());
+        GetItemListResponse item = itemRepository.getItem(userId, request.getItemId(), request.getItemType());
         if (item == null) {
-            throw new NotFoundException(E404_NOT_EXISTS_NOW_ITEM);
+            throw new NotFoundException(E404_NOT_EXISTS_NOW_TRIP);
         }
 
         // FIXME : 쿼리 다시 확인
@@ -85,7 +85,9 @@ public class CheckListService {
 
         if (trip.getUser().getId().equals(userId)) {
             Item itemEntity = convertToItem(item);
-            CheckList savedCheckList = checkListRepository.save(request.toEntity(itemEntity, user, trip));
+            //FIXME : itemType도 추가하기
+            CheckList savedCheckList = checkListRepository.save(
+                    request.toEntity(itemEntity, user, trip, request.getItemType()));
             return CreateCheckListResponse.of(savedCheckList);
         } else {
             throw new ForbiddenException(NOT_MY_CHECKLIST);
