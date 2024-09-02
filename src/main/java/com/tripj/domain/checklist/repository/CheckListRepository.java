@@ -26,7 +26,7 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Che
 
     @Query("select cl from CheckList cl join Trip t on cl.trip.id = t.id " +
             "where cl.user.id = :userId " +
-            "and cl.item.id = :itemId " +
+            "and (cl.item.id = :itemId or cl.fixedItem.id = :itemId) " +
             "and cl.trip.id = :tripId " +
             "and t.previous = 'NOW' " +
             "and cl.itemType = :itemType")

@@ -105,7 +105,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                         .and(item.user.id.eq(userId)))
                 .where(
                         fixedItem.id.eq(itemId),
-                        item.itemType.eq(itemType),
+                        fixedItem.itemType.eq(itemType),
                         item.fixedItemDelYN.isNull().or(item.fixedItemDelYN.ne("Y")))
                 .fetchOne();
 

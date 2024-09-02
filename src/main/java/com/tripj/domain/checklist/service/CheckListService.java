@@ -4,6 +4,8 @@ import com.tripj.domain.checklist.model.dto.request.CreateCheckListRequest;
 import com.tripj.domain.checklist.model.dto.response.*;
 import com.tripj.domain.checklist.model.entity.CheckList;
 import com.tripj.domain.checklist.repository.CheckListRepository;
+import com.tripj.domain.item.constant.ItemType;
+import com.tripj.domain.item.model.entity.FixedItem;
 import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.item.repository.ItemRepository;
 import com.tripj.domain.trip.model.entity.Trip;
@@ -63,18 +65,13 @@ public class CheckListService {
 
         // 지난 여행에 아이템을 체크리스트에 등록 불가
         Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
-            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_TRIP)); //여기서 에러
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_TRIP));
 
-        // 고정 아이템 + 자신의 현재 아이템만 추가 가능
-//        Item item = itemRepository.findItemsByUserAndPreviousIsNow(request.getItemId(), userId)
-//                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_ITEM));
-        // FIXME : 쿼리 다시 확인
         GetItemListResponse item = itemRepository.getItem(userId, request.getItemId(), request.getItemType());
         if (item == null) {
             throw new NotFoundException(E404_NOT_EXISTS_NOW_TRIP);
         }
 
-        // FIXME : 쿼리 다시 확인
         // 중복 체크
         Optional<CheckList> existingCheckList =
                 checkListRepository.findCheckListByUserItemAndCurrentTrip(
@@ -83,12 +80,22 @@ public class CheckListService {
             throw new BusinessException(ALREADY_EXISTS_CHECKLIST);
         }
 
+        // 사용자 추가 아이템, 고정 아이템에 따라 다르게 체크리스트에 추가
         if (trip.getUser().getId().equals(userId)) {
-            Item itemEntity = convertToItem(item);
-            //FIXME : itemType도 추가하기
-            CheckList savedCheckList = checkListRepository.save(
-                    request.toEntity(itemEntity, user, trip, request.getItemType()));
-            return CreateCheckListResponse.of(savedCheckList);
+            CheckList checkList;
+
+            if (request.getItemType() == ItemType.FIXED) {
+                FixedItem fixedItemEntity = convertToFixedItem(item);
+                checkList = request.toEntity(fixedItemEntity, user, trip, request.getItemType());
+                CheckList savedCheckList = checkListRepository.save(checkList);
+                return CreateCheckListResponse.ofFixedItem(savedCheckList);
+            } else {
+                Item itemEntity = convertToItem(item);
+                checkList = request.toEntity(itemEntity, user, trip, request.getItemType());
+                CheckList savedCheckList = checkListRepository.save(checkList);
+                return CreateCheckListResponse.ofItem(savedCheckList);
+            }
+
         } else {
             throw new ForbiddenException(NOT_MY_CHECKLIST);
         }
@@ -96,6 +103,14 @@ public class CheckListService {
 
     private Item convertToItem(GetItemListResponse response) {
         return Item.builder()
+                .id(response.getItemId())
+                .itemName(response.getItemName())
+                .itemType(response.getItemType())
+                .build();
+    }
+
+    private FixedItem convertToFixedItem(GetItemListResponse response) {
+        return FixedItem.builder()
                 .id(response.getItemId())
                 .itemName(response.getItemName())
                 .itemType(response.getItemType())

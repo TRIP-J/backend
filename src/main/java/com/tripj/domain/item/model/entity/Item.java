@@ -34,7 +34,7 @@ public class Item extends BaseTimeEntity {
     @JoinColumn(name = "trip_id")
     private Trip trip;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fixed_item_id")
     private FixedItem fixedItem;
 

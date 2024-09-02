@@ -2,6 +2,7 @@ package com.tripj.domain.checklist.model.entity;
 
 import com.tripj.domain.common.entity.BaseTimeEntity;
 import com.tripj.domain.item.constant.ItemType;
+import com.tripj.domain.item.model.entity.FixedItem;
 import com.tripj.domain.item.model.entity.Item;
 import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.user.model.entity.User;
@@ -35,11 +36,25 @@ public class CheckList extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fixed_item_id")
+    private FixedItem fixedItem;
+
     private String pack;
 
     public static CheckList newCheckList(Item item, User user, Trip trip, ItemType itemType) {
         return CheckList.builder()
                 .item(item)
+                .user(user)
+                .trip(trip)
+                .pack("NO")
+                .itemType(itemType)
+                .build();
+    }
+
+    public static CheckList newCheckList(FixedItem item, User user, Trip trip, ItemType itemType) {
+        return CheckList.builder()
+                .fixedItem(item)
                 .user(user)
                 .trip(trip)
                 .pack("NO")
