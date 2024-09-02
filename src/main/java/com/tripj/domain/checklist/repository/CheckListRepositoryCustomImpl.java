@@ -3,6 +3,7 @@ package com.tripj.domain.checklist.repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.GetMyCheckListResponse;
@@ -34,32 +35,27 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
         List<GetCheckListResponse> results = queryFactory
                 .select(new QGetCheckListResponse(
                         checkList.id,
-                        item.id,
-                        checkList.user.id,
-                        new CaseBuilder()
-                                .when(checkList.itemType.eq(ItemType.USER_ADDED))
-                                .then(item.itemName)
-                                .when(checkList.itemType.eq(ItemType.FIXED))
-                                .then(fixedItem.itemName)
-                                .otherwise("미지정 아이템")
-                                .as("itemName"),
-                        itemCate.id,
-                        checkList.pack,
-                        checkList.itemType
+                        Expressions.cases()
+                                .when(checkList.item.isNotNull()).then(item.itemName)
+                                .otherwise(fixedItem.itemName),
+                        Expressions.cases()
+                                .when(checkList.item.isNotNull()).then(item.itemCate.id)
+                                .otherwise(fixedItem.itemCate.id),
+                        checkList.pack
                 ))
                 .from(checkList)
-                .join(checkList.item, item)
-                .leftJoin(fixedItem).on(fixedItem.id.eq(checkList.item.id).and(checkList.itemType.eq(ItemType.FIXED)))
-                .join(item.itemCate, itemCate)
-                .join(checkList.trip, trip)
+                .leftJoin(item).on(checkList.item.id.eq(item.id))
+                .leftJoin(fixedItem).on(checkList.fixedItem.id.eq(fixedItem.id))
+                .join(trip).on(checkList.trip.id.eq(trip.id))
                 .where(
-                        trip.id.eq(tripId),
-                        checkList.user.id.eq(userId)
+                        checkList.user.id.eq(userId),
+                        trip.id.eq(tripId)
                 )
                 .fetch();
 
         return results;
     }
 
-
 }
+
+

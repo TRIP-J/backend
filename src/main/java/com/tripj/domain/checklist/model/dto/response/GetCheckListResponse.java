@@ -17,12 +17,6 @@ public class GetCheckListResponse {
     @Schema(description = "체크리스트 Id", example = "1")
     private Long checkListId;
 
-    @Schema(description = "아이템 Id", example = "1")
-    private Long itemId;
-
-    @Schema(description = "유저 Id", example = "1")
-    private Long userId;
-
     @Schema(description = "아이템명", example = "동전지갑")
     private String itemName;
 
@@ -32,18 +26,12 @@ public class GetCheckListResponse {
     @Schema(description = "아이템 챙김 여부", example = "NO")
     private String pack;
 
-    @Schema(description = "아이템 타입", example = "FIXED")
-    private ItemType itemType;
-
     @QueryProjection
-    public GetCheckListResponse(Long checkListId, Long itemId, Long userId, String itemName, Long itemCateId, String pack, ItemType itemType) {
+    public GetCheckListResponse(Long checkListId, String itemName, Long itemCateId, String pack) {
         this.checkListId = checkListId;
-        this.itemId = itemId;
-        this.userId = userId;
         this.itemName = itemName;
         this.itemCateId = itemCateId;
         this.pack = pack;
-        this.itemType = itemType;
     }
 
 }

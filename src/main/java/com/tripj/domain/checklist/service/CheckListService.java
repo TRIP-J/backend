@@ -42,8 +42,7 @@ public class CheckListService {
      * 체크리스트에 담은 아이템 일괄 조회
      */
     @Transactional(readOnly = true)
-    public List<GetCheckListResponse> getCheckList(
-            Long userId, Long tripId) {
+    public List<GetCheckListResponse> getCheckList(Long userId, Long tripId) {
 
         List<GetCheckListResponse> checkList = checkListRepository.getCheckList(userId, tripId);
 
