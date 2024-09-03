@@ -112,7 +112,7 @@ public class UserService {
 
         LocalDateTime tokenExpireTime = user.getTokenExpirationTime();
         if (tokenExpireTime.isBefore(LocalDateTime.now())) {
-            throw new AuthenticationException(REFRESH_TOKEN_EXPIRED);
+            throw new AuthenticationException(FORBIDDEN_REFRESH_TOKEN_EXPIRED);
         }
 
         return user;
