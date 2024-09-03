@@ -31,9 +31,13 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
                                 .when(checkList.item.isNotNull()).then(item.itemName)
                                 .otherwise(fixedItem.itemName),
                         Expressions.cases()
+                                .when(checkList.item.isNotNull()).then(item.id)
+                                .otherwise(fixedItem.id),
+                        Expressions.cases()
                                 .when(checkList.item.isNotNull()).then(item.itemCate.id)
                                 .otherwise(fixedItem.itemCate.id),
-                        checkList.pack
+                        checkList.pack,
+                        checkList.itemType
                 ))
                 .from(checkList)
                 .leftJoin(item).on(checkList.item.id.eq(item.id))

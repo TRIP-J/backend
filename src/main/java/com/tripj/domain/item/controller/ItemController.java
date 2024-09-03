@@ -85,10 +85,11 @@ public class ItemController {
     )
     @GetMapping("")
     public RestApiResponse <List<GetItemListResponse>> getItemList(
-            @UserInfo UserInfoDto userInfo) {
+            @UserInfo UserInfoDto userInfo,
+            @RequestParam Long tripId) {
 
         return RestApiResponse.success(
-                itemService.getItemList(userInfo.getUserId()));
+                itemService.getItemList(userInfo.getUserId(), tripId));
     }
 
 }

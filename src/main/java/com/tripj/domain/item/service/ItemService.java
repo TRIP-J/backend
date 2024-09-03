@@ -1,6 +1,8 @@
 package com.tripj.domain.item.service;
 
+import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.GetItemListResponse;
+import com.tripj.domain.checklist.repository.CheckListRepository;
 import com.tripj.domain.country.model.entity.Country;
 import com.tripj.domain.country.repository.CountryRepository;
 import com.tripj.domain.item.constant.ItemStatus;
@@ -29,6 +31,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.tripj.domain.item.constant.ItemStatus.*;
 import static com.tripj.domain.item.constant.ItemType.*;
@@ -44,6 +48,7 @@ public class ItemService {
     private final UserRepository userRepository;
     private final ItemCateRepository itemCateRepository;
     private final TripRepository tripRepository;
+    private final CheckListRepository checkListRepository;
 
     /**
      * 아이템 등록
@@ -145,10 +150,24 @@ public class ItemService {
      * 체크리스트 > 아이템 일괄 조회
      */
     @Transactional(readOnly = true)
-    public List<GetItemListResponse> getItemList(Long userId) {
+    public List<GetItemListResponse> getItemList(Long userId, Long tripId) {
 
-        //TODO : 체크리스트에 추가된 아이템이랑 비교해서 '넣기' '빼기' 구분 가능하게
-        return itemRepository.getItemList(userId);
+        List<GetItemListResponse> itemList = itemRepository.getItemList(userId);
+        List<GetCheckListResponse> checkList = checkListRepository.getCheckList(userId, tripId);
+
+        // checkList의 itemId와 itemType을 조합하여 Set에 저장
+        Set<String> checkListItemSet = checkList.stream()
+                .map(item -> item.getItemId() + "_" + item.getItemType())
+                .collect(Collectors.toSet());
+
+        // itemList를 돌면서 checkList에 있는지 확인하여 addStatus response
+        for (GetItemListResponse item : itemList) {
+            String itemKey = item.getItemId() + "_" + item.getItemType();
+            String addStatus = checkListItemSet.contains(itemKey) ? "ALREADY" : "NOT_YET";
+            item.setAddStatus(addStatus);
+        }
+
+        return itemList;
     }
 
     /**

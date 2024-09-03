@@ -26,6 +26,14 @@ public class GetItemListResponse {
     @Schema(description = "아이템 타입", example = "FIXED")
     private ItemType itemType;
 
+    @Schema(description = "체크리스트에 추가 가능 여부 \n" +
+            "ALREADY = 체크리스트에 추가된 아이템 \n" +
+            "NOT_YET = 아직 추가 안된 아이템",
+            example = "ALREADY")
+    private String addStatus;
+
+
+
     @QueryProjection
     public GetItemListResponse(Long itemId, String itemName, Long itemCateId, ItemType itemType) {
         this.itemId = itemId;
