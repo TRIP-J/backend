@@ -1,25 +1,17 @@
 package com.tripj.domain.checklist.repository;
 
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
-import com.tripj.domain.checklist.model.dto.response.GetMyCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.QGetCheckListResponse;
-import com.tripj.domain.checklist.model.dto.response.QGetMyCheckListResponse;
-import com.tripj.domain.item.constant.ItemType;
-import com.tripj.domain.item.model.entity.QFixedItem;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.tripj.domain.checklist.model.entity.QCheckList.*;
+import static com.tripj.domain.checklist.model.entity.QCheckList.checkList;
 import static com.tripj.domain.item.model.entity.QFixedItem.fixedItem;
 import static com.tripj.domain.item.model.entity.QItem.item;
-import static com.tripj.domain.itemcate.model.entity.QItemCate.itemCate;
-import static com.tripj.domain.trip.model.entity.QTrip.*;
+import static com.tripj.domain.trip.model.entity.QTrip.trip;
 
 @Repository
 public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom {

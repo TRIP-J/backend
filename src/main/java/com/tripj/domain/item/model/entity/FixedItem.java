@@ -1,6 +1,7 @@
 package com.tripj.domain.item.model.entity;
 
 import com.tripj.domain.common.entity.BaseTimeEntity;
+import com.tripj.domain.item.constant.FixStatus;
 import com.tripj.domain.item.constant.ItemType;
 import com.tripj.domain.itemcate.model.entity.ItemCate;
 import jakarta.persistence.*;
@@ -26,4 +27,7 @@ public class FixedItem extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
+
+    @Enumerated(EnumType.STRING)
+    private FixStatus fixStatus;
 }

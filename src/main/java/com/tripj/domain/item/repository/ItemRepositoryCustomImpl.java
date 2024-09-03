@@ -1,20 +1,17 @@
 package com.tripj.domain.item.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.GetItemListResponse;
-import com.tripj.domain.checklist.model.dto.response.QGetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.QGetItemListResponse;
+import com.tripj.domain.item.constant.FixStatus;
 import com.tripj.domain.item.constant.ItemType;
-import com.tripj.domain.item.model.entity.QFixedItem;
 import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.tripj.domain.checklist.model.entity.QCheckList.checkList;
-import static com.tripj.domain.item.model.entity.QFixedItem.*;
+import static com.tripj.domain.item.model.entity.QFixedItem.fixedItem;
 import static com.tripj.domain.item.model.entity.QItem.item;
 import static com.tripj.domain.itemcate.model.entity.QItemCate.itemCate;
 import static com.tripj.domain.trip.model.entity.QTrip.trip;
@@ -30,7 +27,6 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
     @Override
     public List<GetItemListResponse> getItemList(Long userId) {
-        // 첫 번째 쿼리: item 테이블에서 데이터를 가져옴
         List<GetItemListResponse> tripItems = queryFactory
                 .select(new QGetItemListResponse(
                         item.id,
@@ -48,7 +44,6 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 )
                 .fetch();
 
-        // 두 번째 쿼리: fixed_item 테이블에서 데이터를 가져옴
         List<GetItemListResponse> fixedItems = queryFactory
                 .select(new QGetItemListResponse(
                         fixedItem.id,
@@ -61,10 +56,12 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .leftJoin(item)
                 .on(fixedItem.id.eq(item.fixedItem.id)
                         .and(item.user.id.eq(userId)))
-                .where(item.fixedItemDelYN.isNull().or(item.fixedItemDelYN.ne("Y")))
+                .where(
+                        item.fixedItemDelYN.isNull().or(item.fixedItemDelYN.ne("Y")),
+                        fixedItem.fixStatus.eq(FixStatus.valueOf("Y"))
+                )
                 .fetch();
 
-        // 두 결과를 합침
         tripItems.addAll(fixedItems);
 
         return tripItems;

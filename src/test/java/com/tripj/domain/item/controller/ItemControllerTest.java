@@ -104,8 +104,8 @@ class ItemControllerTest {
             //given
             UpdateItemRequest updateItemRequest = updateItemRequest("면도기");
             UpdateItemResponse updateItemResponse = updateItemResponse();
-            given(itemService.updateItem(any(), any(), any()))
-                    .willReturn(updateItemResponse);
+//            given(itemService.updateItem(any(), any(), any()))
+//                    .willReturn(updateItemResponse);
 
             //when //then
             mockMvc.perform(
@@ -124,8 +124,8 @@ class ItemControllerTest {
             //given
             UpdateItemRequest updateItemRequest = updateItemRequest(null);
             UpdateItemResponse updateItemResponse = updateItemResponse();
-            given(itemService.updateItem(any(), any(), any()))
-                    .willReturn(updateItemResponse);
+//            given(itemService.updateItem(any(), any(), any()))
+//                    .willReturn(updateItemResponse);
 
             //when //then
             mockMvc.perform(
@@ -144,8 +144,8 @@ class ItemControllerTest {
     @DisplayName("아이템 삭제에 성공합니다")
     void deleteItem() throws Exception {
         //given
-        given(itemService.deleteItem(any(), any()))
-                .willReturn(new DeleteItemResponse(1L));
+//        given(itemService.deleteItem(any(), any()))
+//                .willReturn(new DeleteItemResponse(1L));
 
         //when //then
         mockMvc.perform(
