@@ -19,8 +19,12 @@ public class CreateCheckListResponse {
     @Schema(description = "여행 Id", example = "1")
     private Long tripId;
 
-    public static CreateCheckListResponse of(CheckList checkList) {
+    public static CreateCheckListResponse ofItem(CheckList checkList) {
         return new CreateCheckListResponse(checkList.getId(), checkList.getItem().getId(), checkList.getTrip().getId());
+    }
+
+    public static CreateCheckListResponse ofFixedItem(CheckList checkList) {
+        return new CreateCheckListResponse(checkList.getId(), checkList.getFixedItem().getId(), checkList.getTrip().getId());
     }
 
 }

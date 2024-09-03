@@ -3,6 +3,7 @@ package com.tripj.external.crawling.controller;
 import com.tripj.domain.precation.model.entity.Precaution;
 import com.tripj.external.crawling.service.PrecautionCrawling;
 import com.tripj.global.model.RestApiResponse;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class PrecautionCrawlingController {
 
     private final PrecautionCrawling precautionCrawling;
 
+    @Hidden
     @Operation(
             summary = "주의사항 크롤링 API",
             description = "주의사항 데이터를 크롤링 합니다."
@@ -28,8 +30,5 @@ public class PrecautionCrawlingController {
     public RestApiResponse<List<Precaution>> parsing() {
         return RestApiResponse.success(precautionCrawling.precautionCrawling());
     }
-
-
-
 
 }

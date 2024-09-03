@@ -53,7 +53,6 @@ public class TripController {
                 tripService.updateTrip(request, tripId, userInfo.getUserId()));
     }
 
-
    	@Operation(
    				summary = "여행 조회 API",
    				description = "여행 선택완료 후 메인페이지에 조회되는 여행 정보 조회"

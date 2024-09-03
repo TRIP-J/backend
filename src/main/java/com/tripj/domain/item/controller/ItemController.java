@@ -51,6 +51,7 @@ public class ItemController {
     public RestApiResponse<UpdateItemResponse> updateItem(
             @Validated @RequestBody UpdateItemRequest request,
             @PathVariable Long itemId,
+            @RequestParam String itemType,
             @UserInfo UserInfoDto userInfo,
             BindingResult bindingResult) throws BindException {
 
@@ -60,20 +61,22 @@ public class ItemController {
         }
 
         return RestApiResponse.success(
-                itemService.updateItem(request, itemId, userInfo.getUserId()));
+                itemService.updateItem(request, itemId, itemType, userInfo.getUserId()));
     }
 
     @Operation(
             summary = "아이템 삭제 API",
             description = "체크리스트에서 아이템을 삭제합니다."
     )
-    @DeleteMapping("/{itemId}")
+    @PostMapping("/delete/{itemId}")
     public RestApiResponse<DeleteItemResponse> deleteItem(
             @PathVariable Long itemId,
+            @RequestParam Long tripId,
+            @RequestParam String itemType,
             @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
-                itemService.deleteItem(itemId, userInfo.getUserId()));
+                itemService.deleteItem(itemId, tripId, itemType, userInfo.getUserId()));
     }
 
     @Operation(
@@ -82,10 +85,11 @@ public class ItemController {
     )
     @GetMapping("")
     public RestApiResponse <List<GetItemListResponse>> getItemList(
-            @UserInfo UserInfoDto userInfo) {
+            @UserInfo UserInfoDto userInfo,
+            @RequestParam Long tripId) {
 
         return RestApiResponse.success(
-                itemService.getItemList(userInfo.getUserId()));
+                itemService.getItemList(userInfo.getUserId(), tripId));
     }
 
 }

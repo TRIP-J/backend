@@ -1,18 +1,17 @@
 package com.tripj.domain.checklist.repository;
 
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
-import com.tripj.domain.checklist.model.dto.response.GetMyCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.QGetCheckListResponse;
-import com.tripj.domain.checklist.model.dto.response.QGetMyCheckListResponse;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.tripj.domain.checklist.model.entity.QCheckList.*;
+import static com.tripj.domain.checklist.model.entity.QCheckList.checkList;
+import static com.tripj.domain.item.model.entity.QFixedItem.fixedItem;
 import static com.tripj.domain.item.model.entity.QItem.item;
-import static com.tripj.domain.itemcate.model.entity.QItemCate.itemCate;
-import static com.tripj.domain.trip.model.entity.QTrip.*;
+import static com.tripj.domain.trip.model.entity.QTrip.trip;
 
 @Repository
 public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom {
@@ -28,19 +27,25 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
         List<GetCheckListResponse> results = queryFactory
                 .select(new QGetCheckListResponse(
                         checkList.id,
-                        item.id,
-                        checkList.user.id,
-                        item.itemName,
-                        itemCate.id,
-                        checkList.pack
+                        Expressions.cases()
+                                .when(checkList.item.isNotNull()).then(item.itemName)
+                                .otherwise(fixedItem.itemName),
+                        Expressions.cases()
+                                .when(checkList.item.isNotNull()).then(item.id)
+                                .otherwise(fixedItem.id),
+                        Expressions.cases()
+                                .when(checkList.item.isNotNull()).then(item.itemCate.id)
+                                .otherwise(fixedItem.itemCate.id),
+                        checkList.pack,
+                        checkList.itemType
                 ))
                 .from(checkList)
-                .join(checkList.item, item)
-                .join(item.itemCate, itemCate)
-                .join(checkList.trip, trip)
+                .leftJoin(item).on(checkList.item.id.eq(item.id))
+                .leftJoin(fixedItem).on(checkList.fixedItem.id.eq(fixedItem.id))
+                .join(trip).on(checkList.trip.id.eq(trip.id))
                 .where(
-                        trip.id.eq(tripId),
-                        checkList.user.id.eq(userId)
+                        checkList.user.id.eq(userId),
+                        trip.id.eq(tripId)
                 )
                 .fetch();
 
@@ -48,3 +53,5 @@ public class CheckListRepositoryCustomImpl implements CheckListRepositoryCustom 
     }
 
 }
+
+

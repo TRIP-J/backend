@@ -1,6 +1,7 @@
 package com.tripj.domain.checklist.model.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
+import com.tripj.domain.item.constant.ItemType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,15 +23,23 @@ public class GetItemListResponse {
     @Schema(description = "아이템 카테고리 Id", example = "1")
     private Long itemCateId;
 
-    @Schema(description = "아이템 고정 여부", example = "F")
-    private String fix;
+    @Schema(description = "아이템 타입", example = "FIXED")
+    private ItemType itemType;
+
+    @Schema(description = "체크리스트에 추가 가능 여부 \n" +
+            "ALREADY = 체크리스트에 추가된 아이템 \n" +
+            "NOT_YET = 아직 추가 안된 아이템",
+            example = "ALREADY")
+    private String addStatus;
+
+
 
     @QueryProjection
-    public GetItemListResponse(Long itemId, String itemName, Long itemCateId, String fix) {
+    public GetItemListResponse(Long itemId, String itemName, Long itemCateId, ItemType itemType) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemCateId = itemCateId;
-        this.fix = fix;
+        this.itemType = itemType;
     }
 
 
