@@ -17,8 +17,8 @@ public class TripBatchScheduler {
     /**
      * 매일 자정 여행계획의 EndDate 가 지나면 Previous 상태 변경
      */
-//    @Scheduled(cron = "0 0 12 * * ?")
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(cron = "0 0 12 * * ?")
+//    @Scheduled(fixedDelay = 60000)
     public void runDailyJobPrevious() {
         log.info("tripDailyJob Update batch execute");
         tripDailyJob.run();
