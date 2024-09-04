@@ -20,7 +20,7 @@ public class TripBatchScheduler {
     @Scheduled(cron = "0 0 12 * * ?")
 //    @Scheduled(fixedDelay = 60000)
     public void runDailyJobPrevious() {
-        log.info("tripDailyJob Update batch execute");
+        log.info("tripDailyJob Update batch execute.");
         tripDailyJob.run();
     }
 
