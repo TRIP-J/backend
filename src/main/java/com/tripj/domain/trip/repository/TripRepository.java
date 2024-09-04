@@ -14,7 +14,7 @@ public interface TripRepository extends JpaRepository<Trip, Long>, TripRepositor
 
     List<Trip> findByUserId(Long userId);
 
-    @Query("select t from Trip t where t.endDate = CURRENT_DATE and t.previous = 'NOW'")
+    @Query("select t from Trip t where t.endDate = CURRENT_DATE - 1 and t.previous = 'NOW'")
     List<Trip> findAllPreviousIsNow();
 
     @Query("select t from Trip t where t.previous = 'NOW' and t.user.id = :userId")
