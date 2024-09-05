@@ -108,11 +108,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public User findUserByRefreshToken(String refreshToken) {
         User user = userRepository.findByRefreshToken(refreshToken)
-            .orElseThrow(() -> new AuthenticationException(REFRESH_TOKEN_NOT_FOUND));
+            .orElseThrow(() -> new AuthenticationException(E403_NOT_FOUND_REFRESH_TOKEN));
 
         LocalDateTime tokenExpireTime = user.getTokenExpirationTime();
         if (tokenExpireTime.isBefore(LocalDateTime.now())) {
-            throw new AuthenticationException(FORBIDDEN_REFRESH_TOKEN_EXPIRED);
+            throw new AuthenticationException(E403_REFRESH_TOKEN_EXPIRED);
         }
 
         return user;

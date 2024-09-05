@@ -25,7 +25,8 @@ public enum ErrorCode {
     E403_NOT_MY_BOARD(FORBIDDEN, false, "FB003", "자신의 게시물만 수정, 삭제 가능합니다."),
     E403_NOT_MY_COMMENT(FORBIDDEN, false, "FB004", "자신의 댓글만 수정, 삭제 가능합니다."),
     E403_NOT_MY_NICKNAME(FORBIDDEN, false, "FB005", "자신의 닉네임만 수정 가능합니다."),
-    FORBIDDEN_REFRESH_TOKEN_EXPIRED(FORBIDDEN, false, "FB006", "해당 refresh token은 만료되었습니다."),
+    E403_REFRESH_TOKEN_EXPIRED(FORBIDDEN, false, "FB006", "해당 refresh token은 만료되었습니다."),
+    E403_NOT_FOUND_REFRESH_TOKEN(FORBIDDEN, false, "FB007", "해당 refresh token은 존재하지 않습니다."),
 
     /**
      * 404 Not Found
