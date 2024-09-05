@@ -3,8 +3,11 @@ package com.tripj.api.login.controller;
 import com.tripj.api.login.dto.RefreshTokenRequest;
 import com.tripj.api.login.dto.TokenResponse;
 import com.tripj.api.login.service.TokenService;
+import com.tripj.domain.user.repository.UserRepository;
 import com.tripj.global.model.RestApiResponse;
 import com.tripj.global.util.AuthorizationHeaderUtils;
+import com.tripj.jwt.service.TokenManager;
+import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TokenController {
 
     private final TokenService tokenService;
+    private final TokenManager tokenManager;
+    private final UserRepository userRepository;
+
 
     @Tag(name = "authentication")
     @Operation(summary = "Access Token 재발급 API", description = "Header를 이용한 Access Token 재발급 API")
@@ -30,7 +36,13 @@ public class TokenController {
 
         AuthorizationHeaderUtils.validateAuthorization(authorizationHeader);
 
-        String refreshToken = authorizationHeader.split(" ")[1];
+        String accessToken = authorizationHeader.split(" ")[1];
+
+        Claims tokenClaims = tokenManager.getTokenClaims(accessToken);
+        Long userId = Long.valueOf((Integer) tokenClaims.get("userId"));
+
+        String refreshToken = userRepository.findRefreshTokenById(userId);
+
         TokenResponse tokenResponseDto
                 = tokenService.createAccessTokenByRefreshToken(refreshToken);
 

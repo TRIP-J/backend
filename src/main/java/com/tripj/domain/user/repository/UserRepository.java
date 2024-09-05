@@ -3,6 +3,8 @@ package com.tripj.domain.user.repository;
 import com.tripj.domain.user.model.dto.response.GetNicknameResponse;
 import com.tripj.domain.user.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,4 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
     Optional<User> findNicknameById(Long userId);
 
     Optional<User> findByRefreshToken(String refreshToken);
+
+    @Query("SELECT u.refreshToken FROM User u WHERE u.id = :userId")
+    String findRefreshTokenById(@Param("userId") Long userId);
+
 }
