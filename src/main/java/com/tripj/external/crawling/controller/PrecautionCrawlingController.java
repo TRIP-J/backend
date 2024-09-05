@@ -21,7 +21,7 @@ public class PrecautionCrawlingController {
 
     private final PrecautionCrawling precautionCrawling;
 
-    @Hidden
+//    @Hidden
     @Operation(
             summary = "주의사항 크롤링 API",
             description = "주의사항 데이터를 크롤링 합니다."
