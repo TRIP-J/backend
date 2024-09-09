@@ -72,7 +72,6 @@ class CheckListServiceTest {
     void setUp() {
         country = Country.builder()
                 .name("일본")
-                .code("JP")
                 .build();
         countryRepository.save(country);
 

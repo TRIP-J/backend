@@ -51,7 +51,6 @@ class TripServiceTest {
     void setUp() {
         country = Country.builder()
                 .name("일본")
-                .code("JP")
                 .build();
         countryRepository.save(country);
 
@@ -278,7 +277,6 @@ class TripServiceTest {
     private Country createCountry(String name, String code) {
         return Country.builder()
                 .name(name)
-                .code(code)
                 .build();
     }
 
