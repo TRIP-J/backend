@@ -37,12 +37,20 @@ public class Precaution extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String accident;
 
-    public static Precaution newPrecaution(String contact, String traffic, String culture, String accident) {
+    @Column(name = "idx")
+    private int idx;
+
+    public static Precaution newPrecaution(
+            String contact, String traffic,
+            String culture, String accident,
+            Country country, int idx) {
         return Precaution.builder()
                 .contact(contact)
                 .traffic(traffic)
                 .culture(culture)
                 .accident(accident)
+                .country(country)
+                .idx(idx)
                 .build();
     }
 }
