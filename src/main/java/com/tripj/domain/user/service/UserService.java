@@ -2,6 +2,7 @@ package com.tripj.domain.user.service;
 
 import com.tripj.domain.user.model.dto.request.UpdateNicknameRequest;
 import com.tripj.domain.user.model.dto.response.GetNicknameResponse;
+import com.tripj.domain.user.model.dto.response.LogoutResponse;
 import com.tripj.domain.user.model.dto.response.UpdateNicknameResponse;
 import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.UserRepository;
@@ -116,5 +117,19 @@ public class UserService {
         }
 
         return user;
+    }
+
+    /**
+     * 로그아웃
+     */
+    public LogoutResponse logout(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
+
+        LocalDateTime now = LocalDateTime.now();
+
+        user.updateRefreshTokenNow(now);
+
+        return LogoutResponse.of(user);
     }
 }
