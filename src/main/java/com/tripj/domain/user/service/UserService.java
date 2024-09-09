@@ -75,10 +75,10 @@ public class UserService {
     @Transactional(readOnly = true)
     public GetNicknameResponse getNickname(Long userId) {
 
-        User user = userRepository.findNicknameById(userId)
+        User user = userRepository.findNicknameAndProfileById(userId)
             .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
 
-        return GetNicknameResponse.of(user.getNickname());
+        return GetNicknameResponse.of(user);
     }
 
     /**

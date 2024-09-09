@@ -22,8 +22,8 @@ public class UserController {
     private final UserService userService;
 
     @Operation(
-            summary = "사용자 닉네임 조회 API",
-            description = "사용자 닉네임을 조회합니다."
+            summary = "사용자 닉네임, 프로필 사진 조회 API",
+            description = "사용자 닉네임, 프로필 사진을 조회합니다."
     )
     @GetMapping("")
     public RestApiResponse<GetNicknameResponse> getNickname(
