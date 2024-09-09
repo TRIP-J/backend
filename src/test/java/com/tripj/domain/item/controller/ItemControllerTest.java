@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
-import com.tripj.domain.item.model.dto.response.DeleteItemResponse;
 import com.tripj.domain.item.model.dto.response.UpdateItemResponse;
 import com.tripj.domain.item.service.ItemService;
 import com.tripj.global.error.GlobalExceptionHandler;
@@ -16,15 +15,12 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

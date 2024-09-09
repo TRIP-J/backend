@@ -2,6 +2,7 @@ package com.tripj.domain.user.controller;
 
 import com.tripj.domain.user.model.dto.request.UpdateNicknameRequest;
 import com.tripj.domain.user.model.dto.response.GetNicknameResponse;
+import com.tripj.domain.user.model.dto.response.LogoutResponse;
 import com.tripj.domain.user.model.dto.response.UpdateNicknameResponse;
 import com.tripj.domain.user.service.UserService;
 import com.tripj.global.model.RestApiResponse;
@@ -44,6 +45,18 @@ public class UserController {
 
         return RestApiResponse.success(
                 userService.updateNickname(request, userInfo.getUserId()));
+    }
+
+    @Operation(
+            summary = "사용자 로그아웃 API",
+            description = "리프레시 토큰을 만료시켜 로그아웃합니다."
+    )
+    @PostMapping("/logout")
+    public RestApiResponse<LogoutResponse> logout(
+            @UserInfo UserInfoDto userInfo) {
+
+        return RestApiResponse.success(
+                userService.logout(userInfo.getUserId()));
     }
 
 }
