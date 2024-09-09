@@ -3,10 +3,6 @@ package com.tripj.domain.item.service;
 import com.tripj.domain.checklist.model.dto.response.GetCheckListResponse;
 import com.tripj.domain.checklist.model.dto.response.GetItemListResponse;
 import com.tripj.domain.checklist.repository.CheckListRepository;
-import com.tripj.domain.country.model.entity.Country;
-import com.tripj.domain.country.repository.CountryRepository;
-import com.tripj.domain.item.constant.ItemStatus;
-import com.tripj.domain.item.constant.ItemType;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
@@ -22,7 +18,6 @@ import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.trip.repository.TripRepository;
 import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.UserRepository;
-import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.BusinessException;
 import com.tripj.global.error.exception.ForbiddenException;
 import com.tripj.global.error.exception.NotFoundException;
@@ -34,8 +29,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.tripj.domain.item.constant.ItemStatus.*;
-import static com.tripj.domain.item.constant.ItemType.*;
+import static com.tripj.domain.item.constant.ItemType.FIXED;
+import static com.tripj.domain.item.constant.ItemType.USER_ADDED;
 import static com.tripj.global.code.ErrorCode.*;
 
 @Service
@@ -122,6 +117,7 @@ public class ItemService {
             }
 
             if (item.getUser().getId().equals(userId)) {
+                checkListRepository.deleteByItemId(itemId);
                 itemRepository.deleteById(item.getId());
             } else {
                 throw new ForbiddenException(E403_NOT_MY_ITEM);
@@ -131,6 +127,8 @@ public class ItemService {
             // 고정 아이템 삭제시에는 item에 fixedItemDelYN 을 'Y'로 등록해준다
             FixedItem fixedItem = fixedItemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_FIXED_ITEM));
+
+            checkListRepository.deleteByFixedItemId(fixedItem.getId());
 
             itemRepository.save(Item.builder()
                 .itemName(fixedItem.getItemName())
