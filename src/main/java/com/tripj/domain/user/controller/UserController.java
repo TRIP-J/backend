@@ -1,6 +1,7 @@
 package com.tripj.domain.user.controller;
 
 import com.tripj.domain.user.model.dto.request.UpdateNicknameRequest;
+import com.tripj.domain.user.model.dto.response.DeleteUserResponse;
 import com.tripj.domain.user.model.dto.response.GetNicknameResponse;
 import com.tripj.domain.user.model.dto.response.LogoutResponse;
 import com.tripj.domain.user.model.dto.response.UpdateNicknameResponse;
@@ -57,6 +58,19 @@ public class UserController {
 
         return RestApiResponse.success(
                 userService.logout(userInfo.getUserId()));
+    }
+
+    @Operation(
+            summary = "사용자 회원탈퇴 API",
+            description = "회원 탈퇴를 합니다. 사용자의 데이터를 모두 삭제합니다." +
+                    " 데이터 보존 기간은 없습니다."
+    )
+    @PostMapping("/withdraw")
+    public RestApiResponse<DeleteUserResponse> withdraw(
+            @UserInfo UserInfoDto userInfo) {
+
+        return RestApiResponse.success(
+                userService.withdraw(userInfo.getUserId()));
     }
 
 }
