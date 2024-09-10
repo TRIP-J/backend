@@ -98,6 +98,9 @@ dependencies {
 	// jsoup
 	implementation 'org.jsoup:jsoup:1.17.2'
 
+	// mail
+	implementation 'com.sun.mail:javax.mail:1.6.2'
+
 	//devtools
 //	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
