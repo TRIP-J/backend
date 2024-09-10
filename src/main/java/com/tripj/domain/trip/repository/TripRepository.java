@@ -30,4 +30,7 @@ public interface TripRepository extends JpaRepository<Trip, Long>, TripRepositor
     Optional<Trip> findByPreviousIsNow(@Param("tripId") Long tripId);
 
     Long countByUserId(Long userId);
+
+    void deleteByUserId(Long id);
+
 }

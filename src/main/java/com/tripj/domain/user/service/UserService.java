@@ -1,6 +1,10 @@
 package com.tripj.domain.user.service;
 
+import com.tripj.domain.checklist.repository.CheckListRepository;
+import com.tripj.domain.item.repository.ItemRepository;
+import com.tripj.domain.trip.repository.TripRepository;
 import com.tripj.domain.user.model.dto.request.UpdateNicknameRequest;
+import com.tripj.domain.user.model.dto.response.DeleteUserResponse;
 import com.tripj.domain.user.model.dto.response.GetNicknameResponse;
 import com.tripj.domain.user.model.dto.response.LogoutResponse;
 import com.tripj.domain.user.model.dto.response.UpdateNicknameResponse;
@@ -28,6 +32,9 @@ import static com.tripj.global.code.ErrorCode.*;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
+    private final TripRepository tripRepository;
+    private final CheckListRepository checkListRepository;
     private final GenerateRandomNicknameRepository nicknameRepository;
 
     /**
@@ -131,5 +138,20 @@ public class UserService {
         user.updateRefreshTokenNow(now);
 
         return LogoutResponse.of(user);
+    }
+
+    /**
+     * 회원탈퇴
+     */
+    public DeleteUserResponse withdraw(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
+
+        checkListRepository.deleteByUserId(user.getId());
+        itemRepository.deleteByUserId(user.getId());
+        tripRepository.deleteByUserId(user.getId());
+        userRepository.deleteById(user.getId());
+
+        return DeleteUserResponse.of(user.getId());
     }
 }

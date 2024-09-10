@@ -39,4 +39,6 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long>, Che
     @Modifying
     @Query("DELETE FROM CheckList c WHERE c.fixedItem.id = :fixedItemId")
     void deleteByFixedItemId(Long fixedItemId);
+
+    void deleteByUserId(Long id);
 }
