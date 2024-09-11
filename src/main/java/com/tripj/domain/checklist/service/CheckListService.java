@@ -12,7 +12,6 @@ import com.tripj.domain.trip.model.entity.Trip;
 import com.tripj.domain.trip.repository.TripRepository;
 import com.tripj.domain.user.model.entity.User;
 import com.tripj.domain.user.repository.UserRepository;
-import com.tripj.global.code.ErrorCode;
 import com.tripj.global.error.exception.BusinessException;
 import com.tripj.global.error.exception.ForbiddenException;
 import com.tripj.global.error.exception.NotFoundException;
@@ -22,10 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static com.tripj.domain.item.constant.ItemStatus.ADDED;
-import static com.tripj.domain.item.constant.ItemStatus.NOT_ADDED;
 import static com.tripj.global.code.ErrorCode.*;
 
 @Service
