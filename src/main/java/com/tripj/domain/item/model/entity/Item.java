@@ -1,8 +1,6 @@
 package com.tripj.domain.item.model.entity;
 
 import com.tripj.domain.common.entity.BaseTimeEntity;
-import com.tripj.domain.country.model.entity.Country;
-import com.tripj.domain.item.constant.ItemStatus;
 import com.tripj.domain.item.constant.ItemType;
 import com.tripj.domain.itemcate.model.entity.ItemCate;
 import com.tripj.domain.trip.model.entity.Trip;
