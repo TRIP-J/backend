@@ -8,4 +8,5 @@ import lombok.Getter;
 public enum ItemType {
     FIXED,
     USER_ADDED,
+    SET_ITEM
 }
