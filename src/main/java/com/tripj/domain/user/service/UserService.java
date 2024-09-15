@@ -1,6 +1,7 @@
 package com.tripj.domain.user.service;
 
 import com.tripj.domain.checklist.repository.CheckListRepository;
+import com.tripj.domain.inquiry.repository.InquiryRepository;
 import com.tripj.domain.item.repository.ItemRepository;
 import com.tripj.domain.trip.repository.TripRepository;
 import com.tripj.domain.user.model.dto.request.UpdateNicknameRequest;
@@ -34,6 +35,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final TripRepository tripRepository;
+    private final InquiryRepository inquiryRepository;
     private final CheckListRepository checkListRepository;
     private final GenerateRandomNicknameRepository nicknameRepository;
 
@@ -150,6 +152,7 @@ public class UserService {
         checkListRepository.deleteByUserId(user.getId());
         itemRepository.deleteByUserId(user.getId());
         tripRepository.deleteByUserId(user.getId());
+        inquiryRepository.deleteByUserId(user.getId());
         userRepository.deleteById(user.getId());
 
         return DeleteUserResponse.of(user.getId());
