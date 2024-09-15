@@ -2,12 +2,18 @@ package com.tripj.domain.item.repository;
 
 import com.tripj.domain.item.model.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom {
 
     void deleteByUserId(Long id);
+
+    @Modifying
+    @Query("DELETE FROM Item i WHERE i.trip.id = :tripId AND i.itemCate.id = :itemCateId")
+    void deleteByTripIdAndItemCateId(Long tripId, Long itemCateId);
 
 //    @Query("select i from Item i left join Trip t on i.trip.id = t.id " +
 //            "where i.id = :itemId " +

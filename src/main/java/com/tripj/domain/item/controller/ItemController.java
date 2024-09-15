@@ -1,7 +1,9 @@
 package com.tripj.domain.item.controller;
 
 import com.tripj.domain.checklist.model.dto.response.GetItemListResponse;
+import com.tripj.domain.item.constant.SetItemCate;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
+import com.tripj.domain.item.model.dto.request.CreateSetItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
 import com.tripj.domain.item.model.dto.response.DeleteItemResponse;
@@ -41,6 +43,21 @@ public class ItemController {
 
         return RestApiResponse.success(
                 itemService.createItem(request, userInfo.getUserId()));
+    }
+
+    @Operation(
+            summary = "추천템 > 세트 아이템 등록 API",
+            description = "체크리스트에서 세트 아이템을 등록합니다." +
+                    " 세트 아이템 등록시 추천템 카테고리에 담겨있던 아이템들은 전부 삭제가 됩니다."
+    )
+    @PostMapping("/set")
+    public RestApiResponse<List<GetItemListResponse>> createSetItem(
+            @RequestBody @Valid CreateSetItemRequest request,
+            SetItemCate setItemCate,
+            @UserInfo UserInfoDto userInfo) {
+
+        return RestApiResponse.success(
+                itemService.createSetItem(request, userInfo.getUserId(), setItemCate));
     }
 
     @Operation(
