@@ -14,9 +14,6 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateSetItemRequest {
 
-    @Schema(description = "아이템 카테고리 Id", example = "1")
-    private Long itemCateId;
-
     @Schema(description = "여행 Id", example = "1")
     private Long tripId;
 
