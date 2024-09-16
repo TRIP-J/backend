@@ -7,6 +7,7 @@ import com.tripj.domain.item.constant.SetItemCate;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
 import com.tripj.domain.item.model.dto.request.CreateSetItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
+import com.tripj.domain.item.model.dto.response.CreateItemCatePairResponse;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
 import com.tripj.domain.item.model.dto.response.DeleteItemResponse;
 import com.tripj.domain.item.model.dto.response.UpdateItemResponse;
@@ -78,7 +79,7 @@ public class ItemService {
     public List<GetItemListResponse> createSetItem(
             CreateSetItemRequest request, Long userId, SetItemCate setItemCate) {
 
-        //TODO : 같은 세트 추가시 validation
+        //TODO : 세트 아이템 추가시 모든 카테고리에 들어있던 사용자 추가 아이템 삭제
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_USER));
@@ -87,21 +88,21 @@ public class ItemService {
         Trip trip = tripRepository.findByPreviousIsNow(request.getTripId())
                 .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_NOW_TRIP));
 
-        ItemCate itemCate = itemCateRepository.findById(request.getItemCateId())
-                .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM_CATE));
-
-        List<String> itemsToAdd = setItemsByCategory.get(setItemCate);
+        List<CreateItemCatePairResponse> itemsToAdd = setItemsByCategory.get(setItemCate);
 
         if (!trip.getUser().getId().equals(userId)) {
             throw new ForbiddenException(NOT_MY_TRIP);
         }
 
-        // 기존 추천템에 있던 아이템 전부 삭제
-        itemRepository.deleteByTripIdAndItemCateId(trip.getId(), itemCate.getId());
+        // 기존에 있던 사용자 추가 아이템 전부 삭제
+        itemRepository.deleteByTripIdAndFixedItemDelYnIsNull(trip.getId());
 
         // 새로운 세트 아이템 추가
-        for (String itemName : itemsToAdd) {
-            Item setItem = request.toEntity(user, itemCate, trip, itemName);
+        for (CreateItemCatePairResponse itemPair : itemsToAdd) {
+            ItemCate itemCate = itemCateRepository.findById(itemPair.getItemCateId())
+                    .orElseThrow(() -> new NotFoundException(E404_NOT_EXISTS_ITEM_CATE));
+
+            Item setItem = request.toEntity(user, itemCate, trip, itemPair.getItemName());
             setItem.updateItemType(SET_ITEM);
             itemRepository.save(setItem);
         }
@@ -196,7 +197,6 @@ public class ItemService {
                 .build());
     }
 
-
     /**
      * 체크리스트 > 아이템 일괄 조회
      */
@@ -222,31 +222,25 @@ public class ItemService {
     }
 
     /**
-     * Previous 변경
+     * 세트 아이템 조회
      */
-//    public void changeItemPrevious() {
-//
-//        List<Item> allPreviousIsNow = itemRepository.findAllPreviousIsNow();
-//
-//        allPreviousIsNow
-//                .forEach(item -> {
-//                    Long tripId = item.getTrip().getId();
-//                    String maxPrevious = itemRepository.findMaxPrevious(tripId);
-//                    if (maxPrevious != null) {
-//                        int nextNum = Integer.parseInt(maxPrevious.substring(1)) + 1;
-//                        String nextPrevious = "B" + String.format("%02d", nextNum);
-//                        item.updatePrevious(nextPrevious);
-//                    }
-//                    if (item.getPrevious().equals("NOW")) {
-//                        item.updatePrevious("B01");
-//                    }
-//                });
-//    }
+    public Map<SetItemCate, List<CreateItemCatePairResponse>> getSetItemList() {
+        return setItemsByCategory;
+    }
 
-    private static final Map<SetItemCate, List<String>> setItemsByCategory = Map.of(
-            SetItemCate.BASIC, List.of("기본세트 예시1", "기본세트예시2", "기본세트예시3"),
-            SetItemCate.PEDDLER, List.of("보부상세트 예시1", "보부상세트 예시2, 보부상세트 예시3"),
-            SetItemCate.MINIMAL, List.of("미니멀세트 예시1", "미니멀세트 예시2")
+    private static final Map<SetItemCate, List<CreateItemCatePairResponse>> setItemsByCategory = Map.of(
+            SetItemCate.BASIC, List.of(
+                    new CreateItemCatePairResponse("기본세트 예시1", 1L),
+                    new CreateItemCatePairResponse("기본세트 예시2", 2L),
+                    new CreateItemCatePairResponse("기본세트 예시3", 3L)),
+            SetItemCate.PEDDLER, List.of(
+                    new CreateItemCatePairResponse("보부상세트 예시1", 1L),
+                    new CreateItemCatePairResponse("보부상세트 예시2", 2L),
+                    new CreateItemCatePairResponse("보부상세트 예시3", 3L)),
+            SetItemCate.MINIMAL, List.of(
+                    new CreateItemCatePairResponse("미니멀세트 예시1", 1L),
+                    new CreateItemCatePairResponse("미니멀세트 예시2", 2L),
+                    new CreateItemCatePairResponse("미니멀세트 예시3", 3L))
     );
 
 }

@@ -5,6 +5,7 @@ import com.tripj.domain.item.constant.SetItemCate;
 import com.tripj.domain.item.model.dto.request.CreateItemRequest;
 import com.tripj.domain.item.model.dto.request.CreateSetItemRequest;
 import com.tripj.domain.item.model.dto.request.UpdateItemRequest;
+import com.tripj.domain.item.model.dto.response.CreateItemCatePairResponse;
 import com.tripj.domain.item.model.dto.response.CreateItemResponse;
 import com.tripj.domain.item.model.dto.response.DeleteItemResponse;
 import com.tripj.domain.item.model.dto.response.UpdateItemResponse;
@@ -23,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,8 +54,8 @@ public class ItemController {
     )
     @PostMapping("/set")
     public RestApiResponse<List<GetItemListResponse>> createSetItem(
-            @RequestBody @Valid CreateSetItemRequest request,
-            SetItemCate setItemCate,
+            @RequestBody CreateSetItemRequest request,
+            @RequestParam SetItemCate setItemCate,
             @UserInfo UserInfoDto userInfo) {
 
         return RestApiResponse.success(
@@ -107,6 +109,16 @@ public class ItemController {
 
         return RestApiResponse.success(
                 itemService.getItemList(userInfo.getUserId(), tripId));
+    }
+
+    @Operation(
+            summary = "세트 아이템 목록 조회 API",
+            description = "세트 아이템 목록을 조회합니다."
+    )
+    @GetMapping("/set/list")
+    public RestApiResponse<Map<SetItemCate, List<CreateItemCatePairResponse>>> getSetItemList() {
+        return RestApiResponse.success(
+                itemService.getSetItemList());
     }
 
 }
